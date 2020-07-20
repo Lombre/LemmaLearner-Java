@@ -61,35 +61,44 @@ public class TextDatabase{
 		for (int i = 0; i < textFilesInFolder.size(); i++) {
 			File subfile = textFilesInFolder.get(i);
 			
-			if (shouldPrintText) {
-				float percentSpaceAnalyzed = ((((float) accumulatedFileSpaceConsumption)/totalFileSpaceConsumption) * 100);
-				System.out.println("Parsed " +  String.format("%.2f", percentSpaceAnalyzed) + " % of all text, in terms of space.");
-				System.out.println("Analysing text " + (i+1) + " of " + textFilesInFolder.size() + ", " + subfile.getName());
-			}
+			if (shouldPrintText)
+				printProgressInAddingTextsToDatabase(textFilesInFolder, totalFileSpaceConsumption,
+						accumulatedFileSpaceConsumption, i, subfile);
 			accumulatedFileSpaceConsumption += subfile.length();
 			
 			parseTextAndAddToDatabase(subfile);
 		}
 		
 		
+		if (shouldPrintText)
+			printAllTextsAddedToDatabaseInformation(absoluteStartTime);
+		
+		
+	}
+
+	private void printAllTextsAddedToDatabaseInformation(long absoluteStartTime) {
 		long absoluteEndTime = System.currentTimeMillis();
 		float absoluteTimeUsed = ((float) (absoluteEndTime - absoluteStartTime))/1000/60; //In minutes		
-		if (shouldPrintText) {
-			System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
-			Lemmatizer lemmatizer = new Lemmatizer();
-			List<String> allConjugations = allWords.values().stream().map(word -> word.getRawWord()).collect(Collectors.toList());
-			HashSet<String> allLemmas = new HashSet<String>();
-			for (String conjugation : allConjugations) {
-				if (lemmatizer.conjugationToLemmas.containsKey(conjugation)) {
-					allLemmas.addAll(lemmatizer.conjugationToLemmas.get(conjugation));
-				} else {
-					allLemmas.add(conjugation);
-				}
+		System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
+		Lemmatizer lemmatizer = new Lemmatizer();
+		List<String> allConjugations = allWords.values().stream().map(word -> word.getRawWord()).collect(Collectors.toList());
+		HashSet<String> allLemmas = new HashSet<String>();
+		for (String conjugation : allConjugations) {
+			if (lemmatizer.conjugationToLemmas.containsKey(conjugation)) {
+				allLemmas.addAll(lemmatizer.conjugationToLemmas.get(conjugation));
+			} else {
+				allLemmas.add(conjugation);
 			}
-			System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
-			int k = 1;
 		}
-		
+		System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
+		int k = 1;
+	}
+
+	private void printProgressInAddingTextsToDatabase(List<File> textFilesInFolder, long totalFileSpaceConsumption,
+			long accumulatedFileSpaceConsumption, int i, File subfile) {
+		float percentSpaceAnalyzed = ((((float) accumulatedFileSpaceConsumption)/totalFileSpaceConsumption) * 100);
+		System.out.println("Parsed " +  String.format("%.2f", percentSpaceAnalyzed) + " % of all text, in terms of space.");
+		System.out.println("Analysing text " + (i+1) + " of " + textFilesInFolder.size() + ", " + subfile.getName());
 	}
 
 	public void parseTextAndAddToDatabase(File subfile) {

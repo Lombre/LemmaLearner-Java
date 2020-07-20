@@ -136,6 +136,61 @@ class TestDatabaseInsertion {
 		
 	}
 	
+
+	@Test
+	public void testWordFrequencyIncreasedPerEncounter() throws Exception {
+		String word1 = "one";
+		String word2 = "two";
+		String word3 = "three";
+		String expectedSentence1 = word1 + " " + word2 + " " + word3 + ".";
+		String expectedSentence2 = word2 + " " + word3 + ".";
+		String expectedSentence3 = word3 + ".";
+		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3;
+		
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
+		
+		assertEquals(database.allTexts.size(), 1);
+		Text parsedText = database.allTexts.get(TestTool.testTextName);
+		assertEquals(parsedText.getRawText(), expectedParagraph);
+		assertSame(parsedText, returnedText);
+		
+		assertEquals(1, database.allParagraphs.size());
+		assertEquals(3, database.allSentences.size());
+		assertEquals(3, database.allWords.size());
+		
+		assertEquals(1, database.allWords.get(word1).getFrequency());
+		assertEquals(2, database.allWords.get(word2).getFrequency());
+		assertEquals(3, database.allWords.get(word3).getFrequency());
+	}
+	
+
+	@Test
+	public void testFrequencyOfWordsOnlyCountendOncePerSentence() throws Exception {
+		String word1 = "unique";
+		String word2 = "word";
+		String word3 = "not";
+		String word4 = "here";
+		String expectedSentence1 = "Unique word.";
+		String expectedSentence2 = "Not not here here.";
+		String expectedParagraph = expectedSentence1 + " " + expectedSentence2;
+		
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
+		
+		assertEquals(database.allTexts.size(), 1);
+		Text parsedText = database.allTexts.get(TestTool.testTextName);
+		assertEquals(expectedParagraph, parsedText.getRawText());
+		assertSame(returnedText, parsedText);
+		
+		assertEquals(1, database.allParagraphs.size());
+		assertEquals(2, database.allSentences.size());
+		assertEquals(4, database.allWords.size());
+		
+		assertEquals(1, database.allWords.get(word1).getFrequency());
+		assertEquals(1, database.allWords.get(word2).getFrequency());
+		assertEquals(1, database.allWords.get(word3).getFrequency());
+		assertEquals(1, database.allWords.get(word4).getFrequency());
+	}
+	
 	
 	
 	

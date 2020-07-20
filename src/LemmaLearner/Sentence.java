@@ -89,4 +89,27 @@ public class Sentence implements Serializable {
 		originParagraphs = new HashSet<Paragraph>();
 		originParagraphs.add(paragraph);
 	}
+
+	public boolean isDirectlyLearnable(Set<Word> learnedWords, TextDatabase database) {
+		Set<Word> wordsInDatabase = this.getWordsInDatabase(database);
+		int wordsInSentence = wordsInDatabase.size();
+		wordsInDatabase.retainAll(learnedWords);
+		int wordsInSentenceLearned = wordsInDatabase.size();
+		return (wordsInSentence - wordsInSentenceLearned) <= 1;
+	}
+
+	public Set<Word> getWordsInDatabase(TextDatabase database) {
+		Set<Word> wordsInSentence = getWordSet();
+		Set<Word> wordsInDatabase = new HashSet<Word>();
+		wordsInSentence.stream().forEach(word -> wordsInDatabase.add(database.allWords.get(word.getRawWord())));
+		return wordsInDatabase;
+	}
+	
+	public List<Word> getUnlearnedWords(Set<Word> learnedWords, TextDatabase database){
+		Set<Word> wordsInSentence = this.getWordsInDatabase(database);
+		List<Word> unlearnedWords = wordsInSentence.stream().filter(word -> !learnedWords.contains(word)).collect(Collectors.toList());
+		return unlearnedWords;
+	}
+
+	
 }

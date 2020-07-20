@@ -8,6 +8,7 @@ public class Word implements Serializable {
 
 	private final Set<Sentence> sentences = new HashSet<Sentence>();
 	private final String rawWord;
+	private int frequency;
 	
 	public Word(Sentence originSentence, String rawWord) {
 		this(rawWord);
@@ -21,7 +22,10 @@ public class Word implements Serializable {
 	public String getRawWord() {
 		return rawWord;
 	}
-	
+
+	public int getFrequency() {
+		return frequency;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -44,9 +48,12 @@ public class Word implements Serializable {
 		if (textDatabase.allWords.containsKey(this.getRawWord())) {
 			//The sentences have already been added, 
 			//so the word in the database simply also needs to refer to those sentences.
-			textDatabase.allWords.get(this.getRawWord()).sentences.addAll(sentences);			
+			Word databaseWord = textDatabase.allWords.get(this.getRawWord());
+			databaseWord.sentences.addAll(sentences);		
+			databaseWord.frequency++;			
 		} else {
 			textDatabase.allWords.put(getRawWord(), this);
+			frequency = 1;
 		}
 	}
 
