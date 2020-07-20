@@ -22,6 +22,8 @@ import antlrGrammar.TextParsingGrammarParser.*;
 
 public class TextDatabase{
 	
+	public static final String notAWordString = "NotAWord";
+
 	//All texts are assumed to be unique, with no duplicates. Uses text.name.
 	public HashMap<String, Text> allTexts = new HashMap<String, Text>(); 
 	
@@ -74,7 +76,18 @@ public class TextDatabase{
 		float absoluteTimeUsed = ((float) (absoluteEndTime - absoluteStartTime))/1000/60; //In minutes		
 		if (shouldPrintText) {
 			System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
-			System.out.println("A total of " + allWords.size() + " unique words are found in all the texts combined.");			
+			Lemmatizer lemmatizer = new Lemmatizer();
+			List<String> allConjugations = allWords.values().stream().map(word -> word.getRawWord()).collect(Collectors.toList());
+			HashSet<String> allLemmas = new HashSet<String>();
+			for (String conjugation : allConjugations) {
+				if (lemmatizer.conjugationToLemmas.containsKey(conjugation)) {
+					allLemmas.addAll(lemmatizer.conjugationToLemmas.get(conjugation));
+				} else {
+					allLemmas.add(conjugation);
+				}
+			}
+			System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
+			int k = 1;
 		}
 		
 	}

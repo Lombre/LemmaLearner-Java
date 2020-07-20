@@ -30,13 +30,60 @@ class TestParsing {
 		parsedText = database.parse("Test texts/singleWordWithPunctuation.txt", false);
 		assertEquals("singleWordWithPunctuation.txt", parsedText.getName());
 	}
+	
+
+	@Test
+	void testWordSplitCorrectlySingleQuoteCase() throws Exception {
+		String wordPart1 = "Hej";
+		String wordPart2 = "med";
+		String wordPart3 = "dig";
+		String expectedSentence = "’" + wordPart1 + "’" + wordPart2 + "’" + wordPart3 + "’";
+		
+		parsedText = TestTool.parseString(expectedSentence, database);
+		assertEquals(parsedText.getParagraphs().size(), 1);
+		assertEquals(parsedText.getRawText(), expectedSentence);
+
+		Paragraph paragraph = (Paragraph) parsedText.getParagraphs().toArray()[0];
+		assertEquals(paragraph.getRawParagraph(), expectedSentence);
+		assertEquals(paragraph.getSentences().size(), 1);
+
+		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
+		assertEquals(sentence.getRawSentence(), expectedSentence);
+		assertEquals(3, sentence.getWordList().size());
+		
+		assertEquals(wordPart1.toLowerCase(), sentence.getWordList().get(0).getRawWord());
+		assertEquals(wordPart2.toLowerCase(), sentence.getWordList().get(1).getRawWord());
+		assertEquals(wordPart3.toLowerCase(), sentence.getWordList().get(2).getRawWord());
+	}
+	
+
+
+	@Test
+	void testWordSplitCorrectlySingleQuoteCommaCase() throws Exception {
+		String word = "Hej";
+		String expectedSentence = word + "’,";
+		
+		parsedText = TestTool.parseString(expectedSentence, database);
+		assertEquals(parsedText.getParagraphs().size(), 1);
+		assertEquals(parsedText.getRawText(), expectedSentence);
+
+		Paragraph paragraph = (Paragraph) parsedText.getParagraphs().toArray()[0];
+		assertEquals(paragraph.getRawParagraph(), expectedSentence);
+		assertEquals(paragraph.getSentences().size(), 1);
+
+		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
+		assertEquals(sentence.getRawSentence(), expectedSentence);
+		assertEquals(1, sentence.getWordList().size());
+		
+		assertEquals(word.toLowerCase(), sentence.getWordList().get(0).getRawWord());
+	}
 
 	@Test
 	void testParseSingleWordSentence() throws IOException {
 		String expectedWord = "Hello";
 		String expectedParagraph = expectedWord + ".";
 		
-		parsedText = database.parse("Test texts/singleWordWithPunctuation.txt", false);
+		parsedText = TestTool.parseString(expectedParagraph, database);
 		assertEquals(parsedText.getParagraphs().size(), 1);
 		assertEquals(parsedText.getRawText(), expectedParagraph);
 		

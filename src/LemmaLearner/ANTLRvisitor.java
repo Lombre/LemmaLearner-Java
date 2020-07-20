@@ -1,7 +1,9 @@
 package LemmaLearner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
@@ -12,6 +14,8 @@ import antlrGrammar.TextParsingGrammarParser;
 import antlrGrammar.TextParsingGrammarParser.DanglingSentenceContext;
 import antlrGrammar.TextParsingGrammarParser.EndParagraphSentenceContext;
 import antlrGrammar.TextParsingGrammarParser.MidParagraphSentenceContext;
+import antlrGrammar.TextParsingGrammarParser.NonWordContext;
+import antlrGrammar.TextParsingGrammarParser.NormalWordContext;
 import antlrGrammar.TextParsingGrammarParser.ParagraphContext;
 import antlrGrammar.TextParsingGrammarParser.QuotedSentenceContext;
 import antlrGrammar.TextParsingGrammarParser.StartContext;
@@ -127,7 +131,7 @@ public class ANTLRvisitor {
 			for (int i = 0; i < ctx.children.size(); i++) {
 				var child = ctx.children.get(i);				
 				if (child instanceof WordContext)					
-					words.add(wordVisitor.visit(child));	
+					words.addAll(wordVisitor.visit(child));	
 				else if (child instanceof QuotedSentenceContext)
 					words.addAll(quotedSentenceVisitor.visit(child).getAllWords());
 				else if (child instanceof TerminalNodeImpl)	
@@ -157,15 +161,35 @@ public class ANTLRvisitor {
 
 	
 
-	public static class WordVisitor extends TextParsingGrammarBaseVisitor<Word>{
+	public static class WordVisitor extends TextParsingGrammarBaseVisitor<List<Word>>{
 
 		@Override
-		public Word visitWord(WordContext ctx) {
-			String rawText = getRawTextFromContext(ctx);			
-			return new Word(rawText);
+		public List<Word> visitWord(WordContext ctx) {
+			var child = ctx.children.get(0);
+			NormalWordVisitor visitor = new NormalWordVisitor();
+			if (child instanceof NormalWordContext )
+				return visitor.visit(child);
+			else if (child instanceof NonWordContext)					
+				return new ArrayList<Word>();
+			//	return new ArrayList<Word>() {{add(new Word(TextDatabase.notAWordString));}};
+			else throw new Error("Unhandeled context type: " + child.getClass());
 		}
-	}
+	}	
 	
+
+	public static class NormalWordVisitor extends TextParsingGrammarBaseVisitor<List<Word>>{
+
+		@Override
+		public List<Word> visitNormalWord(NormalWordContext ctx) {
+			String rawText = getRawTextFromContext(ctx);
+			List<String> splitText = Arrays.asList(rawText.split("(’|,)"));
+			
+			return splitText.stream()
+					        .filter(wordPart -> !wordPart.equals(""))
+							.map(wordPart -> new Word(wordPart))
+							.collect(Collectors.toList());
+		}
+	}	
 
 	public static String getRawTextFromContext(ParserRuleContext ctx) {
 		int startIndex = ctx.start.getStartIndex();

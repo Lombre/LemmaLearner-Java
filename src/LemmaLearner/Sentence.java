@@ -1,6 +1,7 @@
 package LemmaLearner;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Sentence implements Serializable {
 	
@@ -10,14 +11,20 @@ public class Sentence implements Serializable {
 	private final short[] wordLengthIndex;
 	
 	public Sentence(String rawSentence, List<Word> words) {
-		this.rawSentence = rawSentence;
 		if (Short.MAX_VALUE <= rawSentence.length()) throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
+		this.rawSentence = rawSentence;
 		wordBeginningIndex = new short[words.size()];
 		wordLengthIndex = new short[words.size()];
+		setWordIndexes(rawSentence, words);
+	}
+
+	private void setWordIndexes(String rawSentence, List<Word> words) {
 		String lowerCaseRawSentence = rawSentence.toLowerCase();
 		for (int i = 0; i < words.size(); i++) {
 			Word currentWord = words.get(i);
-			int indexBeginning = lowerCaseRawSentence.toLowerCase().indexOf(currentWord.getRawWord());
+			int indexBeginning = lowerCaseRawSentence.indexOf(currentWord.getRawWord());
+			if (indexBeginning == -1) 
+				throw new Error("Word " + currentWord.getRawWord() + " not found in sentence: " + getRawSentence());
 			wordBeginningIndex[i] = (short) indexBeginning;
 			wordLengthIndex[i] = (short) (currentWord.getRawWord().length());
 		}

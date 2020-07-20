@@ -17,17 +17,21 @@ import LemmaLearner.*;
 
 
 
-class TestTool {
+public class TestTool {
 		
 	public static final String testTextName = "test";
 
 	public static Text parseString(String stringToParse, TextDatabase database) {
-		return database.parse(testTextName, CharStreams.fromString(stringToParse), false);
+		return parseString(stringToParse, database, false);
+	}
+	
+	public static Text parseString(String stringToParse, TextDatabase database, boolean shouldDisplayGUI) {
+		return database.parse(testTextName, CharStreams.fromString(stringToParse), shouldDisplayGUI);
 	}
 	
 	
-	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database) {
-		Text parsedText = database.parse(testTextName, CharStreams.fromString(stringToParse), false);
+	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database, boolean shouldDisplayGUI) {
+		Text parsedText = database.parse(testTextName, CharStreams.fromString(stringToParse), shouldDisplayGUI);
 		database.addTextToDatabase(parsedText);
 		return parsedText;
 	}

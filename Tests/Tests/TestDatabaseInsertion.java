@@ -32,7 +32,7 @@ class TestDatabaseInsertion {
 	public void testEmptyTextInsertion_NoAddedParagraphsSentencesOrWords() throws Exception {
 		String expectedSentence = "";
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
@@ -52,7 +52,7 @@ class TestDatabaseInsertion {
 		String word3 = "works";
 		String expectedSentence = word1 + " " + word2 + " " + word3;
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get("test");
@@ -90,7 +90,7 @@ class TestDatabaseInsertion {
 		String expectedText = repeatedSentence + "\r\n" + paragraph2;
 		
 
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedText, database);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedText, database, false);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get("test");

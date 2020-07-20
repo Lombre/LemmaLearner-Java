@@ -12,14 +12,14 @@ import org.antlr.v4.*;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-
+import Tests.TestTool;
 
 
 public class Starter {
 	
 	public static void main(String[] args) throws Exception {
 		//Settings
-		boolean shouldParseRealText = true;
+		boolean shouldParseRealText = false;
 		boolean shouldDisplayText = true;
 		boolean shouldLoadSavedTexts = true;
 		
@@ -29,13 +29,15 @@ public class Starter {
 		CharStream testStream;
 		TextDatabase textDatabase = new TextDatabase(shouldLoadSavedTexts, shouldDisplayText);
 		//memtest();
-
+		
 		if (shouldParseRealText)
-			//testStream = CharStreams.fromFileName("Texts/Wheel of Time, The - Robert Jordan & Brandon Sanderson.txt");
 			textDatabase.addAllTextsInFolderToDatabase("Other texts");
 		else {
-			File testFile = new File("Test texts/testTest.txt");
-			textDatabase.parseTextAndAddToDatabase(testFile);				
+			//File testFile = new File("Test texts/testTest.txt");
+			//textDatabase.parseTextAndAddToDatabase(testFile);		
+			//TestTool.parseString("The writing and artwork within are believed to be in the U.S. public domain, and Standard Ebooks releases this ebook edition under the terms in the CC0 1.0 Universal Public Domain Dedication", textDatabase);
+			//TestTool.parseString("The Standard Ebooks CC0 1.0 Universal Public Domain Dedication", textDatabase);
+			textDatabase.addAllTextsInFolderToDatabase("TextsToParse");		
 		}
 		
 		/*
