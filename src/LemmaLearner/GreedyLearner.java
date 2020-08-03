@@ -105,7 +105,7 @@ public class GreedyLearner {
 	public PriorityQueue<Pair<Sentence, Integer>> getDirectlyLearnableWordsByFrequency(Set<Word> learnedWords) {
 		PriorityQueue<Pair<Sentence, Integer>> directlyLearnableSentencesByFrequency = getSentencesByUnlearnedWordFrequency(learnedWords);
 		for (Sentence sentence : database.allSentences.values()) {
-			if (sentence.isDirectlyLearnable(learnedWords, database)) {
+			if (sentence.isDirectlyLearnable(learnedWords, database) && 0 < sentence.getWordList().size()) {
 				Pair<Sentence, Integer> sentenceScorePair = new Pair<Sentence, Integer>(sentence, -sentence.getHighestFrequency(database));
 				directlyLearnableSentencesByFrequency.add(sentenceScorePair);				
 			}

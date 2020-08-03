@@ -49,7 +49,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	 * @return
 	 */
 	public Set<Word> getWordSet() {
-		return new ListSet<>(getWordList());
+		return new HashSet<>(getWordList());
 	}
 	
 	
@@ -86,7 +86,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public void setInitialOriginParagraph(Paragraph paragraph) {
-		originParagraphs = new ListSet<Paragraph>();
+		originParagraphs = new HashSet<Paragraph>();
 		originParagraphs.add(paragraph);
 	}
 
@@ -100,7 +100,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 
 	public Set<Word> getWordsInDatabase(TextDatabase database) {
 		Set<Word> wordsInSentence = getWordSet();
-		Set<Word> wordsInDatabase = new ListSet<Word>();
+		Set<Word> wordsInDatabase = new HashSet<Word>();
 		wordsInSentence.stream().forEach(word -> wordsInDatabase.add(database.allWords.get(word.getRawWord())));
 		return wordsInDatabase;
 	}

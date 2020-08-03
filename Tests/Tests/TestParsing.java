@@ -202,7 +202,7 @@ class TestParsing {
 	void testParseNestedQuotedSentence() throws IOException {	
 		String expectedSentence = "“This. “Should. Hopefully! (Be...) One Sentence!””.";
 
-		parsedText = TestTool.parseString(expectedSentence, database, true);
+		parsedText = TestTool.parseString(expectedSentence, database);
 		assertEquals(parsedText.getParagraphs().size(), 1);
 		assertEquals(parsedText.getRawText(), expectedSentence);
 		

@@ -9,14 +9,8 @@ import java.util.stream.Collectors;
 import javax.swing.*;
 
 import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.parse.ANTLRParser.throwsSpec_return;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-
 import antlrGrammar.*;
-import antlrGrammar.TextParsingGrammarParser.*;
 
 
 
@@ -126,22 +120,26 @@ public class TextDatabase{
 	}
 
 	private Text parseTextFile(File subfile) {
+		File possibleSavedFile = new File(getSavedTextFileName(subfile));
 		try {					
-			File possibleSavedFile = new File(getSavedTextFileName(subfile));
 			//If the file have already been parsed and save, simply load that, as this is faster than parsing it again.
 			if (possibleSavedFile.exists() && shouldLoadSavedTexts) {
 				return Text.load(possibleSavedFile.getAbsolutePath());													
-			} else {				
-				Text parsedText = parse(subfile.getPath(), false);				
-				parsedText.save(possibleSavedFile.getAbsolutePath());
-				return parsedText;
-			}		
-			
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			//Null is returned signifying no texts could be parsed or loaded.
-			return null;
+			} 			
+		} catch (Exception e) {
+			System.out.println("The saved text: " + getSavedTextFileName(subfile) + " could note be loaded.");
 		}
+		//If the loading failed, or if the text shouldn't be loaded, simply read it:
+
+		try {
+			Text parsedText = parse(subfile.getPath(), false);
+			parsedText.save(possibleSavedFile.getAbsolutePath());
+			return parsedText;
+		} catch (IOException e) {
+			e.printStackTrace();
+			//Signaling that the text could not be read or saved.
+			return null;
+		}				
 	}
 
 	private String getSavedTextFileName(File subfile) {

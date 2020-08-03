@@ -1,19 +1,12 @@
 package LemmaLearner;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
 	private List<E> internalList = new ArrayList<E>();
-	//private Set<E> internalSet = new HashSet<E>();
+	private Set<E> internalSet = new TreeSet<E>();
 	
 	public ListSet() {
 		// TODO Auto-generated constructor stub
@@ -38,7 +31,7 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
 	@Override
 	public boolean contains(Object o) {
-		return internalList.contains(o);
+		return internalSet.contains(o);
 	}
 
 	@Override
@@ -58,19 +51,22 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
 	@Override
 	public boolean add(E e) {
-		if (internalList.contains(e)) 
+		if (internalSet.contains(e)) 
 			return false;
-		return internalList.add(e);
+		internalSet.add(e);
+		internalList.add(e);
+		return true;
 	}
 
 	@Override
 	public boolean remove(Object o) {
+		internalSet.remove(o);
 		return internalList.remove(o);
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		return internalList.containsAll(c);
+		return internalSet.containsAll(c);
 	}
 
 	@Override
@@ -86,16 +82,19 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		return internalList.retainAll(c);
+		throw new Error("Not implemented yet.");
+		//return internalSet.retainAll(c);
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
+		internalSet.removeAll(c);
 		return internalList.removeAll(c);
 	}
 
 	@Override
 	public void clear() {
+		internalSet.clear();
 		internalList.clear();		
 	}
 
@@ -110,6 +109,8 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
 	@Override
 	public E set(int index, E element) {
+		internalSet.remove(internalList.get(index));
+		internalSet.add(element);		
 		return internalList.set(index, element);
 	}
 
@@ -120,7 +121,9 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
 	@Override
 	public E remove(int index) {
-		return internalList.remove(index);
+		var removedObject = internalList.remove(index);
+		internalSet.remove(removedObject);
+		return removedObject;
 	}
 
 	@Override

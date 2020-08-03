@@ -19,7 +19,7 @@ public class Starter {
 	
 	public static void main(String[] args) throws Exception {
 		//Settings
-		boolean shouldParseRealText = false;
+		boolean shouldParseRealText = true;
 		boolean shouldDisplayText = true;
 		boolean shouldLoadSavedTexts = true;
 		
@@ -31,7 +31,7 @@ public class Starter {
 		GreedyLearner learner = new GreedyLearner(textDatabase);
 		//memtest();
 		
-		if (shouldParseRealText)
+		if (shouldParseRealText) 
 			textDatabase.addAllTextsInFolderToDatabase("Other texts");
 		else {
 			//File testFile = new File("Test texts/testTest.txt");
@@ -39,8 +39,8 @@ public class Starter {
 			//TestTool.parseString("The writing and artwork within are believed to be in the U.S. public domain, and Standard Ebooks releases this ebook edition under the terms in the CC0 1.0 Universal Public Domain Dedication", textDatabase);
 			//TestTool.parseString("The Standard Ebooks CC0 1.0 Universal Public Domain Dedication", textDatabase);
 			textDatabase.addAllTextsInFolderToDatabase("TextsToParse");		
-			learner.learnAllLemmas();
 		}
+		learner.learnAllLemmas();
 		
 		/*
 		String content = Files.readString(Path.of("Wheel of Time, The - Robert Jordan & Brandon Sanderson.txt"));
