@@ -116,5 +116,10 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return rawSentence.compareTo(o.rawSentence);
 	}
 
+	public Integer getHighestFrequency(TextDatabase database) {
+		Set<Word> wordsInDatabase = getWordsInDatabase(database);
+		return wordsInDatabase.stream().map(word -> word.getFrequency()).max((x, y) -> x.compareTo(y)).get();
+	}
+
 	
 }

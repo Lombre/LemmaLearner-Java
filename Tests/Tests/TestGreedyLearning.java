@@ -88,9 +88,9 @@ class TestGreedyLearning {
 		Set<Word> learnedWords = new HashSet<Word>();
 		var sentencesByUnlearnedWordFrequency = learner.getDirectlyLearnableWordsByFrequency(learnedWords);
 		
-		assertEquals(expectedSentence2, sentencesByUnlearnedWordFrequency.poll().getRawSentence());
-		assertEquals(expectedSentence3, sentencesByUnlearnedWordFrequency.poll().getRawSentence());
-		assertEquals(expectedSentence1, sentencesByUnlearnedWordFrequency.poll().getRawSentence());
+		assertEquals(expectedSentence2, sentencesByUnlearnedWordFrequency.poll().getFirst().getRawSentence());
+		assertEquals(expectedSentence3, sentencesByUnlearnedWordFrequency.poll().getFirst().getRawSentence());
+		assertEquals(expectedSentence1, sentencesByUnlearnedWordFrequency.poll().getFirst().getRawSentence());
 		assertNull(sentencesByUnlearnedWordFrequency.poll());
 	}
 	
@@ -146,6 +146,30 @@ class TestGreedyLearning {
 				}
 				assertTrue("Greedy invariant broken: Word " + nextWord + " has a higher frequency than " + currentWord + " but is learnt after the word, for no reason.", nextWord.getFrequency() <= currentWord.getFrequency());
 			}
+		}
+	}
+	
+	
+
+
+	@Test
+	public void testLemmasAreLearnedOneByOne() throws Exception {
+		//A lemma must be learned one at a time, for it to be a valid learning order.
+		//Thus each new sentence must contain exactly one new lemma.
+		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
+		database.parseTextAndAddToDatabase(fileToParse);
+		List<Pair<Word, Sentence>> learningOrder = learner.learnAllLemmas();
+		Set<Word> learnedWords = new HashSet<Word>();
+		for (int i = 0; i < learningOrder.size() - 1; i++) {
+			var learnedWord = learningOrder.get(i).getFirst();
+			var currentSentence = learningOrder.get(i).getSecond();
+			assertFalse(learnedWords.contains(learnedWord));
+			for (Word wordInSentence : currentSentence.getWordsInDatabase(database)) {
+				if (wordInSentence == learnedWord)
+					assertFalse(learnedWords.contains(wordInSentence));
+				else assertTrue(learnedWords.contains(wordInSentence));				
+			}
+			learnedWords.add(learnedWord);
 		}
 	}
 	

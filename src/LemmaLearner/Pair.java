@@ -1,5 +1,6 @@
 package LemmaLearner;
 
+
 public class Pair<A, B> implements Comparable<Pair<A, B>> {
     private A first;
     private B second;
@@ -56,6 +57,8 @@ public class Pair<A, B> implements Comparable<Pair<A, B>> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public int compareTo(Pair<A, B> o) {
-		return ((Comparable<B>) second).compareTo(o.second);
+		if (o.first.equals(this.first)) return 0;
+		else return ((Comparable<B>) second).compareTo(o.second);
 	}
+
 }
