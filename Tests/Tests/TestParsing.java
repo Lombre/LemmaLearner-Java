@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
@@ -201,7 +202,7 @@ class TestParsing {
 	void testParseNestedQuotedSentence() throws IOException {	
 		String expectedSentence = "“This. “Should. Hopefully! (Be...) One Sentence!””.";
 
-		parsedText = TestTool.parseString(expectedSentence, database);
+		parsedText = TestTool.parseString(expectedSentence, database, true);
 		assertEquals(parsedText.getParagraphs().size(), 1);
 		assertEquals(parsedText.getRawText(), expectedSentence);
 		
@@ -213,12 +214,13 @@ class TestParsing {
 		assertEquals(sentence.getRawSentence(), expectedSentence);
 		assertEquals(sentence.getWordList().size(), 6);
 		
-		assertEquals("this", sentence.getWordList().get(0).getRawWord());
-		assertEquals("should", sentence.getWordList().get(1).getRawWord());
-		assertEquals("hopefully", sentence.getWordList().get(2).getRawWord());
-		assertEquals("be", sentence.getWordList().get(3).getRawWord());
-		assertEquals("one", sentence.getWordList().get(4).getRawWord());
-		assertEquals("sentence", sentence.getWordList().get(5).getRawWord());
+		List<Word> wordList = sentence.getWordList();
+		assertEquals("this", wordList.get(0).getRawWord());
+		assertEquals("should", wordList.get(1).getRawWord());
+		assertEquals("hopefully", wordList.get(2).getRawWord());
+		assertEquals("be", wordList.get(3).getRawWord());
+		assertEquals("one", wordList.get(4).getRawWord());
+		assertEquals("sentence", wordList.get(5).getRawWord());
 	}
 	
 

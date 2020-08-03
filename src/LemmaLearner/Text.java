@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class Text implements Serializable{
+public class Text implements Serializable, Comparable<Text>{
 	
 	private final String name;
 	private final String rawText; 
@@ -13,7 +13,7 @@ public class Text implements Serializable{
 	public Text(String textName, String rawText, List<Paragraph> paragraphs) {
 		this.name = textName;
 		this.rawText = rawText;
-		this.paragraphs = new LinkedHashSet<Paragraph>(paragraphs);
+		this.paragraphs = new ListSet<Paragraph>(paragraphs);
 		this.paragraphs.forEach(paragraph->paragraph.setOriginText(this));
 	}
 
@@ -23,7 +23,7 @@ public class Text implements Serializable{
 				  						.flatMap(paragraph -> paragraph.getSentences().stream())
 										.flatMap(sentence -> sentence.getWordList().stream())
 										.collect(Collectors.toList());
-		Set<Word> nonDuplicatedWords = new HashSet<Word>(words);
+		Set<Word> nonDuplicatedWords = new ListSet<Word>(words);
 		List<Word> wordList = new ArrayList<Word>(nonDuplicatedWords);
 		wordList.sort((a, b) -> a.getRawWord().compareTo(b.getRawWord()));
 		return wordList;
@@ -77,6 +77,12 @@ public class Text implements Serializable{
 
 	public String getRawText() {
 		return rawText;
+	}
+
+
+	@Override
+	public int compareTo(Text o) {
+		return this.getName().compareTo(o.getName());
 	}
 	
 }

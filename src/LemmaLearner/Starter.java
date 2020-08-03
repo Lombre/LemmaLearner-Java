@@ -21,7 +21,7 @@ public class Starter {
 		//Settings
 		boolean shouldParseRealText = false;
 		boolean shouldDisplayText = true;
-		boolean shouldLoadSavedTexts = false;
+		boolean shouldLoadSavedTexts = true;
 		
 		
 		System.out.println("Start");

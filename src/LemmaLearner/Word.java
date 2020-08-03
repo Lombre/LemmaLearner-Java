@@ -1,12 +1,11 @@
 package LemmaLearner;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
-public class Word implements Serializable {
+public class Word implements Serializable, Comparable<Word> {
 
-	private final Set<Sentence> sentences = new HashSet<Sentence>();
+	private final Set<Sentence> sentences = new ListSet<Sentence>();
 	private final String rawWord;
 	private int frequency;
 	
@@ -59,5 +58,10 @@ public class Word implements Serializable {
 
 	public Set<Sentence> getSentences() {
 		return sentences;
+	}
+
+	@Override
+	public int compareTo(Word o) {
+		return getRawWord().compareTo(o.getRawWord());
 	}
 }

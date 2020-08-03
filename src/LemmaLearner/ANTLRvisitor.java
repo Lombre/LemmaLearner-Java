@@ -130,10 +130,15 @@ public class ANTLRvisitor {
 
 			for (int i = 0; i < ctx.children.size(); i++) {
 				var child = ctx.children.get(i);				
-				if (child instanceof WordContext)					
-					words.addAll(wordVisitor.visit(child));	
-				else if (child instanceof QuotedSentenceContext)
-					words.addAll(quotedSentenceVisitor.visit(child).getAllWords());
+				if (child instanceof WordContext) {
+					List<Word> wordsToAdd = wordVisitor.visit(child);
+					words.addAll(wordsToAdd);	
+				}
+				else if (child instanceof QuotedSentenceContext) {
+					List<Word> wordsToAdd = quotedSentenceVisitor.visit(child).getAllWords();
+					words.addAll(wordsToAdd);	
+					
+				}
 				else if (child instanceof TerminalNodeImpl)	
 					continue;
 				else 

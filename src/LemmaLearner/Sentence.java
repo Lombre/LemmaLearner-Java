@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Sentence implements Serializable {
+public class Sentence implements Serializable, Comparable<Sentence> {
 	
 	private Set<Paragraph> originParagraphs;
 	private final String rawSentence;
@@ -49,7 +49,7 @@ public class Sentence implements Serializable {
 	 * @return
 	 */
 	public Set<Word> getWordSet() {
-		return new HashSet<>(getWordList());
+		return new ListSet<>(getWordList());
 	}
 	
 	
@@ -86,7 +86,7 @@ public class Sentence implements Serializable {
 	}
 
 	public void setInitialOriginParagraph(Paragraph paragraph) {
-		originParagraphs = new HashSet<Paragraph>();
+		originParagraphs = new ListSet<Paragraph>();
 		originParagraphs.add(paragraph);
 	}
 
@@ -100,7 +100,7 @@ public class Sentence implements Serializable {
 
 	public Set<Word> getWordsInDatabase(TextDatabase database) {
 		Set<Word> wordsInSentence = getWordSet();
-		Set<Word> wordsInDatabase = new HashSet<Word>();
+		Set<Word> wordsInDatabase = new ListSet<Word>();
 		wordsInSentence.stream().forEach(word -> wordsInDatabase.add(database.allWords.get(word.getRawWord())));
 		return wordsInDatabase;
 	}
@@ -109,6 +109,11 @@ public class Sentence implements Serializable {
 		Set<Word> wordsInSentence = this.getWordsInDatabase(database);
 		List<Word> unlearnedWords = wordsInSentence.stream().filter(word -> !learnedWords.contains(word)).collect(Collectors.toList());
 		return unlearnedWords;
+	}
+
+	@Override
+	public int compareTo(Sentence o) {
+		return rawSentence.compareTo(o.rawSentence);
 	}
 
 	

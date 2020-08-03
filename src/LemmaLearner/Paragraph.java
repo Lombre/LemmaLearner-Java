@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Paragraph implements Serializable {
+public class Paragraph implements Serializable, Comparable<Paragraph> {
 
 	private Text originText;
 	private String paragraphID;
@@ -12,7 +12,7 @@ public class Paragraph implements Serializable {
 	
 	public Paragraph(String rawParagraph, Collection<Sentence> sentences) {
 		this.rawParagraph = rawParagraph;
-		this.sentences = new LinkedHashSet<Sentence>(sentences);
+		this.sentences = new ListSet<Sentence>(sentences);
 		this.sentences.forEach(sentence -> sentence.setInitialOriginParagraph(this));
 	}
 
@@ -27,9 +27,12 @@ public class Paragraph implements Serializable {
 	}
 
 	public List<Word> getAllWords() {
-		return sentences.stream()
-						.flatMap(sentence -> sentence.getWordList().stream())
-						.collect(Collectors.toList());
+		List<Word> wordList = new ArrayList<Word>();
+		for (Sentence sentence : sentences) {
+			List<Word> sentenceWords = sentence.getWordList();
+			wordList.addAll(sentenceWords);
+		}
+		return wordList;
 	}
 	
 	public void setParagraphID(String id) {
@@ -71,5 +74,10 @@ public class Paragraph implements Serializable {
 
 	public void setOriginText(Text text) {
 		this.originText = text;
+	}
+
+	@Override
+	public int compareTo(Paragraph o) {
+		return this.getRawParagraph().compareTo(o.getRawParagraph());
 	}
 }
