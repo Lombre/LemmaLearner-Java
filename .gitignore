@@ -3,10 +3,9 @@
 
 
 #Specific directories
-Other texts/
-
-#Saved texts
+Other texts/**
 *.saved
+
 
 ### Java ###
 # Compiled class file
