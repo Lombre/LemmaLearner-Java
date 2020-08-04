@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -54,6 +55,10 @@ public class TestTool {
 				hasSameObject = true;
 		}
 		assertTrue(hasSameObject);
+	}
+
+	public static void parseText(File fileToParse, TextDatabase database) {
+		database.parseTextAndAddToDatabase(fileToParse);		
 	}
 	
 

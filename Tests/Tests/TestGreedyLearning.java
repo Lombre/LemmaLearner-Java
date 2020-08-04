@@ -30,7 +30,7 @@ class TestGreedyLearning {
 	
 	@BeforeEach
 	public void setUp() {
-		database = new TextDatabase(false, false);
+		database = new TextDatabase(true, false);
 		learner = new GreedyLearner(database);
 	}
 	
@@ -157,7 +157,7 @@ class TestGreedyLearning {
 		//A lemma must be learned one at a time, for it to be a valid learning order.
 		//Thus each new sentence must contain exactly one new lemma.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
-		database.parseTextAndAddToDatabase(fileToParse);
+		TestTool.parseText(fileToParse, database);
 		List<Pair<Word, Sentence>> learningOrder = learner.learnAllLemmas();
 		Set<Word> learnedWords = new HashSet<Word>();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
@@ -167,7 +167,9 @@ class TestGreedyLearning {
 			for (Word wordInSentence : currentSentence.getWordsInDatabase(database)) {
 				if (wordInSentence == learnedWord)
 					assertFalse(learnedWords.contains(wordInSentence));
-				else assertTrue(learnedWords.contains(wordInSentence));				
+				else {
+					assertTrue(learnedWords.contains(wordInSentence));				
+				}
 			}
 			learnedWords.add(learnedWord);
 		}

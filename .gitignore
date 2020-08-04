@@ -4,6 +4,7 @@
 
 #Specific directories
 Other texts/**
+Websites/**
 *.saved
 
 

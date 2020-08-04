@@ -19,7 +19,7 @@ import antlrGrammar.*;
 public class TextDatabase{
 	
 	
-	public static final String notAWordString = "NotAWord";
+	public static final String NOT_A_WORD_STRING = "NotAWord";
 
 	//All texts are assumed to be unique, with no duplicates. Uses text.name.
 	public HashMap<String, Text> allTexts = new HashMap<String, Text>(); 
@@ -80,13 +80,14 @@ public class TextDatabase{
 		Lemmatizer lemmatizer = new Lemmatizer();
 		List<String> allConjugations = allWords.values().stream().map(word -> word.getRawWord()).collect(Collectors.toList());
 		HashSet<String> allLemmas = new HashSet<String>();
-		for (String conjugation : allConjugations) {
-			if (lemmatizer.conjugationToLemmas.containsKey(conjugation)) {
-				allLemmas.addAll(lemmatizer.conjugationToLemmas.get(conjugation));
-			} else {
-				allLemmas.add(conjugation);
-			}
+		
+		for (int i = 0; i < allConjugations.size(); i++) {
+			String conjugation = allConjugations.get(i);
+			System.out.println("Looking at word " + i + " of " + allConjugations.size() + ".");
+			allLemmas.add(lemmatizer.getLemma(conjugation));
+			System.out.println();
 		}
+		
 		System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
 		int k = 1;
 	}

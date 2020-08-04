@@ -11,6 +11,8 @@ public class Lemmatizer {
 	
 	final Path lemmaFilePath = Paths.get("lemma.en.txt");
 	HashMap<String, List<String>> conjugationToLemmas = new HashMap<String, List<String>>();
+	OnlineDictionary onlineDictionary = new OnlineDictionary();
+	
 	
 	public Lemmatizer() {
 		
@@ -36,6 +38,21 @@ public class Lemmatizer {
 			e.printStackTrace();
 		}
 		int k = 1;
+	}
+
+
+	public String getLemma(String conjugation) {
+		//First use the normal lemmatization, and then perform the online check.
+		String tempLemma = conjugation;
+		if (conjugationToLemmas.containsKey(conjugation)) {
+			tempLemma = conjugationToLemmas.get(tempLemma).get(0);
+		}
+		try {
+			String actualLemma = onlineDictionary.getLemmaFromConjugation(tempLemma);
+			return actualLemma;
+		} catch (Exception e) {
+			throw new Error(tempLemma);
+		}
 	}
 
 }
