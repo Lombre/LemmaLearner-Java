@@ -86,7 +86,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public void setInitialOriginParagraph(Paragraph paragraph) {
-		originParagraphs = new HashSet<Paragraph>();
+		originParagraphs = new ListSet<Paragraph>();
 		originParagraphs.add(paragraph);
 	}
 
@@ -101,7 +101,9 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	public Set<Word> getWordsInDatabase(TextDatabase database) {
 		Set<Word> wordsInSentence = getWordSet();
 		Set<Word> wordsInDatabase = new HashSet<Word>();
-		wordsInSentence.stream().forEach(word -> wordsInDatabase.add(database.allWords.get(word.getRawWord())));
+		for (Word word : wordsInSentence) {
+			wordsInDatabase.add(database.allWords.get(word.getRawWord()));
+		}
 		return wordsInDatabase;
 	}
 	
@@ -119,6 +121,10 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	public Integer getHighestFrequency(TextDatabase database) {
 		Set<Word> wordsInDatabase = getWordsInDatabase(database);
 		return wordsInDatabase.stream().map(word -> word.getFrequency()).max((x, y) -> x.compareTo(y)).get();
+	}
+
+	public int getWordCount() {
+		return wordBeginningIndex.length;
 	}
 
 	

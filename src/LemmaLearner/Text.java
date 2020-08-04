@@ -3,12 +3,17 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.nustaq.serialization.FSTConfiguration;
+import org.nustaq.serialization.FSTObjectInput;
+import org.nustaq.serialization.FSTObjectOutput;
+
 
 public class Text implements Serializable, Comparable<Text>{
 	
 	private final String name;
 	private final String rawText; 
 	private final Set<Paragraph> paragraphs;
+	static FSTConfiguration conf = FSTConfiguration.createDefaultConfiguration();
 	
 	public Text(String textName, String rawText, List<Paragraph> paragraphs) {
 		this.name = textName;
@@ -39,25 +44,50 @@ public class Text implements Serializable, Comparable<Text>{
 		return name;
 	}
 	
-	public void save(String savedTextPath) throws IOException {
-	    FileOutputStream fileOutputStream
-	      = new FileOutputStream(savedTextPath);
-	    ObjectOutputStream objectOutputStream 
-	      = new ObjectOutputStream(fileOutputStream);
-	    objectOutputStream.writeObject(this);
-	    objectOutputStream.flush();
-	    objectOutputStream.close();		
+	public void save(String savedTextPath) {		
+
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(savedTextPath);
+			FSTObjectOutput out = conf.getObjectOutput(fileOutputStream);
+		    out.writeObject( this);
+		    // DON'T out.close() when using factory method;
+		    out.flush();
+		    fileOutputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Error("Saving file \"" + savedTextPath + "\" failed.");
+		}
+		
+		/*
+		
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(savedTextPath);
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+			objectOutputStream.writeObject(this);
+			objectOutputStream.flush();
+			objectOutputStream.close();		
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Error("Saving file \"" + savedTextPath + "\" failed.");
+		}
+		*/
 	}
 	
 	public static Text load(String savedTextPath) throws ClassNotFoundException, IOException {
 
-	    FileInputStream fileInputStream
-	      = new FileInputStream(savedTextPath);
-	    ObjectInputStream objectInputStream
-	      = new ObjectInputStream(fileInputStream);
+	    FileInputStream fileInputStream = new FileInputStream(savedTextPath);
+	    FSTObjectInput in = new FSTObjectInput(fileInputStream);
+	    Text result = (Text) in.readObject();
+	    in.close();
+	    return result;
+	    
+		/*
+	    FileInputStream fileInputStream = new FileInputStream(savedTextPath);
+	    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 	    Text loadedText = (Text) objectInputStream.readObject();
 	    objectInputStream.close(); 
-	    return loadedText;		
+	    return loadedText;	
+	    */	
 	}
 
 
@@ -83,6 +113,30 @@ public class Text implements Serializable, Comparable<Text>{
 	@Override
 	public int compareTo(Text o) {
 		return this.getName().compareTo(o.getName());
+	}
+
+	
+
+	public void filterUnlearnableSentences() {
+		int minSentenceLength = 4;
+		int maxSentenceLength = 16;
+		List<Paragraph> originalParagraphs = new ArrayList<Paragraph>(paragraphs);
+		
+		for (Paragraph paragraph : originalParagraphs) {
+			List<Sentence> originalParagraphSentences = new ArrayList<Sentence>(paragraph.getSentences());
+			for (Sentence sentence : originalParagraphSentences) {
+				if (!(minSentenceLength <= sentence.getWordCount() && sentence.getWordCount() <= maxSentenceLength)) {
+					//It should not be necessary to remove the pointers from the sentence itself
+					paragraph.getSentences().remove(sentence);
+				}
+			}
+			if (paragraph.getSentences().size() == 0) {
+				this.paragraphs.remove(paragraph);
+			}
+		}
+		
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

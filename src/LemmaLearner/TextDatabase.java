@@ -1,20 +1,23 @@
 package LemmaLearner;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.io.File;
-import java.io.IOException;
+
+import java.awt.*;
+import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
 
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
+import org.nustaq.serialization.FSTConfiguration;
+
 import antlrGrammar.*;
 
 
 
 public class TextDatabase{
+	
 	
 	public static final String notAWordString = "NotAWord";
 
@@ -95,8 +98,11 @@ public class TextDatabase{
 		System.out.println("Analysing text " + (i+1) + " of " + textFilesInFolder.size() + ", " + subfile.getName());
 	}
 
+	@SuppressWarnings("IOException")
 	public void parseTextAndAddToDatabase(File subfile) {
 		Text parsedText = parseTextFile(subfile);				
+		parsedText.save(getSavedTextFileName(subfile));
+		parsedText.filterUnlearnableSentences();
 		addTextToDatabase(parsedText);		
 	}
 
@@ -127,13 +133,13 @@ public class TextDatabase{
 				return Text.load(possibleSavedFile.getAbsolutePath());													
 			} 			
 		} catch (Exception e) {
-			System.out.println("The saved text: " + getSavedTextFileName(subfile) + " could note be loaded.");
+			System.out.println("The saved text: " + getSavedTextFileName(subfile) + " could not be loaded.");
+			e.printStackTrace();
 		}
 		//If the loading failed, or if the text shouldn't be loaded, simply read it:
 
 		try {
 			Text parsedText = parse(subfile.getPath(), false);
-			parsedText.save(possibleSavedFile.getAbsolutePath());
 			return parsedText;
 		} catch (IOException e) {
 			e.printStackTrace();

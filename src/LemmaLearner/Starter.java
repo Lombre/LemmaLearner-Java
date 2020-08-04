@@ -1,18 +1,8 @@
 package LemmaLearner;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.io.IOException;
+
 import java.util.*;
 
-import javax.swing.*;
-
-import org.antlr.v4.*;
-import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTree;
-import Tests.TestTool;
+import org.antlr.v4.runtime.CharStream;
 
 
 public class Starter {
@@ -30,6 +20,7 @@ public class Starter {
 		TextDatabase textDatabase = new TextDatabase(shouldLoadSavedTexts, shouldDisplayText);
 		GreedyLearner learner = new GreedyLearner(textDatabase);
 		//memtest();
+		//Thread.sleep(10000);
 		
 		if (shouldParseRealText) 
 			textDatabase.addAllTextsInFolderToDatabase("Other texts");

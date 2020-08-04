@@ -1,15 +1,17 @@
 package LemmaLearner;
 import java.io.Serializable;
 import java.util.*;
+import LemmaLearner.*;
 
 public class Word implements Serializable, Comparable<Word> {
 
-	private final Set<Sentence> sentences = new HashSet<Sentence>();
+	private Set<Sentence> sentences;
 	private final String rawWord;
 	private int frequency;
 	
 	public Word(Sentence originSentence, String rawWord) {
 		this(rawWord);
+		sentences = new ListSet<Sentence>();
 		sentences.add(originSentence);
 	}
 	
