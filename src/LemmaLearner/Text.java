@@ -118,6 +118,15 @@ public class Text implements Serializable, Comparable<Text>{
 	
 
 	public void filterUnlearnableSentences() {
+		//long initialSentenceCount = getParagraphs().stream().flatMap(paragraph -> paragraph.getSentences().stream()).count();
+		filterSentencesBasedOnLength();
+		//long endSentenceCount = getParagraphs().stream().flatMap(paragraph -> paragraph.getSentences().stream()).count();
+		//System.out.println("Initial sentence count = " + initialSentenceCount + ", end sentence count = " + endSentenceCount + ".");
+		
+	}
+
+
+	private void filterSentencesBasedOnLength() {
 		int minSentenceLength = 4;
 		int maxSentenceLength = 16;
 		List<Paragraph> originalParagraphs = new ArrayList<Paragraph>(paragraphs);
@@ -134,9 +143,6 @@ public class Text implements Serializable, Comparable<Text>{
 				this.paragraphs.remove(paragraph);
 			}
 		}
-		
-		// TODO Auto-generated method stub
-		
 	}
 	
 }
