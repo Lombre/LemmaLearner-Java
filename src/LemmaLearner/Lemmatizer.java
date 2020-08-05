@@ -47,12 +47,15 @@ public class Lemmatizer {
 		if (conjugationToLemmas.containsKey(conjugation)) {
 			tempLemma = conjugationToLemmas.get(tempLemma).get(0);
 		}
+		String actualLemma;
 		try {
-			String actualLemma = onlineDictionary.getLemmaFromConjugation(tempLemma);
-			return actualLemma;
+			actualLemma = onlineDictionary.getLemmaFromConjugation(tempLemma);
 		} catch (Exception e) {
-			throw new Error(tempLemma);
+			e.printStackTrace();
+			actualLemma =  TextDatabase.NOT_A_WORD_STRING;
 		}
+        System.out.println("Word \"" + conjugation + "\" has lemma \"" + actualLemma + "\".");
+		return actualLemma;
 	}
 
 }

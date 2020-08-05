@@ -83,7 +83,7 @@ public class TextDatabase{
 		
 		for (int i = 0; i < allConjugations.size(); i++) {
 			String conjugation = allConjugations.get(i);
-			System.out.println("Looking at word " + i + " of " + allConjugations.size() + ".");
+			System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + conjugation + "\".");
 			allLemmas.add(lemmatizer.getLemma(conjugation));
 			System.out.println();
 		}

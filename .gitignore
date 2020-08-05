@@ -3,8 +3,8 @@
 
 
 #Specific directories
-Other texts/**
-Websites/**
+Other texts/
+Websites/
 *.saved
 
 

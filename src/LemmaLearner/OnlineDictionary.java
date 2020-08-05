@@ -10,7 +10,7 @@ import java.nio.file.Path;
 
 public class OnlineDictionary {
 	
-	private final String DICTIONARY_WEBSITE = "https://en.bab.la/dictionary/english-danish/";
+	private final String DICTIONARY_WEBSITE = "https://en.bab.la/dictionary/english-spanish/";
 	private String startWordHTMLMarker = "' class=\"babQuickResult\">";
 	private String endWordHTMLMarker = "</a>";
 	
@@ -19,7 +19,7 @@ public class OnlineDictionary {
 		String response = getResponse(actualWord);
         
         int startDanishTranslationIndex = response.indexOf("\" in English</h2>");
-        int startEnglishTranslationIndex = response.indexOf("\" in Danish</h2>");
+        int startEnglishTranslationIndex = response.indexOf("\" in Spanish</h2>");
         
         if (noEnglishDefinitionFound(startEnglishTranslationIndex) || noDefinitionFound(response))
         	return TextDatabase.NOT_A_WORD_STRING;
@@ -28,12 +28,10 @@ public class OnlineDictionary {
         
         int startWordIndex = response.indexOf(startWordHTMLMarker) + startWordHTMLMarker.length();
         int endWordIndex = response.indexOf(endWordHTMLMarker, startWordIndex);
-        String foundWord = response.substring(startWordIndex, endWordIndex);
+        String foundWord = response.substring(startWordIndex, endWordIndex).toLowerCase();
         
         //Verbs like run will be on the form "to run". We only need the last part.
-        foundWord = foundWord.split(" ")[foundWord.split(" ").length - 1];
-        System.out.println("Word \"" + actualWord + "\" has lemma \"" + foundWord + "\".");
-        
+        foundWord = foundWord.split(" ")[foundWord.split(" ").length - 1];        
 		return foundWord;
 	}
 
