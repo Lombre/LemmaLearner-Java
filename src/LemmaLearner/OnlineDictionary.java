@@ -20,7 +20,7 @@ public class OnlineDictionary {
 		}
 		String response = getResponse(actualWord);
         
-        int startDanishTranslationIndex = response.indexOf("\" in English</h2>");
+        int startSpanishTranslationIndex = response.indexOf("\" in English</h2>");
         int startEnglishTranslationIndex = response.indexOf("\" in Spanish</h2>");
         
         if (noEnglishDefinitionFound(startEnglishTranslationIndex) || noDefinitionFound(response))
