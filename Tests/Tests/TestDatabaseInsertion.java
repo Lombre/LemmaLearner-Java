@@ -70,9 +70,9 @@ class TestDatabaseInsertion {
 		assertSame(parsedSentence, parsedParagraph.getSentences().toArray()[0]);
 		
 		assertEquals(database.allWords.size(), 3);
-		assertEquals(word1.toLowerCase(), database.allWords.get(word1.toLowerCase()).getRawWord());
-		assertEquals(word2.toLowerCase(), database.allWords.get(word2.toLowerCase()).getRawWord());
-		assertEquals(word3.toLowerCase(), database.allWords.get(word3.toLowerCase()).getRawWord());
+		assertEquals(word1.toLowerCase(), database.allWords.get(word1.toLowerCase()).getRawConjugation());
+		assertEquals(word2.toLowerCase(), database.allWords.get(word2.toLowerCase()).getRawConjugation());
+		assertEquals(word3.toLowerCase(), database.allWords.get(word3.toLowerCase()).getRawConjugation());
 	}
 	
 
@@ -128,9 +128,9 @@ class TestDatabaseInsertion {
 		assertNotSame(parsedSentence1, parsedSentence2);
 		
 		assertEquals(database.allWords.size(), 6);
-		for (Word word : database.allWords.values()) {
-			if (!word.getRawWord().equals("different")) TestTool.assertContainsSameObject(parsedSentence1, word.getSentences());
-			if (!word.getRawWord().equals("repeated")) TestTool.assertContainsSameObject(parsedSentence2, word.getSentences());
+		for (Conjugation word : database.allWords.values()) {
+			if (!word.getRawConjugation().equals("different")) TestTool.assertContainsSameObject(parsedSentence1, word.getSentences());
+			if (!word.getRawConjugation().equals("repeated")) TestTool.assertContainsSameObject(parsedSentence2, word.getSentences());
 		}
 		
 		

@@ -1,4 +1,5 @@
 package LemmaLearner;
+import java.awt.Component;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -7,8 +8,9 @@ import LemmaLearner.*;
 
 public class Lemma implements Serializable, Comparable<Lemma> {
 
-	private final Set<Word> conjugations = new ListSet<Word>();
+	private final Set<Conjugation> conjugations = new ListSet<Conjugation>();
 	private final String rawLemma;
+	private int frequency = -1;
 	
 	public Lemma(String rawWord) {
 		this.rawLemma = rawWord.toLowerCase();
@@ -19,7 +21,11 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 	}
 
 	public int getFrequency() {
-		return conjugations.stream().map(word -> word.getFrequency()).reduce(0, (freq1, freq2) -> freq1 + freq2);
+		if (frequency == -1) 
+			frequency = conjugations.stream()
+								    .map(word -> word.getFrequency())
+								    .reduce(0, (freq1, freq2) -> freq1 + freq2);
+		return frequency;
 	}
 	
 	@Override
@@ -48,8 +54,12 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 		return getRawLemma().compareTo(o.getRawLemma());
 	}
 
-	public void addConjugation(Word conjugation) {
+	public void addConjugation(Conjugation conjugation) {
 		this.conjugations.add(conjugation);
 		conjugation.setRawLemma(this);		
+	}
+
+	public Set<Conjugation> getConjugations() {
+		return conjugations;
 	}
 }

@@ -1,30 +1,94 @@
 package LemmaLearner;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.*;
 import java.net.http.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+
+import org.nustaq.serialization.FSTConfiguration;
+import org.nustaq.serialization.FSTObjectInput;
+import org.nustaq.serialization.FSTObjectOutput;
 
 public class OnlineDictionary {
 	
 	private final String DICTIONARY_WEBSITE = "https://en.bab.la/dictionary/english-spanish/";
 	private String startWordHTMLMarker = "' class=\"babQuickResult\">";
 	private String endWordHTMLMarker = "</a>";
+	private HashMap<String, String> conjugationToLemma = new HashMap<String, String>();
+	private final String SAVED_DICTIONARY_PATH = "OnlineDictionary.saved";
+	private boolean shouldLoadSavedDictionary = true;
 	
+	public OnlineDictionary() {
+		
+	}
+
+
+	public void load() {
+		File possibleSavedFile = new File(SAVED_DICTIONARY_PATH);
+		try {					
+			//If the file have already been parsed and save, simply load that, as this is faster than parsing it again.
+			if (possibleSavedFile.exists() && shouldLoadSavedDictionary) 
+				conjugationToLemma = loadSavedDictionary();
+			else 
+				conjugationToLemma = new HashMap<String, String>();				
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new Error();
+			// TODO: handle exception
+		}
+	}
+	
+	
+	public void save() {
+		try {
+			FSTConfiguration conf = FSTConfiguration.createDefaultConfiguration();
+			FileOutputStream fileOutputStream = new FileOutputStream(SAVED_DICTIONARY_PATH);
+			FSTObjectOutput out = conf.getObjectOutput(fileOutputStream);
+		    out.writeObject(conjugationToLemma);
+		    // DON'T out.close() when using factory method;
+		    out.flush();
+		    fileOutputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Error("Saving file \"" + SAVED_DICTIONARY_PATH + "\" failed.");
+		}
+	}
+	
+	private HashMap<String, String> loadSavedDictionary() throws Exception {
+		FileInputStream fileInputStream = new FileInputStream(SAVED_DICTIONARY_PATH);
+	    FSTObjectInput in = new FSTObjectInput(fileInputStream);
+	    HashMap<String, String> result = ( HashMap<String, String>) in.readObject();
+	    in.close();
+	    return result;
+	}
+
+
 	public String getLemmaFromConjugation(String actualWord) throws IOException, InterruptedException {
 		if (actualWord.equals("con") || actualWord.equals("aux") || actualWord.equals("in*")) {
 			return actualWord;
 		}
+		
+		if (conjugationToLemma.containsKey(actualWord)) {
+			return conjugationToLemma.get(actualWord);
+		}
+		
 		String response = getResponse(actualWord);
         
         int startSpanishTranslationIndex = response.indexOf("\" in English</h2>");
         int startEnglishTranslationIndex = response.indexOf("\" in Spanish</h2>");
         
-        if (noEnglishDefinitionFound(startEnglishTranslationIndex) || noDefinitionFound(response))
-        	return TextDatabase.NOT_A_WORD_STRING;
+        if (noEnglishDefinitionFound(startEnglishTranslationIndex) || noDefinitionFound(response)) {
+        	conjugationToLemma.put(actualWord, TextDatabase.NOT_A_WORD_STRING);
+        	return conjugationToLemma.get(actualWord);
+        }
         else //We only want to look at the english translation.
         	response = response.substring(startEnglishTranslationIndex); 
         
@@ -33,8 +97,9 @@ public class OnlineDictionary {
         String foundWord = response.substring(startWordIndex, endWordIndex).toLowerCase();
         
         //Verbs like run will be on the form "to run". We only need the last part.
-        foundWord = foundWord.split(" ")[foundWord.split(" ").length - 1];        
-		return foundWord;
+        foundWord = foundWord.split(" ")[foundWord.split(" ").length - 1];       
+        conjugationToLemma.put(actualWord, foundWord);
+		return conjugationToLemma.get(actualWord);
 	}
 
 

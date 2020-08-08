@@ -3,26 +3,26 @@ import java.io.Serializable;
 import java.util.*;
 import LemmaLearner.*;
 
-public class Word implements Serializable, Comparable<Word> {
+public class Conjugation implements Serializable, Comparable<Conjugation> {
 
 	private Set<Sentence> sentences;
-	private final String rawWord;
+	private final String rawConjugation;
 	private int frequency;
 	private Lemma lemma;
 	
 	
-	public Word(Sentence originSentence, String rawWord) {
-		this(rawWord);
+	public Conjugation(Sentence originSentence, String rawConjugation) {
+		this(rawConjugation);
 		sentences = new ListSet<Sentence>();
 		sentences.add(originSentence);
 	}
 	
-	public Word(String rawWord) {
-		this.rawWord = rawWord.toLowerCase();
+	public Conjugation(String rawConjugation) {
+		this.rawConjugation = rawConjugation.toLowerCase();
 	}
 	
-	public String getRawWord() {
-		return rawWord;
+	public String getRawConjugation() {
+		return rawConjugation;
 	}
 	
 	public Lemma getLemma() {
@@ -37,30 +37,30 @@ public class Word implements Serializable, Comparable<Word> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Word))
+		if (!(obj instanceof Conjugation))
 			return false;
-		else return ((Word) obj).getRawWord().equals(this.getRawWord());
+		else return ((Conjugation) obj).getRawConjugation().equals(this.getRawConjugation());
 	}
 	
 	@Override
 	public int hashCode() {
-		return rawWord.hashCode();
+		return rawConjugation.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return getRawWord();
+		return getRawConjugation();
 	}
 
 	public void addToDatabase(TextDatabase textDatabase) {
-		if (textDatabase.allWords.containsKey(this.getRawWord())) {
+		if (textDatabase.allWords.containsKey(this.getRawConjugation())) {
 			//The sentences have already been added, 
 			//so the word in the database simply also needs to refer to those sentences.
-			Word databaseWord = textDatabase.allWords.get(this.getRawWord());
+			Conjugation databaseWord = textDatabase.allWords.get(this.getRawConjugation());
 			databaseWord.sentences.addAll(sentences);		
 			databaseWord.frequency++;			
 		} else {
-			textDatabase.allWords.put(getRawWord(), this);
+			textDatabase.allWords.put(getRawConjugation(), this);
 			frequency = 1;
 		}
 	}
@@ -70,13 +70,13 @@ public class Word implements Serializable, Comparable<Word> {
 	}
 
 	@Override
-	public int compareTo(Word o) {
-		return getRawWord().compareTo(o.getRawWord());
+	public int compareTo(Conjugation o) {
+		return getRawConjugation().compareTo(o.getRawConjugation());
 	}
 
 	public void setRawLemma(Lemma lemma) {
 		if (this.lemma != null) 
-			throw new Error("The lemma for a word must not be changed.");
+			throw new Error("The lemma for a conjugation is immutable.");
 		this.lemma = lemma;
 	}
 }

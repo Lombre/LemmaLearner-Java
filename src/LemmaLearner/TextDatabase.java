@@ -31,7 +31,7 @@ public class TextDatabase{
 	public HashMap<String, Sentence> allSentences = new HashMap<String, Sentence>();
 	
 	//Words are not assumed to be unique. Uses word.rawWord.
-	public HashMap<String, Word> allWords = new HashMap<String, Word>();
+	public HashMap<String, Conjugation> allWords = new HashMap<String, Conjugation>();
 	
 	public HashMap<String, Lemma> allLemmas = new HashMap<String, Lemma>();
 	
@@ -48,7 +48,6 @@ public class TextDatabase{
 		File folder = new File(folderLocation);
 		List<File> filesInFolder = Arrays.asList(folder.listFiles());
 		List<File> textFilesInFolder = filesInFolder.stream().filter(file -> isTextFile(file)).collect(Collectors.toList());
-		List<Text> parsedTexts = new ArrayList<Text>();
 		
 		//We want to measure the time taken to parse all the texts.
 		long absoluteStartTime = System.currentTimeMillis();		
@@ -61,8 +60,7 @@ public class TextDatabase{
 			File subfile = textFilesInFolder.get(i);
 			
 			if (shouldPrintText)
-				printProgressInAddingTextsToDatabase(textFilesInFolder, totalFileSpaceConsumption,
-						accumulatedFileSpaceConsumption, i, subfile);
+				printProgressInAddingTextsToDatabase(textFilesInFolder, totalFileSpaceConsumption, accumulatedFileSpaceConsumption, i, subfile);
 			accumulatedFileSpaceConsumption += subfile.length();
 			
 			parseTextAndAddToDatabase(subfile);
@@ -79,11 +77,11 @@ public class TextDatabase{
 	public void initializeLemmas() {
 		Lemmatizer lemmatizer = new Lemmatizer();
 		
-		List<Word> allConjugations = new ArrayList<Word>(allWords.values());
+		List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
 		allConjugations.sort((word1, word2) -> word1.compareTo(word2));
 		
 		for (int i = 0; i < allConjugations.size(); i++) {
-			Word currentConjugation = allConjugations.get(i);
+			Conjugation currentConjugation = allConjugations.get(i);
 			String rawLemma = lemmatizer.getRawLemma(currentConjugation);
 			Lemma currentLemma;
 			if (allLemmas.containsKey(rawLemma))
@@ -94,12 +92,13 @@ public class TextDatabase{
 			}
 			currentLemma.addConjugation(currentConjugation);
 			if ((i % 100 == 0 || i < 1000) && shouldLoadSavedTexts) {
-				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawWord() + "\".");		
-		        System.out.println("Word \"" + currentConjugation.getRawWord() + "\" has lemma \"" + rawLemma + "\".");
+				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawConjugation() + "\".");		
+		        System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
 		        System.out.println();
 			}
 		}
-		
+		lemmatizer.save();		
+		System.out.println("Sentences conjugation count: " + allLemmas.get("sentences").getConjugations().size());
 		System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
 		int k = 1;
 	}
@@ -139,7 +138,7 @@ public class TextDatabase{
 																	  .collect(Collectors.toList());
 			parsedSentences.forEach(sentence -> sentence.addToDatabase(this));
 			
-			List<Word> parsedWords = parsedSentences.stream().flatMap(sentence -> sentence.getRawWordSet().stream().map(rawWord -> new Word(sentence, rawWord)))
+			List<Conjugation> parsedWords = parsedSentences.stream().flatMap(sentence -> sentence.getRawWordSet().stream().map(rawWord -> new Conjugation(sentence, rawWord)))
 					  										 .collect(Collectors.toList());
 			parsedWords.forEach(word -> word.addToDatabase(this));
 		}

@@ -14,8 +14,16 @@ public class Lemmatizer {
 	OnlineDictionary onlineDictionary = new OnlineDictionary();
 	
 	
-	public Lemmatizer() {
-		
+	public Lemmatizer() {		
+		initializeStandardLemmatizer();
+		onlineDictionary.load();
+	}
+	
+	void save() {
+		onlineDictionary.save();
+	}
+
+	private void initializeStandardLemmatizer() {
 		try (Stream<String> lines = Files.lines(lemmaFilePath, Charset.defaultCharset())) {
 			for (String line : (Iterable<String>) lines::iterator)
 		    {
@@ -37,12 +45,11 @@ public class Lemmatizer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		int k = 1;
 	}
 
 
-	public String getRawLemma(Word conjugation) {
-		return getRawLemma(conjugation.getRawWord());
+	public String getRawLemma(Conjugation conjugation) {
+		return getRawLemma(conjugation.getRawConjugation());
 	}
 	
 	public String getRawLemma(String rawConjugation) {

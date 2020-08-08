@@ -98,8 +98,8 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return (lemmasInSentence - lemmasInSentenceLearned) <= 1;
 	}
 	
-	public Set<Word> getWordSet(TextDatabase database) {
-		return new HashSet<Word>(getWordList(database));
+	public Set<Conjugation> getWordSet(TextDatabase database) {
+		return new HashSet<Conjugation>(getWordList(database));
 	}
 	
 
@@ -110,9 +110,9 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		
 	}
 
-	public List<Word> getWordList(TextDatabase database) {
+	public List<Conjugation> getWordList(TextDatabase database) {
 		List<String> rawWordsInSentence = getRawWordList();
-		List<Word> wordsInDatabase = new ArrayList<Word>();
+		List<Conjugation> wordsInDatabase = new ArrayList<Conjugation>();
 		for (String rawWord : rawWordsInSentence) {
 			wordsInDatabase.add(database.allWords.get(rawWord));
 		}
@@ -131,7 +131,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public Integer getHighestFrequency(TextDatabase database) {
-		Set<Word> wordsInDatabase = getWordSet(database);
+		Set<Conjugation> wordsInDatabase = getWordSet(database);
 		return wordsInDatabase.stream().map(word -> word.getFrequency()).max((x, y) -> x.compareTo(y)).get();
 	}
 

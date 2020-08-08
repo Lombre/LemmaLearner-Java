@@ -46,19 +46,6 @@ public class Text implements Serializable, Comparable<Text>{
 			throw new Error("Saving file \"" + savedTextPath + "\" failed.");
 		}
 		
-		/*
-		
-		try {
-			FileOutputStream fileOutputStream = new FileOutputStream(savedTextPath);
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-			objectOutputStream.writeObject(this);
-			objectOutputStream.flush();
-			objectOutputStream.close();		
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Error("Saving file \"" + savedTextPath + "\" failed.");
-		}
-		*/
 	}
 	
 	public static Text load(String savedTextPath) throws ClassNotFoundException, IOException {
@@ -68,14 +55,6 @@ public class Text implements Serializable, Comparable<Text>{
 	    Text result = (Text) in.readObject();
 	    in.close();
 	    return result;
-	    
-		/*
-	    FileInputStream fileInputStream = new FileInputStream(savedTextPath);
-	    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-	    Text loadedText = (Text) objectInputStream.readObject();
-	    objectInputStream.close(); 
-	    return loadedText;	
-	    */	
 	}
 
 
