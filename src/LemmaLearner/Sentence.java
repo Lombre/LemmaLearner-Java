@@ -10,23 +10,23 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	private final short[] wordBeginningIndex;
 	private final short[] wordLengthIndex;
 	
-	public Sentence(String rawSentence, List<Word> words) {
+	public Sentence(String rawSentence, List<String> rawWords) {
 		if (Short.MAX_VALUE <= rawSentence.length()) throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
 		this.rawSentence = rawSentence;
-		wordBeginningIndex = new short[words.size()];
-		wordLengthIndex = new short[words.size()];
-		setWordIndexes(rawSentence, words);
+		wordBeginningIndex = new short[rawWords.size()];
+		wordLengthIndex = new short[rawWords.size()];
+		setWordIndexes(rawSentence, rawWords);
 	}
 
-	private void setWordIndexes(String rawSentence, List<Word> words) {
+	private void setWordIndexes(String rawSentence, List<String> rawWords) {
 		String lowerCaseRawSentence = rawSentence.toLowerCase();
-		for (int i = 0; i < words.size(); i++) {
-			Word currentWord = words.get(i);
-			int indexBeginning = lowerCaseRawSentence.indexOf(currentWord.getRawWord());
+		for (int i = 0; i < rawWords.size(); i++) {
+			String currentRawWord = rawWords.get(i);
+			int indexBeginning = lowerCaseRawSentence.indexOf(currentRawWord.toLowerCase());
 			if (indexBeginning == -1) 
-				throw new Error("Word " + currentWord.getRawWord() + " not found in sentence: " + getRawSentence());
+				throw new Error("Word \"" + currentRawWord + "\" not found in sentence: " + getRawSentence());
 			wordBeginningIndex[i] = (short) indexBeginning;
-			wordLengthIndex[i] = (short) (currentWord.getRawWord().length());
+			wordLengthIndex[i] = (short) (currentRawWord.length());
 		}
 	}
 	
@@ -34,13 +34,13 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return rawSentence;
 	}
 
-	public List<Word> getWordList() {
-		ArrayList<Word> words = new ArrayList<Word>();
+	public List<String> getRawWordList() {
+		ArrayList<String> rawWords = new ArrayList<String>();
 		for (int i = 0; i < wordBeginningIndex.length; i++) {
 			String rawWord = rawSentence.substring(wordBeginningIndex[i], wordBeginningIndex[i] + wordLengthIndex[i]).toLowerCase();
-			words.add(new Word(this, rawWord));
+			rawWords.add(rawWord);
 		}
-		return words;
+		return rawWords;
 	}	
 	
 
@@ -48,8 +48,8 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	 * OBS. Note that the words are not synchronized with the database. For this, use getSynchronizedWordSet(textDatabase)
 	 * @return
 	 */
-	public Set<Word> getWordSet() {
-		return new HashSet<>(getWordList());
+	public Set<String> getRawWordSet() {
+		return new HashSet<>(getRawWordList());
 	}
 	
 	
@@ -91,24 +91,28 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public boolean isDirectlyLearnable(Set<Word> learnedWords, TextDatabase database) {
-		Set<Word> wordsInDatabase = this.getWordsInDatabase(database);
+		Set<Word> wordsInDatabase = this.getWordSet(database);
 		int wordsInSentence = wordsInDatabase.size();
 		wordsInDatabase.retainAll(learnedWords);
 		int wordsInSentenceLearned = wordsInDatabase.size();
 		return (wordsInSentence - wordsInSentenceLearned) <= 1;
 	}
+	
+	public Set<Word> getWordSet(TextDatabase database) {
+		return new HashSet<Word>(getWordList(database));
+	}
 
-	public Set<Word> getWordsInDatabase(TextDatabase database) {
-		Set<Word> wordsInSentence = getWordSet();
-		Set<Word> wordsInDatabase = new HashSet<Word>();
-		for (Word word : wordsInSentence) {
-			wordsInDatabase.add(database.allWords.get(word.getRawWord()));
+	public List<Word> getWordList(TextDatabase database) {
+		List<String> rawWordsInSentence = getRawWordList();
+		List<Word> wordsInDatabase = new ArrayList<Word>();
+		for (String rawWord : rawWordsInSentence) {
+			wordsInDatabase.add(database.allWords.get(rawWord));
 		}
 		return wordsInDatabase;
 	}
 	
 	public List<Word> getUnlearnedWords(Set<Word> learnedWords, TextDatabase database){
-		Set<Word> wordsInSentence = this.getWordsInDatabase(database);
+		Set<Word> wordsInSentence = this.getWordSet(database);
 		List<Word> unlearnedWords = wordsInSentence.stream().filter(word -> !learnedWords.contains(word)).collect(Collectors.toList());
 		return unlearnedWords;
 	}
@@ -119,7 +123,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public Integer getHighestFrequency(TextDatabase database) {
-		Set<Word> wordsInDatabase = getWordsInDatabase(database);
+		Set<Word> wordsInDatabase = getWordSet(database);
 		return wordsInDatabase.stream().map(word -> word.getFrequency()).max((x, y) -> x.compareTo(y)).get();
 	}
 

@@ -165,7 +165,7 @@ class TestDatabaseInsertion {
 	
 
 	@Test
-	public void testFrequencyOfWordsOnlyCountendOncePerSentence() throws Exception {
+	public void testFrequencyOfWordsOnlyCountedOncePerSentence() throws Exception {
 		String word1 = "unique";
 		String word2 = "word";
 		String word3 = "not";

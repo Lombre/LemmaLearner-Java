@@ -23,18 +23,6 @@ public class Text implements Serializable, Comparable<Text>{
 	}
 
 	
-	public List<Word> getAllWords(){
-		List<Word> words = paragraphs.stream()
-				  						.flatMap(paragraph -> paragraph.getSentences().stream())
-										.flatMap(sentence -> sentence.getWordList().stream())
-										.collect(Collectors.toList());
-		Set<Word> nonDuplicatedWords = new ListSet<Word>(words);
-		List<Word> wordList = new ArrayList<Word>(nonDuplicatedWords);
-		wordList.sort((a, b) -> a.getRawWord().compareTo(b.getRawWord()));
-		return wordList;
-	}
-	
-	
 	public String getName() {
 		return name;
 	}

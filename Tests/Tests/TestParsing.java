@@ -50,11 +50,11 @@ class TestParsing {
 
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedSentence);
-		assertEquals(3, sentence.getWordList().size());
+		assertEquals(3, sentence.getRawWordList().size());
 		
-		assertEquals(wordPart1.toLowerCase(), sentence.getWordList().get(0).getRawWord());
-		assertEquals(wordPart2.toLowerCase(), sentence.getWordList().get(1).getRawWord());
-		assertEquals(wordPart3.toLowerCase(), sentence.getWordList().get(2).getRawWord());
+		assertEquals(wordPart1.toLowerCase(), sentence.getRawWordList().get(0));
+		assertEquals(wordPart2.toLowerCase(), sentence.getRawWordList().get(1));
+		assertEquals(wordPart3.toLowerCase(), sentence.getRawWordList().get(2));
 	}
 	
 
@@ -74,9 +74,9 @@ class TestParsing {
 
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedSentence);
-		assertEquals(1, sentence.getWordList().size());
+		assertEquals(1, sentence.getRawWordList().size());
 		
-		assertEquals(word.toLowerCase(), sentence.getWordList().get(0).getRawWord());
+		assertEquals(word.toLowerCase(), sentence.getRawWordList().get(0));
 	}
 
 	@Test
@@ -94,10 +94,10 @@ class TestParsing {
 		
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedParagraph);
-		assertEquals(sentence.getWordList().size(), 1);
+		assertEquals(sentence.getRawWordList().size(), 1);
 		
-		Word word = sentence.getWordList().get(0);
-		assertEquals(word.getRawWord(), expectedWord.toLowerCase());		
+		String rawWord = sentence.getRawWordList().get(0);
+		assertEquals(rawWord, expectedWord.toLowerCase());		
 	}
 
 	@Test
@@ -119,16 +119,16 @@ class TestParsing {
 		
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedParagraph);
-		assertEquals(sentence.getWordList().size(), 3);
+		assertEquals(sentence.getRawWordList().size(), 3);
 		
-		Word word1 = sentence.getWordList().get(0);
-		assertEquals(word1.getRawWord(), expectedWord1.toLowerCase());	
+		String rawWord1 = sentence.getRawWordList().get(0);
+		assertEquals(rawWord1, expectedWord1.toLowerCase());	
 
-		Word word2 = sentence.getWordList().get(1);
-		assertEquals(word2.getRawWord(), expectedWord2.toLowerCase());	
+		String rawWord2 = sentence.getRawWordList().get(1);
+		assertEquals(rawWord2, expectedWord2.toLowerCase());	
 
-		Word word3 = sentence.getWordList().get(2);
-		assertEquals(word3.getRawWord(), expectedWord3.toLowerCase());	
+		String rawWord3 = sentence.getRawWordList().get(2);
+		assertEquals(rawWord3, expectedWord3.toLowerCase());	
 		
 	}
 	
@@ -194,7 +194,7 @@ class TestParsing {
 		
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedSentence);
-		assertEquals(sentence.getWordList().size(), 6);
+		assertEquals(sentence.getRawWordList().size(), 6);
 	}
 	
 
@@ -212,15 +212,15 @@ class TestParsing {
 		
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedSentence);
-		assertEquals(sentence.getWordList().size(), 6);
+		assertEquals(sentence.getRawWordList().size(), 6);
 		
-		List<Word> wordList = sentence.getWordList();
-		assertEquals("this", wordList.get(0).getRawWord());
-		assertEquals("should", wordList.get(1).getRawWord());
-		assertEquals("hopefully", wordList.get(2).getRawWord());
-		assertEquals("be", wordList.get(3).getRawWord());
-		assertEquals("one", wordList.get(4).getRawWord());
-		assertEquals("sentence", wordList.get(5).getRawWord());
+		List<String> rawWordList = sentence.getRawWordList();
+		assertEquals("this", rawWordList.get(0));
+		assertEquals("should", rawWordList.get(1));
+		assertEquals("hopefully", rawWordList.get(2));
+		assertEquals("be", rawWordList.get(3));
+		assertEquals("one", rawWordList.get(4));
+		assertEquals("sentence", rawWordList.get(5));
 	}
 	
 
@@ -238,7 +238,7 @@ class TestParsing {
 		
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedSentence);
-		assertEquals(sentence.getWordList().size(), 6);
+		assertEquals(sentence.getRawWordList().size(), 6);
 	}
 	
 
@@ -258,7 +258,7 @@ class TestParsing {
 		
 		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence.getRawSentence(), expectedSentence);
-		assertEquals(sentence.getWordList().size(), 5);
+		assertEquals(sentence.getRawWordList().size(), 5);
 		
 	}	
 
@@ -279,11 +279,11 @@ class TestParsing {
 		
 		Sentence sentence1 = (Sentence) paragraph.getSentences().toArray()[0];
 		assertEquals(sentence1.getRawSentence(), expectedSentence1);
-		assertEquals(sentence1.getWordList().size(), 5);
+		assertEquals(sentence1.getRawWordList().size(), 5);
 		
 		Sentence sentence2 = (Sentence) paragraph.getSentences().toArray()[1];
 		assertEquals(sentence2.getRawSentence(), expectedSentence2);
-		assertEquals(sentence2.getWordList().size(), 5);		
+		assertEquals(sentence2.getRawWordList().size(), 5);		
 	}
 	
 	@Test

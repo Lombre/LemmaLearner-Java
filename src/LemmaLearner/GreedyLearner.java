@@ -70,7 +70,7 @@ public class GreedyLearner {
 		Sentence bestScoringSentence = null;
 		for (Sentence sentence : database.allSentences.values()) {
 			//Sum of word frequencies in sentence
-			int currentSentenceScore = sentence.getWordsInDatabase(database).stream()
+			int currentSentenceScore = sentence.getWordList(database).stream()
 															.map(word -> word.getFrequency())
 															.reduce(0, (frequency1, frequency2) -> frequency1 + frequency2);
 			if (bestSentenceScore < currentSentenceScore) {
@@ -79,7 +79,7 @@ public class GreedyLearner {
 			}
 		}
 		System.out.println("Learn initial sentence with total frequency score " + bestSentenceScore + ": " + bestScoringSentence.getRawSentence());
-		for (Word word : bestScoringSentence.getWordsInDatabase(database)) {
+		for (Word word : bestScoringSentence.getWordList(database)) {
 			learnWord(bestScoringSentence, learnedWords, learningOrder, wordsByFrequency, word);
 			updateDirectlyLearnableSentences(word, learnedWords, directlyLearnableSentencesByFrequency, seenSentences);	
 		}
@@ -118,7 +118,7 @@ public class GreedyLearner {
 	private Word learnWordWithoutSentence(PriorityQueue<Word> wordsByFrequency, Set<Word> learnedWords, List<Pair<Word, Sentence>> learningOrder) {
 		Word wordToLearn = wordsByFrequency.poll();
 		learnedWords.add(wordToLearn);
-		learningOrder.add(new Pair<Word, Sentence>(wordToLearn, new Sentence(NOT_A_SENTENCE_STRING, new ArrayList<Word>())));
+		learningOrder.add(new Pair<Word, Sentence>(wordToLearn, new Sentence(NOT_A_SENTENCE_STRING, new ArrayList<String>())));
 		printLearnedInformation(learningOrder);
 		return wordToLearn;
 	}
@@ -136,7 +136,7 @@ public class GreedyLearner {
 	public PriorityQueue<Pair<Sentence, Integer>> getDirectlyLearnableWordsByFrequency(Set<Word> learnedWords) {
 		PriorityQueue<Pair<Sentence, Integer>> directlyLearnableSentencesByFrequency = getSentencesByUnlearnedWordFrequency(learnedWords);
 		for (Sentence sentence : database.allSentences.values()) {
-			if (sentence.isDirectlyLearnable(learnedWords, database) && 0 < sentence.getWordList().size()) {
+			if (sentence.isDirectlyLearnable(learnedWords, database) && 0 < sentence.getRawWordList().size()) {
 				Pair<Sentence, Integer> sentenceScorePair = new Pair<Sentence, Integer>(sentence, -sentence.getHighestFrequency(database));
 				directlyLearnableSentencesByFrequency.add(sentenceScorePair);				
 			}

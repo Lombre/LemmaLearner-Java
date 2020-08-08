@@ -26,13 +26,13 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 		return sentences;
 	}
 
-	public List<Word> getAllWords() {
-		List<Word> wordList = new ArrayList<Word>();
+	public List<String> getAllRawWords() {
+		List<String> rawWordList = new ArrayList<String>();
 		for (Sentence sentence : sentences) {
-			List<Word> sentenceWords = sentence.getWordList();
-			wordList.addAll(sentenceWords);
+			List<String> sentenceWords = sentence.getRawWordList();
+			rawWordList.addAll(sentenceWords);
 		}
-		return wordList;
+		return rawWordList;
 	}
 	
 	public void setParagraphID(String id) {

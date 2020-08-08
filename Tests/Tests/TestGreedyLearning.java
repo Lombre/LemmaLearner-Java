@@ -139,8 +139,14 @@ class TestGreedyLearning {
 			var currentSentence = learningOrder.get(i).getSecond();
 			var nextWord = learningOrder.get(i+1).getFirst();
 			var nextSentence = learningOrder.get(i+1).getSecond();
+
+			//An initial sentence is learned, with all the words in it. 
+			//The words learned from this sentence should thus be skipped.
+			if (currentSentence.equals(learningOrder.get(0).getSecond())) {
+				continue;
+			}
 			
-			if (!nextSentence.getRawSentence().equals(learner.NOT_A_SENTENCE_STRING) && !nextSentence.getWordSet().contains(currentWord)) {
+			if (!nextSentence.getRawSentence().equals(learner.NOT_A_SENTENCE_STRING) && !nextSentence.getWordSet(database).contains(currentWord)) {
 				if (!(nextWord.getFrequency() <= currentWord.getFrequency())) {
 					int k = 1;
 				}
@@ -161,10 +167,16 @@ class TestGreedyLearning {
 		List<Pair<Word, Sentence>> learningOrder = learner.learnAllLemmas();
 		Set<Word> learnedWords = new HashSet<Word>();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
-			var learnedWord = learningOrder.get(i).getFirst();
-			var currentSentence = learningOrder.get(i).getSecond();
+			Word learnedWord = learningOrder.get(i).getFirst();
+			Sentence currentSentence = learningOrder.get(i).getSecond();
+			//An initial sentence is learned, with all the words in it. 
+			//The words learned from this sentence should thus be skipped.
+			if (currentSentence.equals(learningOrder.get(0).getSecond())) {
+				learnedWords.add(learnedWord);
+				continue;
+			}
 			assertFalse(learnedWords.contains(learnedWord));
-			for (Word wordInSentence : currentSentence.getWordsInDatabase(database)) {
+			for (Word wordInSentence : currentSentence.getWordList(database)) {
 				if (wordInSentence == learnedWord)
 					assertFalse(learnedWords.contains(wordInSentence));
 				else {

@@ -54,7 +54,6 @@ public class Lemmatizer {
 			e.printStackTrace();
 			actualLemma =  TextDatabase.NOT_A_WORD_STRING;
 		}
-        System.out.println("Word \"" + conjugation + "\" has lemma \"" + actualLemma + "\".");
 		return actualLemma;
 	}
 

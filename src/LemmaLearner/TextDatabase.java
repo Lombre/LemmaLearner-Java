@@ -79,13 +79,18 @@ public class TextDatabase{
 		System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
 		Lemmatizer lemmatizer = new Lemmatizer();
 		List<String> allConjugations = allWords.values().stream().map(word -> word.getRawWord()).collect(Collectors.toList());
+		allConjugations.sort((string1, string2) -> string1.compareTo(string2));
 		HashSet<String> allLemmas = new HashSet<String>();
 		
 		for (int i = 0; i < allConjugations.size(); i++) {
 			String conjugation = allConjugations.get(i);
-			System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + conjugation + "\".");
-			allLemmas.add(lemmatizer.getLemma(conjugation));
-			System.out.println();
+			String lemmaString = lemmatizer.getLemma(conjugation);
+			allLemmas.add(lemmaString);
+			if (i % 100 == 0 || i < 1000) {
+				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + conjugation + "\".");		
+		        System.out.println("Word \"" + conjugation + "\" has lemma \"" + lemmaString + "\".");
+		        System.out.println();
+			}
 		}
 		
 		System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
@@ -120,7 +125,7 @@ public class TextDatabase{
 																	  .collect(Collectors.toList());
 			parsedSentences.forEach(sentence -> sentence.addToDatabase(this));
 			
-			List<Word> parsedWords = parsedSentences.stream().flatMap(sentence -> sentence.getWordSet().stream())
+			List<Word> parsedWords = parsedSentences.stream().flatMap(sentence -> sentence.getRawWordSet().stream().map(rawWord -> new Word(sentence, rawWord)))
 					  										 .collect(Collectors.toList());
 			parsedWords.forEach(word -> word.addToDatabase(this));
 		}

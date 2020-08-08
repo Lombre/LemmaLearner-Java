@@ -15,7 +15,9 @@ public class OnlineDictionary {
 	private String endWordHTMLMarker = "</a>";
 	
 	public String getLemmaFromConjugation(String actualWord) throws IOException, InterruptedException {
-		
+		if (actualWord.equals("con") || actualWord.equals("aux") || actualWord.equals("in*")) {
+			return actualWord;
+		}
 		String response = getResponse(actualWord);
         
         int startDanishTranslationIndex = response.indexOf("\" in English</h2>");
@@ -40,13 +42,13 @@ public class OnlineDictionary {
 	private String getResponse(String actualWord) throws IOException, InterruptedException, Error {
 		File savedDictionaryData = new File("Websites/" + actualWord + ".txt");
 		
-		if (savedDictionaryData.exists()) {
+		if (savedDictionaryData.exists() && true) {
 			return Files.readString(savedDictionaryData.toPath());
 		} else {
 			String response = getDictionaryWebpage(actualWord);
 			
 	        //To avoid spaming the website.
-	        Thread.sleep(2000);
+	        Thread.sleep(1000);
 			
 			try (PrintWriter out = new PrintWriter("Websites/" + actualWord + ".txt")) {
 				out.println(response);

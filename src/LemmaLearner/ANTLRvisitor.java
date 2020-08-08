@@ -109,7 +109,7 @@ public class ANTLRvisitor {
 			String rawText = getRawTextFromContext(ctx);
 			SentenceVisitor danglingSentenceVisitor = new SentenceVisitor();
 			Sentence danglingSentence = danglingSentenceVisitor.visit(ctx.sentence);			
-			return new Sentence(rawText, danglingSentence.getWordList());
+			return new Sentence(rawText, danglingSentence.getRawWordList());
 		}		
 
 		
@@ -118,7 +118,7 @@ public class ANTLRvisitor {
 			String rawText = getRawTextFromContext(ctx);
 			SentenceVisitor danglingSentenceVisitor = new SentenceVisitor();
 			Sentence danglingSentence = danglingSentenceVisitor.visit(ctx.sentence);			
-			return new Sentence(rawText, danglingSentence.getWordList());
+			return new Sentence(rawText, danglingSentence.getRawWordList());
 		}		
 
 		@Override
@@ -126,17 +126,17 @@ public class ANTLRvisitor {
 			String rawText = getRawTextFromContext(ctx);
 			WordVisitor wordVisitor = new WordVisitor();
 			QuotedSentenceVisitor quotedSentenceVisitor = new QuotedSentenceVisitor();
-			List<Word> words = new ArrayList<Word>();
+			List<String> rawWords = new ArrayList<String>();
 
 			for (int i = 0; i < ctx.children.size(); i++) {
 				var child = ctx.children.get(i);				
 				if (child instanceof WordContext) {
-					List<Word> wordsToAdd = wordVisitor.visit(child);
-					words.addAll(wordsToAdd);	
+					List<String> wordsToAdd = wordVisitor.visit(child);
+					rawWords.addAll(wordsToAdd);	
 				}
 				else if (child instanceof QuotedSentenceContext) {
-					List<Word> wordsToAdd = quotedSentenceVisitor.visit(child).getAllWords();
-					words.addAll(wordsToAdd);	
+					List<String> rawWordsToAdd = quotedSentenceVisitor.visit(child).getAllRawWords();
+					rawWords.addAll(rawWordsToAdd);	
 					
 				}
 				else if (child instanceof TerminalNodeImpl)	
@@ -145,7 +145,7 @@ public class ANTLRvisitor {
 					throw new Error("Unhandeled context type: " + child.getClass());
 			}
 			
-			return new Sentence(rawText, words);
+			return new Sentence(rawText, rawWords);
 		}
 	}
 	
@@ -166,32 +166,32 @@ public class ANTLRvisitor {
 
 	
 
-	public static class WordVisitor extends TextParsingGrammarBaseVisitor<List<Word>>{
+	public static class WordVisitor extends TextParsingGrammarBaseVisitor<List<String>>{
 
 		@Override
-		public List<Word> visitWord(WordContext ctx) {
+		public List<String> visitWord(WordContext ctx) {
 			var child = ctx.children.get(0);
 			NormalWordVisitor visitor = new NormalWordVisitor();
 			if (child instanceof NormalWordContext )
 				return visitor.visit(child);
 			else if (child instanceof NonWordContext)					
-				return new ArrayList<Word>();
+				return new ArrayList<String>();
 			//	return new ArrayList<Word>() {{add(new Word(TextDatabase.notAWordString));}};
 			else throw new Error("Unhandeled context type: " + child.getClass());
 		}
 	}	
 	
 
-	public static class NormalWordVisitor extends TextParsingGrammarBaseVisitor<List<Word>>{
+	public static class NormalWordVisitor extends TextParsingGrammarBaseVisitor<List<String>>{
 
 		@Override
-		public List<Word> visitNormalWord(NormalWordContext ctx) {
+		public List<String> visitNormalWord(NormalWordContext ctx) {
 			String rawText = getRawTextFromContext(ctx);
 			List<String> splitText = Arrays.asList(rawText.split("(’|,)"));
 			
 			return splitText.stream()
 					        .filter(wordPart -> !wordPart.equals(""))
-							.map(wordPart -> new Word(wordPart))
+							//.map(wordPart -> new Word(wordPart))
 							.collect(Collectors.toList());
 		}
 	}	
