@@ -8,6 +8,8 @@ public class Word implements Serializable, Comparable<Word> {
 	private Set<Sentence> sentences;
 	private final String rawWord;
 	private int frequency;
+	private Lemma lemma;
+	
 	
 	public Word(Sentence originSentence, String rawWord) {
 		this(rawWord);
@@ -21,6 +23,12 @@ public class Word implements Serializable, Comparable<Word> {
 	
 	public String getRawWord() {
 		return rawWord;
+	}
+	
+	public Lemma getLemma() {
+		if (lemma == null)
+			throw new NullPointerException();
+		return lemma;
 	}
 
 	public int getFrequency() {
@@ -64,5 +72,11 @@ public class Word implements Serializable, Comparable<Word> {
 	@Override
 	public int compareTo(Word o) {
 		return getRawWord().compareTo(o.getRawWord());
+	}
+
+	public void setRawLemma(Lemma lemma) {
+		if (this.lemma != null) 
+			throw new Error("The lemma for a word must not be changed.");
+		this.lemma = lemma;
 	}
 }

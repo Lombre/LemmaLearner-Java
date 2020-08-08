@@ -90,16 +90,24 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		originParagraphs.add(paragraph);
 	}
 
-	public boolean isDirectlyLearnable(Set<Word> learnedWords, TextDatabase database) {
-		Set<Word> wordsInDatabase = this.getWordSet(database);
-		int wordsInSentence = wordsInDatabase.size();
-		wordsInDatabase.retainAll(learnedWords);
-		int wordsInSentenceLearned = wordsInDatabase.size();
-		return (wordsInSentence - wordsInSentenceLearned) <= 1;
+	public boolean isDirectlyLearnable(Set<Lemma> learnedLemmas, TextDatabase database) {
+		Set<Lemma> lemmas = this.getLemmaSet(database);
+		int lemmasInSentence = lemmas.size();
+		lemmas.retainAll(learnedLemmas);
+		int lemmasInSentenceLearned = lemmas.size();
+		return (lemmasInSentence - lemmasInSentenceLearned) <= 1;
 	}
 	
 	public Set<Word> getWordSet(TextDatabase database) {
 		return new HashSet<Word>(getWordList(database));
+	}
+	
+
+	public Set<Lemma> getLemmaSet(TextDatabase database) {
+		return getWordSet(database).stream()
+									.map(word -> word.getLemma())
+									.collect(Collectors.toCollection(HashSet::new));
+		
 	}
 
 	public List<Word> getWordList(TextDatabase database) {
@@ -111,10 +119,10 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return wordsInDatabase;
 	}
 	
-	public List<Word> getUnlearnedWords(Set<Word> learnedWords, TextDatabase database){
-		Set<Word> wordsInSentence = this.getWordSet(database);
-		List<Word> unlearnedWords = wordsInSentence.stream().filter(word -> !learnedWords.contains(word)).collect(Collectors.toList());
-		return unlearnedWords;
+	public List<Lemma> getUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database){
+		Set<Lemma> lemmasInSentence = this.getLemmaSet(database);
+		List<Lemma> unlearnedLemmas = lemmasInSentence.stream().filter(lemma -> !learnedLemmas.contains(lemma)).collect(Collectors.toList());
+		return unlearnedLemmas;
 	}
 
 	@Override

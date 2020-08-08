@@ -36,13 +36,13 @@ class TestGreedyLearning {
 	
 
 	@Test
-	public void testWordsByFrequencyOrderedCorrectly() throws Exception {
-		String word1 = "one";
-		String word2 = "two";
-		String word3 = "three";
-		String expectedSentence1 = word1 + " " + word2 + " " + word3 + ".";
-		String expectedSentence2 = word2 + " " + word3 + ".";
-		String expectedSentence3 = word3 + ".";
+	public void testLemmasByFrequencyOrderedCorrectly() throws Exception {
+		String Lemma1 = "one";
+		String Lemma2 = "two";
+		String Lemma3 = "three";
+		String expectedSentence1 = Lemma1 + " " + Lemma2 + " " + Lemma3 + ".";
+		String expectedSentence2 = Lemma2 + " " + Lemma3 + ".";
+		String expectedSentence3 = Lemma3 + ".";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3;
 		
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
@@ -53,27 +53,27 @@ class TestGreedyLearning {
 		assertSame(parsedText, returnedText);
 		
 		GreedyLearner learner = new GreedyLearner(database);
-		PriorityQueue<Word> wordsByFrequency = learner.getWordsByFrequency();
-		Word hopefullyWord3 = wordsByFrequency.poll();
-		Word hopefullyWord2 = wordsByFrequency.poll();
-		Word hopefullyWord1 = wordsByFrequency.poll();
-		assertNull(wordsByFrequency.poll());
+		PriorityQueue<Lemma> LemmasByFrequency = learner.getLemmasByFrequency();
+		Lemma hopefullyLemma3 = LemmasByFrequency.poll();
+		Lemma hopefullyLemma2 = LemmasByFrequency.poll();
+		Lemma hopefullyLemma1 = LemmasByFrequency.poll();
+		assertNull(LemmasByFrequency.poll());
 		
-		assertSame(database.allWords.get(word1), hopefullyWord1);
-		assertSame(database.allWords.get(word2), hopefullyWord2);
-		assertSame(database.allWords.get(word3), hopefullyWord3);
+		assertSame(database.allLemmas.get(Lemma1), hopefullyLemma1);
+		assertSame(database.allLemmas.get(Lemma2), hopefullyLemma2);
+		assertSame(database.allLemmas.get(Lemma3), hopefullyLemma3);
 	}
 	
 	@Test
-	public void testInitialDirectlyLearnableWordsByFrequencyOrderedCorrectly() throws Exception {
-		String word1 = "flour"; //Occurs once.
-		String word2 = "egg"; //Occurs twice.
-		String word3 = "milk"; //Occurs thrice.
-		String expectedSentence1 = word1 + ".";
-		String expectedSentence3 = word2 + ".";
-		String expectedSentence2 = word3 + ".";
-		String expectedSentence4 = word2 + " " + word3 + ".";
-		String expectedSentence5 = word3 + " " + "cake" + ".";
+	public void testInitialDirectlyLearnableLemmasByFrequencyOrderedCorrectly() throws Exception {
+		String Lemma1 = "flour"; //Occurs once.
+		String Lemma2 = "egg"; //Occurs twice.
+		String Lemma3 = "milk"; //Occurs thrice.
+		String expectedSentence1 = Lemma1 + ".";
+		String expectedSentence3 = Lemma2 + ".";
+		String expectedSentence2 = Lemma3 + ".";
+		String expectedSentence4 = Lemma2 + " " + Lemma3 + ".";
+		String expectedSentence5 = Lemma3 + " " + "cake" + ".";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3 + " " + expectedSentence4 + " " + expectedSentence5;
 		
 
@@ -85,22 +85,22 @@ class TestGreedyLearning {
 		assertSame(parsedText, returnedText);
 		
 		GreedyLearner learner = new GreedyLearner(database);
-		Set<Word> learnedWords = new HashSet<Word>();
-		var sentencesByUnlearnedWordFrequency = learner.getDirectlyLearnableWordsByFrequency(learnedWords);
+		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
+		var sentencesByUnlearnedLemmaFrequency = learner.getDirectlyLearnableLemmasByFrequency(learnedLemmas);
 		
-		assertEquals(expectedSentence2, sentencesByUnlearnedWordFrequency.poll().getFirst().getRawSentence());
-		assertEquals(expectedSentence3, sentencesByUnlearnedWordFrequency.poll().getFirst().getRawSentence());
-		assertEquals(expectedSentence1, sentencesByUnlearnedWordFrequency.poll().getFirst().getRawSentence());
-		assertNull(sentencesByUnlearnedWordFrequency.poll());
+		assertEquals(expectedSentence2, sentencesByUnlearnedLemmaFrequency.poll().getFirst().getRawSentence());
+		assertEquals(expectedSentence3, sentencesByUnlearnedLemmaFrequency.poll().getFirst().getRawSentence());
+		assertEquals(expectedSentence1, sentencesByUnlearnedLemmaFrequency.poll().getFirst().getRawSentence());
+		assertNull(sentencesByUnlearnedLemmaFrequency.poll());
 	}
 	
 
 	@Test
 	public void testSentenceIsDirectlyLearnable() throws Exception {
-		String word1 = "one";
-		String word2 = "two";
-		String word3 = "three";
-		String expectedSentence = word1 + " " + word2 + " " + word3 + ".";
+		String Lemma1 = "one";
+		String Lemma2 = "two";
+		String Lemma3 = "three";
+		String expectedSentence = Lemma1 + " " + Lemma2 + " " + Lemma3 + ".";
 		
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
 		
@@ -109,48 +109,49 @@ class TestGreedyLearning {
 		assertEquals(parsedText.getRawText(), expectedSentence);
 		assertSame(parsedText, returnedText);
 		
-		Set<Word> learnedWords = new HashSet<Word>();
+		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		Sentence sentence = database.allSentences.get(expectedSentence);
 		
-		assertFalse(sentence.isDirectlyLearnable(learnedWords, database));
+		assertFalse(sentence.isDirectlyLearnable(learnedLemmas, database));
 		
-		learnedWords.add(database.allWords.get(word1));
-		assertFalse(sentence.isDirectlyLearnable(learnedWords, database));
+		learnedLemmas.add(database.allLemmas.get(Lemma1));
+		assertFalse(sentence.isDirectlyLearnable(learnedLemmas, database));
 		
-		learnedWords.add(database.allWords.get(word2));
-		assertTrue(sentence.isDirectlyLearnable(learnedWords, database));
+		learnedLemmas.add(database.allLemmas.get(Lemma2));
+		assertTrue(sentence.isDirectlyLearnable(learnedLemmas, database));
 		
-		learnedWords.add(database.allWords.get(word3));
-		assertTrue(sentence.isDirectlyLearnable(learnedWords, database));
+		learnedLemmas.add(database.allLemmas.get(Lemma3));
+		assertTrue(sentence.isDirectlyLearnable(learnedLemmas, database));
 		
 	}
 	
 
 	@Test
 	public void testLearnedLemmasIsDoneGreedily() throws Exception {
-		//If it is done greedily, the invariant that there is no word w2 learned after another word w1,
+		//If it is done greedily, the invariant that there is no Lemma w2 learned after another Lemma w1,
 		//Such that w1.frequency < w2.frequency, unless w1 participates in the sentence used to learn w2,
 		//or w2 is learnt without a sentence.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
 		database.parseTextAndAddToDatabase(fileToParse);
-		List<Pair<Word, Sentence>> learningOrder = learner.learnAllLemmas();
+		database.initializeLemmas();
+		List<Pair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
-			var currentWord = learningOrder.get(i).getFirst();
+			var currentLemma = learningOrder.get(i).getFirst();
 			var currentSentence = learningOrder.get(i).getSecond();
-			var nextWord = learningOrder.get(i+1).getFirst();
+			var nextLemma = learningOrder.get(i+1).getFirst();
 			var nextSentence = learningOrder.get(i+1).getSecond();
 
-			//An initial sentence is learned, with all the words in it. 
-			//The words learned from this sentence should thus be skipped.
+			//An initial sentence is learned, with all the Lemmas in it. 
+			//The Lemmas learned from this sentence should thus be skipped.
 			if (currentSentence.equals(learningOrder.get(0).getSecond())) {
 				continue;
 			}
 			
-			if (!nextSentence.getRawSentence().equals(learner.NOT_A_SENTENCE_STRING) && !nextSentence.getWordSet(database).contains(currentWord)) {
-				if (!(nextWord.getFrequency() <= currentWord.getFrequency())) {
+			if (!nextSentence.getRawSentence().equals(learner.NOT_A_SENTENCE_STRING) && !nextSentence.getLemmaSet(database).contains(currentLemma)) {
+				if (!(nextLemma.getFrequency() <= currentLemma.getFrequency())) {
 					int k = 1;
 				}
-				assertTrue("Greedy invariant broken: Word " + nextWord + " has a higher frequency than " + currentWord + " but is learnt after the word, for no reason.", nextWord.getFrequency() <= currentWord.getFrequency());
+				assertTrue("Greedy invariant broken: Lemma " + nextLemma + " has a higher frequency than " + currentLemma + " but is learnt after the Lemma, for no reason.", nextLemma.getFrequency() <= currentLemma.getFrequency());
 			}
 		}
 	}
@@ -164,26 +165,26 @@ class TestGreedyLearning {
 		//Thus each new sentence must contain exactly one new lemma.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
 		TestTool.parseText(fileToParse, database);
-		List<Pair<Word, Sentence>> learningOrder = learner.learnAllLemmas();
-		Set<Word> learnedWords = new HashSet<Word>();
+		List<Pair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
+		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
-			Word learnedWord = learningOrder.get(i).getFirst();
+			Lemma learnedLemma = learningOrder.get(i).getFirst();
 			Sentence currentSentence = learningOrder.get(i).getSecond();
-			//An initial sentence is learned, with all the words in it. 
-			//The words learned from this sentence should thus be skipped.
+			//An initial sentence is learned, with all the Lemmas in it. 
+			//The Lemmas learned from this sentence should thus be skipped.
 			if (currentSentence.equals(learningOrder.get(0).getSecond())) {
-				learnedWords.add(learnedWord);
+				learnedLemmas.add(learnedLemma);
 				continue;
 			}
-			assertFalse(learnedWords.contains(learnedWord));
-			for (Word wordInSentence : currentSentence.getWordList(database)) {
-				if (wordInSentence == learnedWord)
-					assertFalse(learnedWords.contains(wordInSentence));
+			assertFalse(learnedLemmas.contains(learnedLemma));
+			for (Lemma LemmaInSentence : currentSentence.getLemmaSet(database)) {
+				if (LemmaInSentence == learnedLemma)
+					assertFalse(learnedLemmas.contains(LemmaInSentence));
 				else {
-					assertTrue(learnedWords.contains(wordInSentence));				
+					assertTrue(learnedLemmas.contains(LemmaInSentence));				
 				}
 			}
-			learnedWords.add(learnedWord);
+			learnedLemmas.add(learnedLemma);
 		}
 	}
 	

@@ -41,10 +41,14 @@ public class Lemmatizer {
 	}
 
 
-	public String getLemma(String conjugation) {
+	public String getRawLemma(Word conjugation) {
+		return getRawLemma(conjugation.getRawWord());
+	}
+	
+	public String getRawLemma(String rawConjugation) {
 		//First use the normal lemmatization, and then perform the online check.
-		String tempLemma = conjugation;
-		if (conjugationToLemmas.containsKey(conjugation)) {
+		String tempLemma = rawConjugation;
+		if (conjugationToLemmas.containsKey(rawConjugation)) {
 			tempLemma = conjugationToLemmas.get(tempLemma).get(0);
 		}
 		String actualLemma;

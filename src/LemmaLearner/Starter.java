@@ -9,9 +9,9 @@ public class Starter {
 	
 	public static void main(String[] args) throws Exception {
 		//Settings
-		boolean shouldParseRealText = false;
+		boolean shouldParseRealText = true;
 		boolean shouldDisplayText = true;
-		boolean shouldLoadSavedTexts = false;
+		boolean shouldLoadSavedTexts = true;
 		
 		
 		System.out.println("Start");
@@ -29,7 +29,7 @@ public class Starter {
 			//textDatabase.parseTextAndAddToDatabase(testFile);		
 			//TestTool.parseString("The writing and artwork within are believed to be in the U.S. public domain, and Standard Ebooks releases this ebook edition under the terms in the CC0 1.0 Universal Public Domain Dedication", textDatabase);
 			//TestTool.parseString("The Standard Ebooks CC0 1.0 Universal Public Domain Dedication", textDatabase);
-			textDatabase.addAllTextsInFolderToDatabase("TextsToParse");		
+			textDatabase.addAllTextsInFolderToDatabase("Texts");		
 		}
 		learner.learnAllLemmas();
 		

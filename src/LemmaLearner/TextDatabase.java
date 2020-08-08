@@ -33,6 +33,8 @@ public class TextDatabase{
 	//Words are not assumed to be unique. Uses word.rawWord.
 	public HashMap<String, Word> allWords = new HashMap<String, Word>();
 	
+	public HashMap<String, Lemma> allLemmas = new HashMap<String, Lemma>();
+	
 	final boolean shouldLoadSavedTexts;
 	final boolean shouldPrintText;
 	
@@ -66,6 +68,7 @@ public class TextDatabase{
 			parseTextAndAddToDatabase(subfile);
 		}
 		
+		initializeLemmas();
 		
 		if (shouldPrintText)
 			printAllTextsAddedToDatabaseInformation(absoluteStartTime);
@@ -73,28 +76,39 @@ public class TextDatabase{
 		
 	}
 
-	private void printAllTextsAddedToDatabaseInformation(long absoluteStartTime) {
-		long absoluteEndTime = System.currentTimeMillis();
-		float absoluteTimeUsed = ((float) (absoluteEndTime - absoluteStartTime))/1000/60; //In minutes		
-		System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
+	public void initializeLemmas() {
 		Lemmatizer lemmatizer = new Lemmatizer();
-		List<String> allConjugations = allWords.values().stream().map(word -> word.getRawWord()).collect(Collectors.toList());
-		allConjugations.sort((string1, string2) -> string1.compareTo(string2));
-		HashSet<String> allLemmas = new HashSet<String>();
+		
+		List<Word> allConjugations = new ArrayList<Word>(allWords.values());
+		allConjugations.sort((word1, word2) -> word1.compareTo(word2));
 		
 		for (int i = 0; i < allConjugations.size(); i++) {
-			String conjugation = allConjugations.get(i);
-			String lemmaString = lemmatizer.getLemma(conjugation);
-			allLemmas.add(lemmaString);
-			if (i % 100 == 0 || i < 1000) {
-				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + conjugation + "\".");		
-		        System.out.println("Word \"" + conjugation + "\" has lemma \"" + lemmaString + "\".");
+			Word currentConjugation = allConjugations.get(i);
+			String rawLemma = lemmatizer.getRawLemma(currentConjugation);
+			Lemma currentLemma;
+			if (allLemmas.containsKey(rawLemma))
+				currentLemma = allLemmas.get(rawLemma);
+			else {
+				currentLemma = new Lemma(rawLemma);
+				allLemmas.put(rawLemma, currentLemma);				
+			}
+			currentLemma.addConjugation(currentConjugation);
+			if ((i % 100 == 0 || i < 1000) && shouldLoadSavedTexts) {
+				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawWord() + "\".");		
+		        System.out.println("Word \"" + currentConjugation.getRawWord() + "\" has lemma \"" + rawLemma + "\".");
 		        System.out.println();
 			}
 		}
 		
 		System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
 		int k = 1;
+	}
+
+	private void printAllTextsAddedToDatabaseInformation(long absoluteStartTime) {
+		long absoluteEndTime = System.currentTimeMillis();
+		float absoluteTimeUsed = ((float) (absoluteEndTime - absoluteStartTime))/1000/60; //In minutes		
+		System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
+
 	}
 
 	private void printProgressInAddingTextsToDatabase(List<File> textFilesInFolder, long totalFileSpaceConsumption,

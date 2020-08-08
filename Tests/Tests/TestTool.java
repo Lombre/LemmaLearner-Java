@@ -34,6 +34,7 @@ public class TestTool {
 	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database, boolean shouldDisplayGUI) {
 		Text parsedText = database.parse(testTextName, CharStreams.fromString(stringToParse), shouldDisplayGUI);
 		database.addTextToDatabase(parsedText);
+		database.initializeLemmas();
 		return parsedText;
 	}
 	
@@ -59,6 +60,7 @@ public class TestTool {
 
 	public static void parseText(File fileToParse, TextDatabase database) {
 		database.parseTextAndAddToDatabase(fileToParse);		
+		database.initializeLemmas();
 	}
 	
 
