@@ -92,7 +92,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 
 	public boolean isDirectlyLearnable(Set<Lemma> learnedLemmas, TextDatabase database) {
 		int numberOfUnlearnedLemmas = getNumberOfUnlearnedLemmas(learnedLemmas, database);
-		return numberOfUnlearnedLemmas <= 1;
+		return numberOfUnlearnedLemmas == 1;
 	}
 
 	private int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {

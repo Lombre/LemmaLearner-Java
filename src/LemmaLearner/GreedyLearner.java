@@ -34,8 +34,7 @@ public class GreedyLearner {
 			if (directlyLearnableSentencesByFrequency.isEmpty()) {
 				newlyLearnedLemma = learnLemmaWithoutSentence();
 				updateDirectlyLearnableSentences(newlyLearnedLemma);
-			} else {
-				
+			} else {				
 				Sentence directlyLearnableSentence = getBestScoringDirectlyLearnableSentence();	
 				if (directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database).isEmpty())
 					continue;
@@ -82,36 +81,8 @@ public class GreedyLearner {
 	}
 
 
-	private Sentence getBestScoringDirectlyLearnableSentence() {
-		List<Pair<Sentence, Integer>> topSentencePairCandidates = new ArrayList<Pair<Sentence, Integer>>();
-		int count = 0;
-		int maxCount = 100;
-		while (count < maxCount && !directlyLearnableSentencesByFrequency.isEmpty()) {
-			count++;
-			var sentenceAndScore = directlyLearnableSentencesByFrequency.poll();
-			topSentencePairCandidates.add(sentenceAndScore);
-			
-		}
-		
-		Sentence bestSentence = topSentencePairCandidates.get(0).getFirst();
-		double bestScore = bestSentence.getScore(database);
-		int k = 1;
-		for (Pair<Sentence, Integer> sentencePair : topSentencePairCandidates) {
-			Sentence sentence = sentencePair.getFirst();
-			double sentenceScore = sentence.getScore(database);
-			if (bestScore < sentenceScore) {
-				bestSentence = sentence;
-				bestScore = sentenceScore;
-			}
-		}
-		
-		for (Pair<Sentence, Integer> sentencePair : topSentencePairCandidates) {
-			if (!sentencePair.getFirst().equals(bestSentence)) {
-				directlyLearnableSentencesByFrequency.add(sentencePair);
-			}
-		}
-		
-		return bestSentence;
+	private Sentence getBestScoringDirectlyLearnableSentence() {		
+		return directlyLearnableSentencesByFrequency.poll().getFirst();
 	}
 
 
@@ -190,7 +161,7 @@ public class GreedyLearner {
 		for (Sentence sentence : database.allSentences.values()) {
 			if (sentence.isDirectlyLearnable(learnedLemmas, database) && 0 < sentence.getRawWordList().size()) {
 				Pair<Sentence, Integer> sentenceScorePair = new Pair<Sentence, Integer>(sentence, -sentence.getHighestFrequency(database));
-				directlyLearnableSentencesByFrequency.add(sentenceScorePair);				
+				directlyLearnableSentencesByFrequency.add(sentenceScorePair);	
 			}
 		}
 		return directlyLearnableSentencesByFrequency;
@@ -198,7 +169,7 @@ public class GreedyLearner {
 
 
 	public PriorityQueue<Pair<Sentence, Integer>> getSentencesByUnlearnedWordFrequency(Set<Lemma> learnedLemmas) {
-		PriorityQueue<Pair<Sentence, Integer>> directlyLearnableSentencesByFrequency = new PriorityQueue<Pair<Sentence, Integer>>();
+		PriorityQueue<Pair<Sentence, Integer>> directlyLearnableSentencesByFrequency = new LazyPriorityQueue<Pair<Sentence, Integer>>();
 		return directlyLearnableSentencesByFrequency;
 	}
 
