@@ -91,11 +91,17 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public boolean isDirectlyLearnable(Set<Lemma> learnedLemmas, TextDatabase database) {
+		int numberOfUnlearnedLemmas = getNumberOfUnlearnedLemmas(learnedLemmas, database);
+		return numberOfUnlearnedLemmas == 1;
+	}
+
+	private int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		Set<Lemma> lemmas = this.getLemmaSet(database);
 		int lemmasInSentence = lemmas.size();
 		lemmas.retainAll(learnedLemmas);
 		int lemmasInSentenceLearned = lemmas.size();
-		return (lemmasInSentence - lemmasInSentenceLearned) <= 1;
+		int numberOfUnlearnedLemmas = (lemmasInSentence - lemmasInSentenceLearned);
+		return numberOfUnlearnedLemmas;
 	}
 	
 	public Set<Conjugation> getWordSet(TextDatabase database) {
@@ -137,6 +143,24 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 
 	public int getWordCount() {
 		return wordBeginningIndex.length;
+	}
+
+	public boolean hasNoNewLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
+		return getNumberOfUnlearnedLemmas(learnedLemmas, database) == 0;
+	}
+
+	public double getScore(TextDatabase database) {
+		double score = 0;
+		var lemmas = getLemmaSet(database);
+		for (Lemma lemma : lemmas) {
+			if (lemma.getTimesLearned() == 0) {
+				//The primary basis for the score is the frequency of the unlearned lemma.
+				score += lemma.getFrequency();
+			} else {
+				score += 1.0/( lemma.getTimesLearned() + 1.0);
+			}
+		}
+		return score;
 	}
 
 	

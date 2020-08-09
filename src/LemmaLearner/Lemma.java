@@ -11,6 +11,7 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 	private final Set<Conjugation> conjugations = new ListSet<Conjugation>();
 	private final String rawLemma;
 	private int frequency = -1;
+	private int timesLearned = 0;
 	
 	public Lemma(String rawWord) {
 		this.rawLemma = rawWord.toLowerCase();
@@ -26,6 +27,14 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 								    .map(word -> word.getFrequency())
 								    .reduce(0, (freq1, freq2) -> freq1 + freq2);
 		return frequency;
+	}
+	
+	public void incrementTimesLearned() {
+		timesLearned++;
+	}
+	
+	public int getTimesLearned() {
+		return timesLearned;
 	}
 	
 	@Override

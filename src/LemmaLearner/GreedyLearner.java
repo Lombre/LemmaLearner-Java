@@ -12,7 +12,7 @@ public class GreedyLearner {
 	private Set<Lemma> learnedLemmas = new HashSet<Lemma>();	
 	private Set<Sentence> seenSentences = new HashSet<Sentence>();
 	private PriorityQueue<Lemma> lemmasByFrequency;
-	private PriorityQueue<Pair<Sentence, Integer>> directlyLearnableSentencesByFrequency;
+	private Set<Sentence> directlyLearnableSentencesByFrequency;
 	public static final String NOT_A_SENTENCE_STRING = "No sentence found.";
 
 	public GreedyLearner(TextDatabase database) {
@@ -24,7 +24,6 @@ public class GreedyLearner {
 		
 		lemmasByFrequency = getLemmasByFrequency();
 		directlyLearnableSentencesByFrequency = getDirectlyLearnableLemmasByFrequency(learnedLemmas);
-		directlyLearnableSentencesByFrequency.stream().forEach(sentenceScorePair -> seenSentences.add(sentenceScorePair.getFirst()));;
 		long absoluteStartTime = System.currentTimeMillis();
 		
 		learnInitialSentence();		
@@ -36,8 +35,7 @@ public class GreedyLearner {
 				updateDirectlyLearnableSentences(newlyLearnedLemma);
 			} else {
 				
-				var sentenceAndScore = directlyLearnableSentencesByFrequency.poll();
-				Sentence directlyLearnableSentence = sentenceAndScore.getFirst();	
+				Sentence directlyLearnableSentence = getBestSentence();	
 				if (directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database).isEmpty())
 					continue;
 				else {
@@ -83,6 +81,20 @@ public class GreedyLearner {
 	}
 
 
+	private Sentence getBestSentence() {
+		double bestScore = -1;
+		Sentence bestSentence = null;
+		for (Sentence sentence : directlyLearnableSentencesByFrequency) {
+			double sentenceScore = sentence.getScore(database);
+			if (bestScore < sentenceScore) {
+				bestScore = sentenceScore;
+				bestSentence = sentence;
+			}
+		}
+		return bestSentence;
+	}
+
+
 	private void learnInitialSentence() {
 		
 		int bestSentenceScore = -1;
@@ -107,11 +119,11 @@ public class GreedyLearner {
 
 
 	private void updateDirectlyLearnableSentences( Lemma newlyLearnedLemma) {
-		for (Sentence sentence : newlyLearnedLemma.getSentences()) {
-			if (!seenSentences.contains(sentence) && sentence.isDirectlyLearnable(learnedLemmas, database)) {
-				var unlearnedLemmas = sentence.getUnlearnedLemmas(learnedLemmas, database);
-				Integer maxUnlearnedLemmaFrequency = unlearnedLemmas.stream().map(lemma -> lemma.getFrequency()).max((x, y) -> x.compareTo(y)).get();
-				directlyLearnableSentencesByFrequency.add(new Pair<Sentence, Integer>(sentence, -maxUnlearnedLemmaFrequency));
+		for (Sentence sentence : newlyLearnedLemma.getSentences()) {			
+			if (directlyLearnableSentencesByFrequency.contains(sentence) && sentence.hasNoNewLemmas(learnedLemmas, database)) {
+				directlyLearnableSentencesByFrequency.remove(sentence);				
+			} else if (!seenSentences.contains(sentence) && sentence.isDirectlyLearnable(learnedLemmas, database)) {
+				directlyLearnableSentencesByFrequency.add(sentence);
 				seenSentences.add(sentence);
 			}
 		}
@@ -127,6 +139,7 @@ public class GreedyLearner {
 
 
 	private void learnLemma(Sentence directlyLearnableSentence, Lemma lemmaToLearn) {
+		lemmaToLearn.incrementTimesLearned();
 		learnedLemmas.add(lemmaToLearn);
 		lemmasByFrequency.remove(lemmaToLearn);
 		learningOrder.add(new Pair<Lemma, Sentence>(lemmaToLearn, directlyLearnableSentence));
@@ -136,6 +149,7 @@ public class GreedyLearner {
 
 	private Lemma learnLemmaWithoutSentence() {
 		Lemma lemmaToLearn = lemmasByFrequency.poll();
+		lemmaToLearn.incrementTimesLearned();
 		learnedLemmas.add(lemmaToLearn);
 		learningOrder.add(new Pair<Lemma, Sentence>(lemmaToLearn, new Sentence(NOT_A_SENTENCE_STRING, new ArrayList<String>())));
 		printLearnedInformation(learningOrder);
@@ -152,12 +166,12 @@ public class GreedyLearner {
 	}
 
 
-	public PriorityQueue<Pair<Sentence, Integer>> getDirectlyLearnableLemmasByFrequency(Set<Lemma> learnedLemmas) {
-		PriorityQueue<Pair<Sentence, Integer>> directlyLearnableSentencesByFrequency = getSentencesByUnlearnedWordFrequency(learnedLemmas);
+	public Set<Sentence> getDirectlyLearnableLemmasByFrequency(Set<Lemma> learnedLemmas) {
+		Set<Sentence> directlyLearnableSentencesByFrequency = new HashSet<Sentence>();
 		for (Sentence sentence : database.allSentences.values()) {
 			if (sentence.isDirectlyLearnable(learnedLemmas, database) && 0 < sentence.getRawWordList().size()) {
-				Pair<Sentence, Integer> sentenceScorePair = new Pair<Sentence, Integer>(sentence, -sentence.getHighestFrequency(database));
-				directlyLearnableSentencesByFrequency.add(sentenceScorePair);				
+				directlyLearnableSentencesByFrequency.add(sentence);				
+				seenSentences.add(sentence);
 			}
 		}
 		return directlyLearnableSentencesByFrequency;
