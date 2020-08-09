@@ -91,16 +91,17 @@ public class TextDatabase{
 				allLemmas.put(rawLemma, currentLemma);				
 			}
 			currentLemma.addConjugation(currentConjugation);
-			if ((i % 100 == 0 || i < 1000) && shouldLoadSavedTexts) {
+			if ((i % 100 == 0 || i < 1000) && shouldPrintText) {
 				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawConjugation() + "\".");		
 		        System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
 		        System.out.println();
 			}
 		}
-		lemmatizer.save();		
-		System.out.println("Sentences conjugation count: " + allLemmas.get("sentences").getConjugations().size());
-		System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
-		int k = 1;
+		lemmatizer.save();	
+		if (shouldPrintText) {
+			//System.out.println("Sentences conjugation count: " + allLemmas.get("sentences").getConjugations().size());
+			System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
+		}
 	}
 
 	private void printAllTextsAddedToDatabaseInformation(long absoluteStartTime) {

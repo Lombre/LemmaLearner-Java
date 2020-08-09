@@ -48,14 +48,36 @@ public class GreedyLearner {
 		}	
 		
 		List<Lemma> lemmasLearnedFromSentences = learningOrder.stream()
-															.filter(pair -> !pair.getSecond().equals(NOT_A_SENTENCE_STRING))
+															.filter(pair -> !pair.getSecond().getRawSentence().equals(NOT_A_SENTENCE_STRING))
 															.map(pair -> pair.getFirst())
 															.collect(Collectors.toList());
+		
 		System.out.println("Number of lemmas learned from sentences: " + lemmasLearnedFromSentences.size() + " of " + database.allLemmas.size());
 
 		long absoluteEndTime = System.currentTimeMillis();	
 		float absoluteTimeUsed = ((float) (absoluteEndTime - absoluteStartTime))/1000; //In minutes		
-		System.out.println("Learned all words in " + absoluteTimeUsed + " seconds.");				
+		System.out.println("Learned all words in " + absoluteTimeUsed + " seconds.");	
+		
+		HashMap<Integer, List<Lemma>> timesLemmasHaveBeenLearned = new HashMap<Integer, List<Lemma>>();
+		for (Lemma lemma : database.allLemmas.values()) {
+			if (timesLemmasHaveBeenLearned.containsKey(lemma.getFrequency())) {
+				timesLemmasHaveBeenLearned.get(lemma.getFrequency()).add(lemma);
+			} else {
+				var listLemma = new ArrayList<Lemma>();
+				listLemma.add(lemma);
+				timesLemmasHaveBeenLearned.put(lemma.getFrequency(), listLemma);
+			}
+		}
+		int i = 0;
+		int sumNumberOfLemmas = 0;
+		for (; i <= 10; i++) {
+			if (timesLemmasHaveBeenLearned.containsKey(i)) {
+				System.out.println("Number of lemmas that have been learned " + i + " times: " + timesLemmasHaveBeenLearned.get(i).size());	
+				sumNumberOfLemmas += timesLemmasHaveBeenLearned.get(i).size();
+			}
+		}
+		System.out.println("Number of lemmas that have been learned more than " + (i-1) + " times: " + (database.allLemmas.size() - sumNumberOfLemmas));
+		
 		
 		return learningOrder;
 	}
@@ -93,6 +115,7 @@ public class GreedyLearner {
 				seenSentences.add(sentence);
 			}
 		}
+		System.out.println("Priority queue size: " + directlyLearnableSentencesByFrequency.size());
 	}
 
 
