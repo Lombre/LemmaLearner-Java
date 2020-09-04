@@ -10,7 +10,7 @@ public class Starter {
 	public static void main(String[] args) throws Exception {
 		
 		//Settings
-		boolean shouldParseRealText = false;
+		boolean shouldParseRealText = true;
 		boolean shouldDisplayText = true;
 		boolean shouldLoadSavedTexts = true;
 		

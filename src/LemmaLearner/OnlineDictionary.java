@@ -1,16 +1,10 @@
 package LemmaLearner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.*;
 import java.net.http.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
+import java.nio.file.*;
+import java.util.*;
 
 import org.nustaq.serialization.FSTConfiguration;
 import org.nustaq.serialization.FSTObjectInput;
@@ -18,31 +12,47 @@ import org.nustaq.serialization.FSTObjectOutput;
 
 public class OnlineDictionary {
 	
-	private final String DICTIONARY_WEBSITE = "https://en.bab.la/dictionary/english-spanish/";
-	private String startWordHTMLMarker = "' class=\"babQuickResult\">";
-	private String endWordHTMLMarker = "</a>";
-	private HashMap<String, String> conjugationToLemma = new HashMap<String, String>();
+	private final String language;
+	private final String dictionaryURL;
+	private final HashMap<String, String> conjugationToLemma = new HashMap<String, String>();
 	private final String SAVED_DICTIONARY_PATH = "OnlineDictionary.saved";
 	private boolean shouldLoadSavedDictionary = true;
+	private final String startSecondaryLanguage;
+	private final String startPrimaryLanguage;
 	
-	public OnlineDictionary() {
-		
+	private final String startWordHTMLMarker = "' class=\"babQuickResult\">";
+	private final String endWordHTMLMarker = "</a>";
+	
+	private final String startWordTypeHTMLMarker = "<span class=\"suffix\">{";
+	private final String endWordTypeHTMLMarker = "}";
+	
+	
+	public OnlineDictionary(String language) {
+		this.language = language;
+		if (this.language.toLowerCase().equals("english")) {
+			dictionaryURL =  "https://en.bab.la/dictionary/english-spanish/";
+			startSecondaryLanguage = "\" in English</h2>";
+			startPrimaryLanguage = "\" in Spanish</h2>";
+		} 
+		else {
+			dictionaryURL = "https://en.bab.la/dictionary/english-"+ this.language.toLowerCase() + "/";
+			startSecondaryLanguage = "\" in " + this.language + "</h2>";
+			startPrimaryLanguage = "\" in English</h2>";
+		}
 	}
 
 
 	public void load() {
-		File possibleSavedFile = new File(SAVED_DICTIONARY_PATH);
-		try {					
-			//If the file have already been parsed and save, simply load that, as this is faster than parsing it again.
-			if (possibleSavedFile.exists() && shouldLoadSavedDictionary) 
-				conjugationToLemma = loadSavedDictionary();
-			else 
-				conjugationToLemma = new HashMap<String, String>();				
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw new Error();
-			// TODO: handle exception
+		//If the file have already been parsed and save, simply load that, as this is faster than parsing it again.
+		if (Files.exists(Paths.get(SAVED_DICTIONARY_PATH)) && shouldLoadSavedDictionary) {
+			try {					
+				conjugationToLemma.putAll(loadSavedDictionary());		
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				throw new Error();
+			}
+			
 		}
 	}
 	
@@ -65,47 +75,90 @@ public class OnlineDictionary {
 	private HashMap<String, String> loadSavedDictionary() throws Exception {
 		FileInputStream fileInputStream = new FileInputStream(SAVED_DICTIONARY_PATH);
 	    FSTObjectInput in = new FSTObjectInput(fileInputStream);
-	    HashMap<String, String> result = ( HashMap<String, String>) in.readObject();
+	    HashMap<String, String> result = (HashMap<String, String>) in.readObject();
 	    in.close();
 	    return result;
 	}
 
 
 	public String getLemmaFromConjugation(String actualWord) throws IOException, InterruptedException {
-		if (actualWord.equals("con") || actualWord.equals("aux") || actualWord.equals("in*")) {
-			return actualWord;
-		}
 		
-		if (conjugationToLemma.containsKey(actualWord)) {
+		
+		if (conjugationToLemma.containsKey(actualWord) && shouldLoadSavedDictionary) {
 			return conjugationToLemma.get(actualWord);
 		}
 		
-		String response = getResponse(actualWord);
+		if (actualWord.equals("in*"))
+			return actualWord;
+				
+		String primaryLanguageWebpageContent = getPrimaryLanguageWebpageContent(actualWord);         
+        List<Pair<String, String>> dictionaryWords = getWordsAndWordTypesFromWebsiteResponse(primaryLanguageWebpageContent);        
+        removeWordsWithIllegealWordTypes(dictionaryWords);
         
-        int startSpanishTranslationIndex = response.indexOf("\" in English</h2>");
-        int startEnglishTranslationIndex = response.indexOf("\" in Spanish</h2>");
-        
-        if (noEnglishDefinitionFound(startEnglishTranslationIndex) || noDefinitionFound(response)) {
+        if (dictionaryWords.size() == 0) {
         	conjugationToLemma.put(actualWord, TextDatabase.NOT_A_WORD_STRING);
-        	return conjugationToLemma.get(actualWord);
-        }
-        else //We only want to look at the english translation.
-        	response = response.substring(startEnglishTranslationIndex); 
+		} else {
+			//Verbs like run will be on the form "to run". We only need the last part.
+			String foundWord = dictionaryWords.get(0).getFirst();
+			foundWord = foundWord.split(" ")[foundWord.split(" ").length - 1];       
+			conjugationToLemma.put(actualWord, foundWord);			
+		}
         
-        int startWordIndex = response.indexOf(startWordHTMLMarker) + startWordHTMLMarker.length();
-        int endWordIndex = response.indexOf(endWordHTMLMarker, startWordIndex);
-        String foundWord = response.substring(startWordIndex, endWordIndex).toLowerCase();
-        
-        //Verbs like run will be on the form "to run". We only need the last part.
-        foundWord = foundWord.split(" ")[foundWord.split(" ").length - 1];       
-        conjugationToLemma.put(actualWord, foundWord);
 		return conjugationToLemma.get(actualWord);
 	}
 
 
+	private void removeWordsWithIllegealWordTypes(List<Pair<String, String>> dictionaryWords) {
+		dictionaryWords.removeIf(pair -> pair.getSecond().equals("pl") || pair.getSecond().equals("pr.n.") || pair.getSecond().equals("m"));
+	}
 
-	private String getResponse(String actualWord) throws IOException, InterruptedException, Error {
-		File savedDictionaryData = new File("Websites/" + actualWord + ".txt");
+
+	private List<Pair<String, String>> getWordsAndWordTypesFromWebsiteResponse(String response) {
+		List<Pair<String, String>> dictionaryWords = new ArrayList<Pair<String, String>>(); 
+        while (response.indexOf(startWordHTMLMarker) != -1) {
+        	int startWordIndex = response.indexOf(startWordHTMLMarker) + startWordHTMLMarker.length();
+        	int endWordIndex = response.indexOf(endWordHTMLMarker, startWordIndex);
+        	String foundWord = response.substring(startWordIndex, endWordIndex).toLowerCase();		
+
+        	int startWordTypeIndex = response.indexOf(startWordTypeHTMLMarker, endWordIndex) + startWordTypeHTMLMarker.length();
+        	int endWordTypeIndex = response.indexOf(endWordTypeHTMLMarker, startWordTypeIndex);
+        	int divIndex = response.indexOf("</div>", endWordIndex);
+        	if (divIndex < startWordTypeIndex || endWordTypeIndex == -1) {
+        		response = response.substring(endWordIndex);
+				continue;
+			} else {
+				String foundWordType = response.substring(startWordTypeIndex, endWordTypeIndex).toLowerCase();	
+        		response = response.substring(endWordTypeIndex);        		
+        		dictionaryWords.add(new Pair<String, String>(foundWord, foundWordType));
+			}
+		}
+		return dictionaryWords;
+	}
+
+
+	private String getPrimaryLanguageWebpageContent(String actualWord)
+			throws IOException, InterruptedException, Error {
+		String response = getWebpage(actualWord);
+        
+        int startSecondaryLanguageTranslationIndex = response.indexOf(startSecondaryLanguage);
+        int startPrimaryLanguageTranslationIndex = response.indexOf(startPrimaryLanguage);
+        
+        if (noPrimaryLanguageDefinitionFound(startPrimaryLanguageTranslationIndex) || noDefinitionFound(response)) {
+        	conjugationToLemma.put(actualWord, TextDatabase.NOT_A_WORD_STRING);
+        	response = "";
+        }
+        else if (startSecondaryLanguageTranslationIndex != -1) //We only want to look at the english translation.
+        	response = response.substring(startPrimaryLanguageTranslationIndex, startSecondaryLanguageTranslationIndex); 
+        else
+			response = response.substring(startPrimaryLanguageTranslationIndex);
+		return response;
+	}
+
+
+
+	private String getWebpage(String actualWord) throws IOException, InterruptedException, Error {
+		String fileDestination = "Websites/" + language.toLowerCase() + "_" + actualWord + ".txt";
+		File savedDictionaryData = new File(fileDestination);
 		
 		if (savedDictionaryData.exists() && true) {
 			return Files.readString(savedDictionaryData.toPath());
@@ -113,15 +166,15 @@ public class OnlineDictionary {
 			String response = getDictionaryWebpage(actualWord);
 			
 	        //To avoid spaming the website.
-	        Thread.sleep(1000);
 			
-			try (PrintWriter out = new PrintWriter("Websites/" + actualWord + ".txt")) {
+			try (PrintWriter out = new PrintWriter(fileDestination)) {
 				out.println(response);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new Error("The file for the word " + actualWord + " could not be saved to disk.");
 			}
 			System.out.println("Saved file for word \"" + actualWord + "\"");
+			Thread.sleep(1000);
 			return response;			
 		}
 		
@@ -129,7 +182,7 @@ public class OnlineDictionary {
 
 
 
-	private boolean noEnglishDefinitionFound(int startEnglishTranslationIndex) {
+	private boolean noPrimaryLanguageDefinitionFound(int startEnglishTranslationIndex) {
 		return startEnglishTranslationIndex == -1;
 	}
 
@@ -144,7 +197,7 @@ public class OnlineDictionary {
 	private String getDictionaryWebpage(String actualWord) throws IOException, InterruptedException {
 		HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(DICTIONARY_WEBSITE + actualWord))
+                .uri(URI.create(dictionaryURL + actualWord))
                 .GET() // GET is default
                 .build();
 

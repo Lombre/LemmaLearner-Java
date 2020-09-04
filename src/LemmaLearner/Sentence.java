@@ -3,12 +3,15 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Sentence implements Serializable, Comparable<Sentence> {
 	
 	private Set<Paragraph> originParagraphs;
+	private List<Sentence> subSentences;
 	private final String rawSentence;
 	private final short[] wordBeginningIndex;
 	private final short[] wordLengthIndex;
+	private final double scoreExponent = 4;
 	
 	public Sentence(String rawSentence, List<String> rawWords) {
 		if (Short.MAX_VALUE <= rawSentence.length()) throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
@@ -18,15 +21,22 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		setWordIndexes(rawSentence, rawWords);
 	}
 
+	public Sentence(String rawText, List<String> rawWords, List<Sentence> subSentences) {
+		this(rawText, rawWords);
+		this.subSentences = subSentences;
+	}
+
 	private void setWordIndexes(String rawSentence, List<String> rawWords) {
 		String lowerCaseRawSentence = rawSentence.toLowerCase();
+		int lastEndingIndex = 0;
 		for (int i = 0; i < rawWords.size(); i++) {
 			String currentRawWord = rawWords.get(i);
-			int indexBeginning = lowerCaseRawSentence.indexOf(currentRawWord.toLowerCase());
+			int indexBeginning = lowerCaseRawSentence.indexOf(currentRawWord.toLowerCase(), lastEndingIndex);
 			if (indexBeginning == -1) 
 				throw new Error("Word \"" + currentRawWord + "\" not found in sentence: " + getRawSentence());
 			wordBeginningIndex[i] = (short) indexBeginning;
 			wordLengthIndex[i] = (short) (currentRawWord.length());
+			lastEndingIndex = wordBeginningIndex[i] + wordLengthIndex[i];
 		}
 	}
 	
@@ -43,11 +53,24 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return rawWords;
 	}	
 	
+	public String getLemmatizedRawSentence(TextDatabase database) {
+		if (wordBeginningIndex.length == 0) {
+			return getRawSentence();
+		}
+		List<Conjugation> conjugations = getWordList(database);
+		String lemmatizedRawSentence = "";
+		lemmatizedRawSentence += rawSentence.substring(0, wordBeginningIndex[0]);
+		for (int i = 0; i < wordBeginningIndex.length -1; i++) {
+			Conjugation currentConjugation = conjugations.get(i);
+			lemmatizedRawSentence += currentConjugation + "(" + currentConjugation.getLemma() + ", " + currentConjugation.getLemma().getTimesLearned() + ", " + currentConjugation.getTimesLearned() + ")";
+			lemmatizedRawSentence += rawSentence.substring(wordBeginningIndex[i] + wordLengthIndex[i], wordBeginningIndex[i+1]);				
+		}
+		Conjugation lastConjugation = conjugations.get(conjugations.size()-1);
+		lemmatizedRawSentence += lastConjugation + "(" + lastConjugation.getLemma() + ", " + lastConjugation.getLemma().getTimesLearned() + ", " + lastConjugation.getTimesLearned() + ")";
+		lemmatizedRawSentence += rawSentence.substring(wordBeginningIndex[wordBeginningIndex.length-1] + wordLengthIndex[wordBeginningIndex.length-1], rawSentence.length());
+		return lemmatizedRawSentence;
+	}
 
-	/**
-	 * OBS. Note that the words are not synchronized with the database. For this, use getSynchronizedWordSet(textDatabase)
-	 * @return
-	 */
 	public Set<String> getRawWordSet() {
 		return new HashSet<>(getRawWordList());
 	}
@@ -95,7 +118,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return numberOfUnlearnedLemmas == 1;
 	}
 
-	private int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
+	public int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		Set<Lemma> lemmas = this.getLemmaSet(database);
 		int lemmasInSentence = lemmas.size();
 		lemmas.retainAll(learnedLemmas);
@@ -107,7 +130,13 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	public Set<Conjugation> getWordSet(TextDatabase database) {
 		return new HashSet<Conjugation>(getWordList(database));
 	}
-	
+
+	private List<Lemma> getLemmaList(TextDatabase database) {
+		return getWordList(database).stream()
+									.map(word -> word.getLemma())
+									.collect(Collectors.toList());
+		
+	}
 
 	public Set<Lemma> getLemmaSet(TextDatabase database) {
 		return getWordSet(database).stream()
@@ -145,23 +174,55 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return wordBeginningIndex.length;
 	}
 
-	public double getScore(TextDatabase database) {
+	public double getScore(TextDatabase database, int numberOfTimesCounted) {
+		double lemmaScore = getLemmaScore(database, numberOfTimesCounted);
+		double conjugationScore = getConjugationScore(database, numberOfTimesCounted);
+		double score = lemmaScore + conjugationScore;
+		return score;
+	}
+
+	private double getLemmaScore(TextDatabase database, int numberOfTimesCounted) {
 		double score = 0;
 		var lemmas = getLemmaSet(database);
 		for (Lemma lemma : lemmas) {
 			if (lemma.getTimesLearned() == 0) {
 				//The primary basis for the score is the frequency of the unlearned lemma.
 				score += lemma.getFrequency();
-			} else {
-				double extraScore = 1.0/( Math.pow(2, lemma.getTimesLearned()));
+			} else if (lemma.getTimesLearned() < numberOfTimesCounted){
+				double extraScore = 1.0/( Math.pow(scoreExponent, lemma.getTimesLearned()));
 				score += extraScore;
-			}
+			} 
+		}
+		return score;
+	}
+	
+
+	private double getConjugationScore(TextDatabase database, int numberOfTimesCounted) {
+		double score = 0;
+		var conjugations = getWordSet(database);
+		for (Conjugation conjugation : conjugations) {
+			if (conjugation.getTimesLearned() < numberOfTimesCounted){
+				double extraScore = 1.0/( Math.pow(scoreExponent, conjugation.getTimesLearned()+2));
+				score += extraScore;
+			} 
 		}
 		return score;
 	}
 
 	public boolean hasNoNewLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		return getNumberOfUnlearnedLemmas(learnedLemmas, database) == 0;
+	}
+
+	public List<Sentence> getSubSentences() {
+		return subSentences;
+	}
+
+	public Paragraph getAParagraph() {
+		if (originParagraphs == null || originParagraphs.size() == 0) {
+			return null;
+		} else {
+			return (Paragraph) originParagraphs.toArray()[0];
+		}
 	}
 
 

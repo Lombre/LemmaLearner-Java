@@ -38,7 +38,7 @@ class TestLemmatizing {
 	@Test
 	public void testOnlineDictionaryAcceptsActualNoun() throws Exception {
 		String actualWord = "king";
-		OnlineDictionary dictionary = new OnlineDictionary();
+		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(actualWord, conjugation);
 	}
@@ -47,18 +47,26 @@ class TestLemmatizing {
 	@Test
 	public void testOnlineDictionaryAcceptsActualVerb() throws Exception {
 		String actualWord = "kill";
-		OnlineDictionary dictionary = new OnlineDictionary();
+		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(actualWord, conjugation);
 	}
-	
+
+	@Test
+	public void testOnlineDictionaryHandlesNames() throws Exception {
+		String actualWord = "lucas";
+		String nonConjugatedWord = TextDatabase.NOT_A_WORD_STRING;
+		OnlineDictionary dictionary = new OnlineDictionary("English");
+		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
+		assertEquals(nonConjugatedWord, conjugation);
+	}
 
 
 	@Test
 	public void testOnlineDictionaryHandlesNounConjugation() throws Exception {
 		String actualWord = "kings";
 		String nonConjugatedWord = "king";
-		OnlineDictionary dictionary = new OnlineDictionary();
+		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(nonConjugatedWord, conjugation);
 	}
@@ -68,7 +76,7 @@ class TestLemmatizing {
 	@Test
 	public void testOnlineDictionaryRejectsNonWords() throws Exception {
 		String actualWord = "thisisnotaword";
-		OnlineDictionary dictionary = new OnlineDictionary();
+		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(TextDatabase.NOT_A_WORD_STRING, conjugation);
 	}	

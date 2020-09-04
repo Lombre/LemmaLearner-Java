@@ -155,4 +155,17 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 		return internalList.spliterator();
 	}
 
+
+	public boolean replaceWith(E element, Collection<? extends E> collection) {
+		if (!internalSet.contains(element)) {
+			throw new Error("Cannot replace something that does not exist in the set to start with.");
+		}
+		internalSet.remove(element);
+		internalSet.addAll(collection);
+		int index = internalList.indexOf(element);
+		internalList.remove(index);
+		internalList.addAll(index, collection);
+		return true;
+	}
+
 }

@@ -1,5 +1,7 @@
 				 				 			 			This ebook is the product of many hours of hard work by volunteers for Standard Ebooks, and builds on the hard work of other literature lovers made possible by the public domain.
 
+			Test sentence in* should be parsed. 
+			
 			This particular ebook is based on a transcription produced for Project Gutenberg and on digital scans available at the Internet Archive.
 
 			The writing and artwork within are believed to be in the U.S. public domain, and Standard Ebooks releases this ebook edition under the terms in the CC0 1.0 Universal Public Domain Dedication. For full license information, see the Uncopyright at the end of this ebook.

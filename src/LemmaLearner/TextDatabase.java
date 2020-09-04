@@ -12,6 +12,7 @@ import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.nustaq.serialization.FSTConfiguration;
 
+import Tests.TestTool;
 import antlrGrammar.*;
 
 
@@ -75,7 +76,7 @@ public class TextDatabase{
 	}
 
 	public void initializeLemmas() {
-		Lemmatizer lemmatizer = new Lemmatizer();
+		Lemmatizer lemmatizer = new Lemmatizer("English");
 		
 		List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
 		allConjugations.sort((word1, word2) -> word1.compareTo(word2));
@@ -91,16 +92,20 @@ public class TextDatabase{
 				allLemmas.put(rawLemma, currentLemma);				
 			}
 			currentLemma.addConjugation(currentConjugation);
-			if ((i % 100 == 0 || i < 1000) && shouldPrintText) {
-				System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawConjugation() + "\".");		
-		        System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
-		        System.out.println();
-			}
+			printLemmatizationProgress(allConjugations, i, currentConjugation, rawLemma);
 		}
 		lemmatizer.save();	
 		if (shouldPrintText) {
-			//System.out.println("Sentences conjugation count: " + allLemmas.get("sentences").getConjugations().size());
 			System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
+		}
+	}
+
+	private void printLemmatizationProgress(List<Conjugation> allConjugations, int i, Conjugation currentConjugation,
+			String rawLemma) {
+		if ((i % 100 == 0 || i < 1000) && shouldPrintText) {
+			System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawConjugation() + "\".");		
+		    System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
+		    System.out.println();
 		}
 	}
 
@@ -154,7 +159,7 @@ public class TextDatabase{
 			} 			
 		} catch (Exception e) {
 			System.out.println("The saved text: " + getSavedTextFileName(subfile) + " could not be loaded.");
-			e.printStackTrace();
+			System.out.println("Will try to read the original file instead.");
 		}
 		//If the loading failed, or if the text shouldn't be loaded, simply read it:
 
@@ -191,35 +196,12 @@ public class TextDatabase{
 		final ANTLRvisitor.StartVisitor visitor = new ANTLRvisitor.StartVisitor(textName);		
 
 		if (shouldDisplayGUITree)	
-			displayParserTree(parser, startContext);		
+			TestTool.displayParserTree(parser, startContext);		
 		
 		final Text resultText = visitor.visit(startContext);
 		return resultText;
 	}
 
-
-	private static void displayParserTree(final TextParsingGrammarParser parser,
-			final TextParsingGrammarParser.StartContext startContext) {
-		JFrame frame = new JFrame("Antlr AST");
-		JPanel panel = new JPanel();
-		frame.setLayout(new BorderLayout());
-		frame.add(BorderLayout.CENTER, new JScrollPane(panel));
-		frame.setLocationRelativeTo(null);
-		
-		//JScrollPane scrollPane = new JScrollPane();
-		//scrollPane.setPreferredSize(new Dimension( 800,300));
-		panel.setAutoscrolls(true);
-		TreeViewer viewer = new TreeViewer(Arrays.asList(
-				parser.getRuleNames()),startContext);
-		viewer.setScale(1); // Scale a little
-		viewer.setAutoscrolls(true);
-		panel.add(viewer);			
-		//scrollPane.add(viewer);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension( 800,300));	
-		frame.pack();
-		frame.setVisible(true);
-	}
 	
 	
 	

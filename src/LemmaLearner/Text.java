@@ -8,7 +8,7 @@ import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
 
-public class Text implements Serializable, Comparable<Text>{
+public class Text implements Serializable{
 	
 	private final String name;
 	private final String rawText; 
@@ -76,19 +76,10 @@ public class Text implements Serializable, Comparable<Text>{
 		return rawText;
 	}
 
-
-	@Override
-	public int compareTo(Text o) {
-		return this.getName().compareTo(o.getName());
-	}
-
 	
 
 	public void filterUnlearnableSentences() {
-		//long initialSentenceCount = getParagraphs().stream().flatMap(paragraph -> paragraph.getSentences().stream()).count();
 		filterSentencesBasedOnLength();
-		//long endSentenceCount = getParagraphs().stream().flatMap(paragraph -> paragraph.getSentences().stream()).count();
-		//System.out.println("Initial sentence count = " + initialSentenceCount + ", end sentence count = " + endSentenceCount + ".");
 		
 	}
 
@@ -101,9 +92,21 @@ public class Text implements Serializable, Comparable<Text>{
 		for (Paragraph paragraph : originalParagraphs) {
 			List<Sentence> originalParagraphSentences = new ArrayList<Sentence>(paragraph.getSentences());
 			for (Sentence sentence : originalParagraphSentences) {
-				if (!(minSentenceLength <= sentence.getWordCount() && sentence.getWordCount() <= maxSentenceLength)) {
+				
+				if (sentence.getWordCount() < minSentenceLength){
 					//It should not be necessary to remove the pointers from the sentence itself
 					paragraph.getSentences().remove(sentence);
+				} else if (maxSentenceLength < sentence.getWordCount()) {
+					//If the sentence is to long, we can replace it with its subsentences, if it has any.
+					if (sentence.getSubSentences().size() != 0) {
+						List<Sentence> sentencesWithCorrectLength = sentence.getSubSentences().stream()
+																						 	  .filter(subSentence -> minSentenceLength <= subSentence.getWordCount() && subSentence.getWordCount() <= maxSentenceLength)
+																						 	  .collect(Collectors.toList());
+						paragraph.getSentences().replaceWith(sentence, sentencesWithCorrectLength);
+					}
+					else {
+						paragraph.getSentences().remove(sentence);						
+					}
 				}
 			}
 			if (paragraph.getSentences().size() == 0) {

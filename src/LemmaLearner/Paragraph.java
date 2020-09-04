@@ -8,7 +8,7 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	private Text originText;
 	private String paragraphID;
 	private final String rawParagraph;
-	private final Set<Sentence> sentences;
+	private final ListSet<Sentence> sentences;
 	
 	public Paragraph(String rawParagraph, Collection<Sentence> sentences) {
 		this.rawParagraph = rawParagraph;
@@ -22,7 +22,7 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	
 
 
-	public Set<Sentence> getSentences() {
+	public ListSet<Sentence> getSentences() {
 		return sentences;
 	}
 
@@ -58,8 +58,10 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Paragraph)) return false;
-		else return ((Paragraph) obj).getParagraphID().equals(this.paragraphID);
+		if (!(obj instanceof Paragraph)) 
+			return false;
+		else 
+			return ((Paragraph) obj).getParagraphID().equals(this.paragraphID);
 	}
 
 

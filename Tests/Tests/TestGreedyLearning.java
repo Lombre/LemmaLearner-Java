@@ -86,13 +86,44 @@ class TestGreedyLearning {
 		
 		GreedyLearner learner = new GreedyLearner(database);
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
-		var sentencesByUnlearnedLemmaFrequency = learner.getDirectlyLearnableLemmasByFrequency(learnedLemmas);
+		var sentencesByUnlearnedLemmaFrequency = learner.getDirectlyLearnableSentencesByFrequency(learnedLemmas);
 		
-		assertEquals(expectedSentence2, sentencesByUnlearnedLemmaFrequency.poll().getFirst().getRawSentence());
-		assertEquals(expectedSentence3, sentencesByUnlearnedLemmaFrequency.poll().getFirst().getRawSentence());
-		assertEquals(expectedSentence1, sentencesByUnlearnedLemmaFrequency.poll().getFirst().getRawSentence());
+		assertEquals(expectedSentence2, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());
+		assertEquals(expectedSentence3, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());
+		assertEquals(expectedSentence1, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());
 		assertNull(sentencesByUnlearnedLemmaFrequency.poll());
 	}
+
+	
+
+	@Test
+	public void testSentencesAreScoredCorrectly() throws Exception {
+		String rawLemma1 = "one";
+		String rawLemma2 = "two";
+		String rawLemma3 = "three";
+		String expectedSentence = rawLemma1 + " " + rawLemma2 + " " + rawLemma3 + ".";
+		
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
+		Sentence learnedSentence = database.allSentences.get(expectedSentence);
+		//Initalially the lemas should give a score of 1 each, as that are their frequencies.
+		assertEquals(1+1+1, learnedSentence.getScore(database, 10), 0.001);
+		
+		Lemma lemma1 = database.allLemmas.get(rawLemma1);
+		Lemma lemma2 = database.allLemmas.get(rawLemma2);
+		Lemma lemma3 = database.allLemmas.get(rawLemma3);
+		
+		lemma1.incrementTimesLearned();
+		assertEquals(0.25+1+1, learnedSentence.getScore(database, 10), 0.001);
+		lemma2.incrementTimesLearned();
+		assertEquals(0.25+0.25+1, learnedSentence.getScore(database, 10), 0.001);
+		lemma3.incrementTimesLearned();
+		assertEquals(0.25+0.25+0.25, learnedSentence.getScore(database, 10), 0.001);
+		
+
+		lemma2.incrementTimesLearned();
+		assertEquals(0.25+(1.0/16)+0.25, learnedSentence.getScore(database, 10), 0.001);
+	}
+	
 	
 
 	@Test
@@ -121,13 +152,13 @@ class TestGreedyLearning {
 		assertTrue(sentence.isDirectlyLearnable(learnedLemmas, database));
 		
 		learnedLemmas.add(database.allLemmas.get(Lemma3));
-		assertTrue(sentence.isDirectlyLearnable(learnedLemmas, database));
+		assertFalse(sentence.isDirectlyLearnable(learnedLemmas, database));
 		
 	}
 	
 
 	@Test
-	public void testLearnedLemmasIsDoneGreedily() throws Exception {
+	public void testLemmasAreLearnedGreedily() throws Exception {
 		//If it is done greedily, the invariant that there is no Lemma w2 learned after another Lemma w1,
 		//Such that w1.frequency < w2.frequency, unless w1 participates in the sentence used to learn w2,
 		//or w2 is learnt without a sentence.
@@ -148,10 +179,7 @@ class TestGreedyLearning {
 			}
 			
 			if (!nextSentence.getRawSentence().equals(learner.NOT_A_SENTENCE_STRING) && !nextSentence.getLemmaSet(database).contains(currentLemma)) {
-				if (!(nextLemma.getFrequency() <= currentLemma.getFrequency())) {
-					int k = 1;
-				}
-				assertTrue("Greedy invariant broken: Lemma " + nextLemma + " has a higher frequency than " + currentLemma + " but is learnt after the Lemma, for no reason.", nextLemma.getFrequency() <= currentLemma.getFrequency());
+				assertTrue("Greedy invariant broken: Lemma " + nextLemma + " has a higher frequency (" + nextLemma.getFrequency() +  ") than " + currentLemma + " (" + currentLemma.getFrequency() +  ") but is learnt after the Lemma, for no reason.", nextLemma.getFrequency() <= currentLemma.getFrequency());
 			}
 		}
 	}
@@ -167,12 +195,15 @@ class TestGreedyLearning {
 		TestTool.parseText(fileToParse, database);
 		List<Pair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
-		for (int i = 0; i < learningOrder.size() - 1; i++) {
+		//Is notaword lemma.
+		learnedLemmas.add(learningOrder.get(0).getFirst());
+		//Skip the first lemma, as this is notaword.
+		for (int i = 1; i < learningOrder.size() - 1; i++) {
 			Lemma learnedLemma = learningOrder.get(i).getFirst();
 			Sentence currentSentence = learningOrder.get(i).getSecond();
 			//An initial sentence is learned, with all the Lemmas in it. 
 			//The Lemmas learned from this sentence should thus be skipped.
-			if (currentSentence.equals(learningOrder.get(0).getSecond())) {
+			if (currentSentence.equals(learningOrder.get(1).getSecond())) {
 				learnedLemmas.add(learnedLemma);
 				continue;
 			}
@@ -181,12 +212,14 @@ class TestGreedyLearning {
 				if (LemmaInSentence == learnedLemma)
 					assertFalse(learnedLemmas.contains(LemmaInSentence));
 				else {
-					assertTrue(learnedLemmas.contains(LemmaInSentence));				
+					assertTrue("Sentence \"" + currentSentence + "\" contains lemma " + LemmaInSentence + " which haven't been learned yet.", learnedLemmas.contains(LemmaInSentence));				
 				}
 			}
 			learnedLemmas.add(learnedLemma);
 		}
 	}
+	
+	
 	
 
 }

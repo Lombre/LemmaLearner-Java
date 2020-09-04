@@ -60,15 +60,15 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 		conjugation.setRawLemma(this);		
 	}
 
-	public Set<Conjugation> getConjugations() {
-		return conjugations;
-	}
-
 	public int getTimesLearned() {
 		return timesLearned;
 	}
 	
 	public void incrementTimesLearned() {
 		timesLearned++;
+	}
+
+	public Set<Conjugation> getConjugations() {
+		return conjugations;
 	}
 }

@@ -109,7 +109,7 @@ public class ANTLRvisitor {
 			String rawText = getRawTextFromContext(ctx);
 			SentenceVisitor danglingSentenceVisitor = new SentenceVisitor();
 			Sentence danglingSentence = danglingSentenceVisitor.visit(ctx.sentence);			
-			return new Sentence(rawText, danglingSentence.getRawWordList());
+			return new Sentence(rawText, danglingSentence.getRawWordList(), danglingSentence.getSubSentences());
 		}		
 
 		
@@ -118,7 +118,7 @@ public class ANTLRvisitor {
 			String rawText = getRawTextFromContext(ctx);
 			SentenceVisitor danglingSentenceVisitor = new SentenceVisitor();
 			Sentence danglingSentence = danglingSentenceVisitor.visit(ctx.sentence);			
-			return new Sentence(rawText, danglingSentence.getRawWordList());
+			return new Sentence(rawText, danglingSentence.getRawWordList(), danglingSentence.getSubSentences());
 		}		
 
 		@Override
@@ -127,7 +127,7 @@ public class ANTLRvisitor {
 			WordVisitor wordVisitor = new WordVisitor();
 			QuotedSentenceVisitor quotedSentenceVisitor = new QuotedSentenceVisitor();
 			List<String> rawWords = new ArrayList<String>();
-
+			List<Sentence> subSentences = new ArrayList<Sentence>();
 			for (int i = 0; i < ctx.children.size(); i++) {
 				var child = ctx.children.get(i);				
 				if (child instanceof WordContext) {
@@ -135,9 +135,10 @@ public class ANTLRvisitor {
 					rawWords.addAll(wordsToAdd);	
 				}
 				else if (child instanceof QuotedSentenceContext) {
-					List<String> rawWordsToAdd = quotedSentenceVisitor.visit(child).getAllRawWords();
+					Paragraph quotedSentence = quotedSentenceVisitor.visit(child);
+					List<String> rawWordsToAdd = quotedSentence.getAllRawWords();
 					rawWords.addAll(rawWordsToAdd);	
-					
+					subSentences.addAll(quotedSentence.getSentences());
 				}
 				else if (child instanceof TerminalNodeImpl)	
 					continue;
@@ -145,7 +146,7 @@ public class ANTLRvisitor {
 					throw new Error("Unhandeled context type: " + child.getClass());
 			}
 			
-			return new Sentence(rawText, rawWords);
+			return new Sentence(rawText, rawWords, subSentences);
 		}
 	}
 	

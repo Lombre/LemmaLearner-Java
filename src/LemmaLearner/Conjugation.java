@@ -9,6 +9,7 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 	private final String rawConjugation;
 	private int frequency;
 	private Lemma lemma;
+	private int timesLearned;
 	
 	
 	public Conjugation(Sentence originSentence, String rawConjugation) {
@@ -78,5 +79,14 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 		if (this.lemma != null) 
 			throw new Error("The lemma for a conjugation is immutable.");
 		this.lemma = lemma;
+	}
+
+
+	public void incrementTimesLearned() {
+		timesLearned++;
+	}
+	
+	public Integer getTimesLearned() {
+		return timesLearned;
 	}
 }
