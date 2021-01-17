@@ -73,4 +73,12 @@ public class Lemmatizer {
 		return actualLemma;
 	}
 
+	public boolean knowsConjugation(String rawConjugation) {
+		boolean knows =  conjugationToLemmas.containsKey(rawConjugation) || onlineDictionary.knowsConjugation(rawConjugation);
+		if (!knows) 
+			knows = false;
+		knows =  conjugationToLemmas.containsKey(rawConjugation) || onlineDictionary.knowsConjugation(rawConjugation);
+		return conjugationToLemmas.containsKey(rawConjugation) || onlineDictionary.knowsConjugation(rawConjugation);
+	}
+
 }

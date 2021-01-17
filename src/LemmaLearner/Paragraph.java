@@ -82,4 +82,8 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	public int compareTo(Paragraph o) {
 		return this.getRawParagraph().compareTo(o.getRawParagraph());
 	}
+
+	public Sentence getNthSentence(int n) {
+		return sentences.get(n);
+	}
 }

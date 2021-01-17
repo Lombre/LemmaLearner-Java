@@ -22,10 +22,12 @@ class TestDatabaseInsertion {
 
 	TextDatabase database;
 	Text parsedText;
+	Configurations config;
 	
 	@BeforeEach
 	public void setUp() {
-		database = new TextDatabase(false, false);
+		config = new Configurations();
+		database = new TextDatabase(config);
 	}
 	
 	@Test

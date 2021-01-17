@@ -10,6 +10,10 @@ import org.nustaq.serialization.FSTConfiguration;
 import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
+
+
+//Will need to refractor this class, as honestly, the code is quite messy :/
+
 public class OnlineDictionary {
 	
 	private final String language;
@@ -26,9 +30,14 @@ public class OnlineDictionary {
 	private final String startWordTypeHTMLMarker = "<span class=\"suffix\">{";
 	private final String endWordTypeHTMLMarker = "}";
 	
+
+	private final String startConjugationMarker;
+	private final String endConjugationMarker = "\"";
+	
 	
 	public OnlineDictionary(String language) {
 		this.language = language;
+		this.startConjugationMarker =  "/conjugation/" + language.toLowerCase() + "/";
 		if (this.language.toLowerCase().equals("english")) {
 			dictionaryURL =  "https://en.bab.la/dictionary/english-spanish/";
 			startSecondaryLanguage = "\" in English</h2>";
@@ -45,6 +54,7 @@ public class OnlineDictionary {
 	public void load() {
 		//If the file have already been parsed and save, simply load that, as this is faster than parsing it again.
 		if (Files.exists(Paths.get(SAVED_DICTIONARY_PATH)) && shouldLoadSavedDictionary) {
+			
 			try {					
 				conjugationToLemma.putAll(loadSavedDictionary());		
 			}
@@ -84,15 +94,16 @@ public class OnlineDictionary {
 	public String getLemmaFromConjugation(String actualWord) throws IOException, InterruptedException {
 		
 		
-		if (conjugationToLemma.containsKey(actualWord) && shouldLoadSavedDictionary) {
+		if (knowsConjugation(actualWord) && shouldLoadSavedDictionary) {
 			return conjugationToLemma.get(actualWord);
 		}
 		
 		if (actualWord.equals("in*"))
 			return actualWord;
-				
+
+		
 		String primaryLanguageWebpageContent = getPrimaryLanguageWebpageContent(actualWord);         
-        List<Pair<String, String>> dictionaryWords = getWordsAndWordTypesFromWebsiteResponse(primaryLanguageWebpageContent);        
+        List<Pair<String, String>> dictionaryWords = getWordsAndWordTypesFromWebsiteResponse(actualWord, primaryLanguageWebpageContent);        
         removeWordsWithIllegealWordTypes(dictionaryWords);
         
         if (dictionaryWords.size() == 0) {
@@ -109,11 +120,12 @@ public class OnlineDictionary {
 
 
 	private void removeWordsWithIllegealWordTypes(List<Pair<String, String>> dictionaryWords) {
+		//Remove things likes names, because we don't really care about learning those types of words
 		dictionaryWords.removeIf(pair -> pair.getSecond().equals("pl") || pair.getSecond().equals("pr.n.") || pair.getSecond().equals("m"));
 	}
 
 
-	private List<Pair<String, String>> getWordsAndWordTypesFromWebsiteResponse(String response) {
+	private List<Pair<String, String>> getWordsAndWordTypesFromWebsiteResponse(String actualWord, String response) throws IOException, InterruptedException, Error {
 		List<Pair<String, String>> dictionaryWords = new ArrayList<Pair<String, String>>(); 
         while (response.indexOf(startWordHTMLMarker) != -1) {
         	int startWordIndex = response.indexOf(startWordHTMLMarker) + startWordHTMLMarker.length();
@@ -132,7 +144,28 @@ public class OnlineDictionary {
         		dictionaryWords.add(new Pair<String, String>(foundWord, foundWordType));
 			}
 		}
+        
+        
+        String wordWebpage = getWebpage(actualWord);
+        //System.out.println(wordWebpage);
+        //System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        if (isConjugation(wordWebpage)) {
+        	var conjugationPair = new ArrayList<Pair<String,String>>(){};
+    		int startConjugationIndex = wordWebpage.indexOf(startConjugationMarker) + startConjugationMarker.length();
+    		int endConjugationIndex = wordWebpage.indexOf(endConjugationMarker, startConjugationIndex);
+        	String conjugation = wordWebpage.substring(startConjugationIndex, endConjugationIndex).toLowerCase();
+        	conjugationPair.add(new Pair<String, String>(conjugation, "vb"));
+			return conjugationPair;
+		}
+		
+		
 		return dictionaryWords;
+	}
+
+
+	private boolean isConjugation(String response) {
+		int startConjugationIndex = response.indexOf(startConjugationMarker);
+		return startConjugationIndex != -1;
 	}
 
 
@@ -165,16 +198,19 @@ public class OnlineDictionary {
 		} else {
 			String response = getDictionaryWebpage(actualWord);
 			
-	        //To avoid spaming the website.
 			
 			try (PrintWriter out = new PrintWriter(fileDestination)) {
 				out.println(response);
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new Error("The file for the word " + actualWord + " could not be saved to disk.");
+				System.out.println("The file for the word " + actualWord + " could not be saved to disk.");
+				//throw new Error("The file for the word " + actualWord + " could not be saved to disk.");
 			}
 			System.out.println("Saved file for word \"" + actualWord + "\"");
-			Thread.sleep(1000);
+			//To avoid spaming the website.
+			int sleepTime = 133 + new Random().nextInt(357);
+			Thread.sleep(sleepTime);
+			//System.out.println(sleepTime);
 			return response;			
 		}
 		
@@ -204,6 +240,11 @@ public class OnlineDictionary {
         HttpResponse<String> response = client.send(request,
                 HttpResponse.BodyHandlers.ofString());
 		return response.body();
+	}
+
+
+	public boolean knowsConjugation(String actualWord) {
+		return conjugationToLemma.containsKey(actualWord);
 	}
 
 }

@@ -9,14 +9,17 @@ import org.antlr.v4.runtime.CharStream;
 public class LearningProgressPrinter {
 
 	public static void printLemmasWithHighNumberOfConjugations(TextDatabase database) {
-		for (Lemma lemma : database.allLemmas.values()) {
-			if (10 <= lemma.getConjugations().size()) {
-				System.out.println("Lemma \"" + lemma + "\" has " + lemma.getConjugations().size() + " conjugations.");
-				for (Conjugation conjugation : lemma.getConjugations()) {
-					System.out.println(lemma + " -> " + conjugation);
+		if (false) {
+			
+			for (Lemma lemma : database.allLemmas.values()) {
+				if (10 <= lemma.getConjugations().size()) {
+					System.out.println("Lemma \"" + lemma + "\" has " + lemma.getConjugations().size() + " conjugations.");
+					for (Conjugation conjugation : lemma.getConjugations()) {
+						System.out.println(lemma + " -> " + conjugation);
+					}
+					System.out.println();
 				}
-				System.out.println();
-			}
+			}			
 		}
 	}
 
@@ -75,6 +78,7 @@ public class LearningProgressPrinter {
 	}
 
 	public static void printFinishedLearningLemmasInformation(long absoluteStartTime, List<Pair<Lemma, Sentence>> learningOrder, Set<Lemma> learnedLemmas, TextDatabase database) {
+		
 		List<Lemma> lemmasLearnedFromSentences = learningOrder.stream()
 															.filter(pair -> !pair.getSecond().getRawSentence().equals(GreedyLearner.NOT_A_SENTENCE_STRING))
 															.map(pair -> pair.getFirst())
@@ -88,9 +92,80 @@ public class LearningProgressPrinter {
 		System.out.println("Learned all words in " + absoluteTimeUsed + " seconds.");	
 		
 		printNumberOfTimesLemmasHaveBeenLearned(database);
-		printNumberOfTimesConjugationsHaveBeenLearned(learnedLemmas);
-		
+		printNumberOfTimesConjugationsHaveBeenLearned(learnedLemmas);				
+		printerNumberOfIgnorableSentences(database);		
+		//printerNumberOfTimesLemmasHaveBeenLearned(learningOrder);
 	}
+
+	private static void printerNumberOfTimesLemmasHaveBeenLearned(List<Pair<Lemma, Sentence>> learningOrder) {
+		for (int i = 0; i < learningOrder.size(); i++) {
+			Lemma lemma = learningOrder.get(i).getFirst();
+			System.out.println((i+1) + ") " + lemma + " -> " + lemma.getTimesLearned());
+		}
+	}
+
+	private static void printerNumberOfIgnorableSentences(TextDatabase database) {
+		//A test of methods to filter out redundant sentences, to minimize computation time.
+		
+		HashSet<Pair<Lemma, Lemma>> seenLemmaPairs = new HashSet<Pair<Lemma, Lemma>>();
+		HashMap<Lemma, Integer> timesLemmaSeen = new HashMap<Lemma, Integer>();
+		database.allLemmas.values().stream().forEach(lemma -> timesLemmaSeen.put(lemma, 0));
+		int ignorableSentences = 0;
+		List<Sentence> ignoredSentences = new ArrayList<Sentence>();
+		
+		int minTimesToLearn = 20;
+		int lowFrequency = 100;
+		for (Sentence sentence : database.allSentences.values()) {
+			List<Lemma> sentenceLemmas = new ArrayList<Lemma>(sentence.getLemmaSet(database));
+			var uncommonLemmas = sentenceLemmas.stream().filter(lemma -> lemma.getFrequency() < lowFrequency).collect(Collectors.toList());
+			
+			
+			boolean hasNonRedundantPair = !containOnlyRedundantLemmaPairs(seenLemmaPairs, sentenceLemmas);
+			boolean containLemmaSeenFewTimes = sentenceLemmas.stream().anyMatch(x -> timesLemmaSeen.get(x) < minTimesToLearn);
+			boolean containsLowFrequencyNonRedundantPair = !containOnlyRedundantLemmaPairs(seenLemmaPairs, uncommonLemmas);
+			
+			//System.out.println(sentence);
+			if ((hasNonRedundantPair && containLemmaSeenFewTimes) || containsLowFrequencyNonRedundantPair) {
+				addPairsOfLemmasToSeenLemmaPairs(seenLemmaPairs, sentenceLemmas);
+				sentenceLemmas.forEach(lemma -> timesLemmaSeen.put(lemma, timesLemmaSeen.get(lemma) + 1));
+			} else {
+				ignorableSentences++;
+				ignoredSentences.add(sentence);
+			}
+		}
+		System.out.println("Ignorable sentences: " + ignorableSentences + " out of " + database.allSentences.size() + " (" + (100.0f*ignorableSentences/database.allSentences.size()) + "%).");
+			
+	}
+	
+
+
+	private static boolean containOnlyRedundantLemmaPairs(HashSet<Pair<Lemma, Lemma>> seenLemmaPairs, List<Lemma> sentenceLemmas) {
+		for (int i = 0; i < sentenceLemmas.size(); i++) {
+			for (int j = i + 1; j < sentenceLemmas.size(); j++) {
+				var lemmaPair1 = new Pair<Lemma, Lemma>(sentenceLemmas.get(i), sentenceLemmas.get(j));
+				//var lemmaPair2 = new Pair<Lemma, Lemma>(sentenceLemmas.get(j), sentenceLemmas.get(i));
+				if (!seenLemmaPairs.contains(lemmaPair1)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+
+	private static void addPairsOfLemmasToSeenLemmaPairs(HashSet<Pair<Lemma, Lemma>> seenLemmaPairs, List<Lemma> sentenceLemmas) {
+		for (int i = 0; i < sentenceLemmas.size(); i++) {
+			for (int j = i + 1; j < sentenceLemmas.size(); j++) {
+				var lemmaPair1 = new Pair<Lemma, Lemma>(sentenceLemmas.get(i), sentenceLemmas.get(j));
+				var lemmaPair2 = new Pair<Lemma, Lemma>(sentenceLemmas.get(j), sentenceLemmas.get(i));
+				if (!seenLemmaPairs.contains(lemmaPair1)) {
+					seenLemmaPairs.add(lemmaPair1);
+					seenLemmaPairs.add(lemmaPair2);
+				}
+			}
+		}
+	}
+
 
 	public static void printLearnedInformation(List<Pair<Lemma, Sentence>> learningOrder, TextDatabase database) {
 		var learnedWordSentencePair = learningOrder.get(learningOrder.size() - 1);		

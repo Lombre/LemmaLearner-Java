@@ -5,6 +5,9 @@
 #Specific directories
 Other texts/
 Websites/
+Texts/
+Test texts/
+TextsToParse/
 *.saved
 
 

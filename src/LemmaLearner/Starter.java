@@ -10,21 +10,20 @@ public class Starter {
 	public static void main(String[] args) throws Exception {
 		
 		//Settings
-		boolean shouldParseRealText = true;
-		boolean shouldDisplayText = true;
-		boolean shouldLoadSavedTexts = true;
+		boolean shouldParseRealText = false;
 		
-		TextDatabase textDatabase = new TextDatabase(shouldLoadSavedTexts, shouldDisplayText);
-		GreedyLearner learner = new GreedyLearner(textDatabase);
+		Configurations config = new Configurations();
 		
-		
+		TextDatabase textDatabase = new TextDatabase(config);
+		GreedyLearner learner = new GreedyLearner(textDatabase, config);
+				
 		System.out.println("Start");
 		
 		
 		if (shouldParseRealText) 
-			textDatabase.addAllTextsInFolderToDatabase("Other texts");
+			textDatabase.addAllTextsInFolderToDatabase("Texts");
 		else 
-			textDatabase.addAllTextsInFolderToDatabase("Texts");		
+			textDatabase.addAllTextsInFolderToDatabase("TextsToParse");		
 		
 		
 		learner.learnAllLemmas();		

@@ -29,11 +29,13 @@ class TestNewPriorityQueue {
 	Text parsedText;
 	GreedyLearner learner;
 	TreePriorityQueue<Sentence> queue;
+	Configurations config;
 	
 	@BeforeEach
 	public void setUp() {
-		database = new TextDatabase(true, false);
-		learner = new GreedyLearner(database);
+		config = new Configurations();
+		database = new TextDatabase(config);
+		learner = new GreedyLearner(database, config);
 		queue = learner.getSentencesByUnlearnedWordFrequency();
 		
 	}

@@ -172,6 +172,7 @@ public class ANTLRvisitor {
 		@Override
 		public List<String> visitWord(WordContext ctx) {
 			var child = ctx.children.get(0);
+			//var childText = getRawTextFromContext(ctx);
 			NormalWordVisitor visitor = new NormalWordVisitor();
 			if (child instanceof NormalWordContext )
 				return visitor.visit(child);

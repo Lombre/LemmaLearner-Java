@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <meta name="language" content="en">
+    <meta name="google" content="notranslate">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0" name="viewport">
+    <title>CONTEMPLATIONS - Translation in Spanish - bab.la</title>
+    <meta content="Translation for 'contemplations' in the free English-Spanish dictionary and many other Spanish translations." name="description">
+                                    <meta name="keywords" content="contemplations, Spanish, translation">    <meta name="robots" content="index,follow">    <link rel="canonical" href="https://en.bab.la/dictionary/english-spanish/contemplations" />                                            <link rel="alternate" hreflang="es" href="https://es.bab.la/diccionario/ingles-espanol/contemplations" />
+                                        <script>
+        var iaw = iaw || {};
+        iaw.que = iaw.que || [];
+        iaw.cmd = iaw.cmd || [];
+    </script>
+    
+    <!-- OneTrust Using TCF with Prebid  -->
+    <script src="https://cdn.cookielaw.org/consent/tcf.stub.js" type="text/javascript" charset="UTF-8"></script>
+    <!-- OneTrust Cookies Consent Notice start for bab.la -->
+    <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="a164f2c2-ed5e-446a-bdcc-348b8cc96441" data-ignore-ga="true" ></script>
+    <script type="text/javascript">
+        function OptanonWrapper() { }
+    </script>
+    <!-- OneTrust Cookies Consent Notice end for bab.la -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <link rel="preconnect" href="//static.bab.la/"/>
+<link rel="preconnect" href="https://securepubads.g.doubleclick.net">
+<link rel="preconnect" href="https://c2shb.ssp.yahoo.com">
+<link rel="preconnect" href="https://ib.adnxs.com">
+<link rel="preconnect" href="https://bidder.criteo.com">
+<link rel="preconnect" href="https://as-sec.casalemedia.com">
+<link rel="preconnect" href="https://idm-d.openx.net">
+<link rel="preconnect" href="https://hbopenbid.pubmatic.com">
+<link rel="preconnect" href="https://fastlane.rubiconproject.com">
+<link rel="preconnect" href="https://prg.smartadserver.com">
+<link rel="preconnect" href="https://a.teads.tv">
+<link rel="preconnect" href="https://tlx.3lift.com">
+<link rel="preconnect" href="https://ad.yieldlab.net">
+<script async="async" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+
+<script>
+  iaw.que.push(function() {
+
+        iaw.setPageLayout('default');
+        iaw.setPageCriteria({'l': 'en', 'pc': 'dictionary', 'edc': 'enes', 'dc': 'enes', 'sfr': 'lab_dict_enes'});
+        iaw.setPageLabels(["wprod"]);
+        iaw.setCountry('RO');
+        iaw.useEuConsentInfo();  iaw.enableAdSlotRefresher();
+
+  if(typeof ga != "undefined") {
+    iaw.setGA(ga);
+  }
+  //iaw.enableLogs();
+});
+</script>
+<script src="//static.bab.la/js/vendor/iaw-babla.min.js?v=1595858799" async></script>    <link rel="preload" href="https://www.google-analytics.com/analytics.js" as="script">
+    <link rel="stylesheet" href="//static.bab.la/css/basic.css?v=1595858799">
+
+<link rel="preload" href="//static.bab.la/css/extra.css?v=1595858799" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="//static.bab.la/css/extra.css?v=1595858799"></noscript>
+    <script>
+        !function(n){"use strict";n.loadCSS||(n.loadCSS=function(){});var t,o=loadCSS.relpreload={};o.support=function(){var e;try{e=n.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),o.bindMediaToggle=function(t){var e=t.media||"all";function a(){t.addEventListener?t.removeEventListener("load",a):t.attachEvent&&t.detachEvent("onload",a),t.setAttribute("onload",null),t.media=e}t.addEventListener?t.addEventListener("load",a):t.attachEvent&&t.attachEvent("onload",a),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(a,3e3)},o.poly=function(){if(!o.support())for(var t=n.document.getElementsByTagName("link"),e=0;e<t.length;e++){var a=t[e];"preload"!==a.rel||"style"!==a.getAttribute("as")||a.getAttribute("data-loadcss")||(a.setAttribute("data-loadcss",!0),o.bindMediaToggle(a))}},o.support()||(o.poly(),t=n.setInterval(o.poly,500),n.addEventListener?n.addEventListener("load",function(){o.poly(),n.clearInterval(t)}):n.attachEvent&&n.attachEvent("onload",function(){o.poly(),n.clearInterval(t)})),"undefined"!=typeof exports?exports.loadCSS=loadCSS:n.loadCSS=loadCSS}("undefined"!=typeof global?global:this);    </script>
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="bab.la" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/languages/mstile-310x310.png" />
+    <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga("create", "UA-149407836-1", "auto");
+        ga("set", "anonymizeIp", true);
+        ga("require", "displayfeatures");
+        ga("set", "dimension1", "languages");
+        ga("set", "dimension2", "dictionary");
+                    ga("set", "dimension3", "entry");
+                ga("send", "pageview");
+        var response_code = "200";
+        if(response_code.startsWith("4") || response_code.startsWith("5"))
+            ga("send", "event", "Error", response_code, window.location.href); 
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- Pubstack Tag -->
+    <script src="https://boot.pbstck.com/v1/tag/f18c027f-eefb-48c2-b89a-f013e1828e06" async></script>
+    <!-- Blockthrough -->
+    <script>
+        var btScript = document.createElement('script');
+        btScript.src = '//idmgroup-com.videoplayerhub.com/videoloader.js';
+        document.head.appendChild(btScript);
+    </script>
+</head>
+
+<body class="languages"><a id="top" style="float:left;width:0;height:0;overflow:hidden;"></a><aside class='site-switch-toggle'>
+    <a class='navbar-brand' href='#' role='button'><span class='babla-logo'>bab.la</span><span class='material-icons'>arrow_drop_down</span></a>
+</aside>
+<nav class='navbar'>
+    <div class='navbar-header'>
+        <a class='navbar-brand' href='/'><span class='babla-logo'>bab.la - Online dictionaries, vocabulary, conjugation, grammar</span></a>
+        <button aria-expanded='false' class='navbar-toggle collapsed' data-target='#babla-navbar-collapse' data-toggle='collapse' type='button'>
+            <span class='sr-only'>Toggle navigation</span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+        </button>
+    </div>
+    <div id='babla-navbar-collapse' class='collapse navbar-collapse'>
+        <ul class='nav navbar-nav'>
+                            <li><a href="/translator/"  onclick="babTE('MenuLinks', 'translator', 'en');">Translator</a></li>
+                                <li class="active"><a href="/dictionary/"  onclick="babTE('MenuLinks', 'dictionary', 'en');">Dictionary</a></li>
+                                <li><a href="/conjugation/"  onclick="babTE('MenuLinks', 'conjugation', 'en');">Conjugation</a></li>
+                                <li><a href="/phrases/"  onclick="babTE('MenuLinks', 'phrases', 'en');">Phrases</a></li>
+                                <li><a href="/games/"  onclick="babTE('MenuLinks', 'games', 'en');">Games</a></li>
+                                                    <li class='dropdown'><a aria-expanded='false' aria-haspopup='true' class='dropdown-toggle' data-toggle='dropdown' href='#' role='button'>More by bab.la <span class='material-icons'>arrow_drop_down</span></a>
+                        <ul class='dropdown-menu'>
+                                                            <li><a href="/quiz/"  onclick="babTE('MenuLinks', 'quiz', 'en');">Quizzes</a></li>
+                                                            <li><a href="/grammar/"  onclick="babTE('MenuLinks', 'grammar', 'en');">Grammar</a></li>
+                                                    </ul>
+                    </li>
+                        </ul>
+        <ul class='nav navbar-nav site-switch-nav'>
+                            <li class="languages active"><a href="/" onclick="babTE('MenuLinks', 'languages', 'en');">Dictionaries</a></li>
+                            <li class="magazine"><a href="/living-abroad/" onclick="babTE('MenuLinks', 'magazine', 'en');">Living abroad</a></li>
+                            <li class="corporate"><a href="/company/" onclick="babTE('MenuLinks', 'corporate', 'en');">About bab.la</a></li>
+                    </ul>
+        <ul class='nav navbar-nav navbar-right'>
+            <!-- li><a href='#'>Login</a></li -->
+            <li class='language-setting dropdown'>
+                <a aria-expanded='false' aria-haspopup='true' class='dropdown-toggle' data-toggle='dropdown' href='#' role='button'>
+                    <span class='material-icons visual-label'>public</span>
+                    <span class='mobile-label'>Website Language</span>
+                    <span class='material-icons'>arrow_drop_down</span>
+                </a>
+                <ul class='dropdown-menu'>
+                    <li class='dropdown-header'>Website Language</li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <li  class="active">
+                                <a href="https://en.bab.la/dictionary/english-spanish/contemplations" onclick="babTE('MenuLinks', ' en', 'en');">
+                                    <span class="flag  uk-us"> en</span>
+                                    English                                </a>
+                            </li>
+                                                                                                <li >
+                                <a href="https://es.bab.la/diccionario/ingles-espanol/contemplations" onclick="babTE('MenuLinks', ' es', 'en');">
+                                    <span class="flag  es"> es</span>
+                                    Español                                </a>
+                            </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<main class="main">
+    
+<span id="scrollhelper"></span>
+
+<aside id="fixed2" class='action-wrapper'>
+    <div class="logo-flash" onclick="window.location.href='/'">Search dictionary</div>
+    <div data-ride="carousel" class="keyboard-wrapper carousel">
+  <div class="container-fluid carousel-inner">
+      <div class="babla-extra-letter-set item active">
+        <div class="babla-extra-letter-set-line">
+          <a href="#" title="Spanish" class="keyboardSwitch"><span class="flag es"></span> Spanish</a>
+          <a href="#" class="keyboard-char" rel="á">á</a>
+          <a href="#" class="keyboard-char" rel="é">é</a>
+          <a href="#" class="keyboard-char" rel="í">í</a>
+          <a href="#" class="keyboard-char" rel="ó">ó</a>
+          <a href="#" class="keyboard-char" rel="ú">ú</a>
+          <a href="#" class="keyboard-char" rel="ü">ü</a>
+          <a href="#" class="keyboard-char" rel="ñ">ñ</a>
+        </div>
+      </div>
+  </div>
+</div>
+    <div class='action-panel'>
+        <div class='container-fluid'>
+            <div class='action-panel-form'>
+                <div class='action-panel-form-item action-panel-form-item-language'>
+                    <a class='action-panel-form-language-switch action-links-toggle' href='#' role='button'>
+                        <span class='material-icons'>expand_more</span>
+                        <span class='flag uk'>English</span>
+                                                    <span class='flag es'>Spanish</span>
+                                            </a>
+                </div>
+                <div id="prefetch" class='action-panel-form-item action-panel-form-item-input'>
+                    <span class='form-prefix'><span class='material-icons'>search</span></span>
+                    <label for="bablasearch" class="sr-only">Translate</label>
+                                        <input class='action-search typeahead' id='bablasearch' placeholder='English or Spanish' onmouseover="this.select();this.focus()" autofocus autocomplete="off" type="text" value="contemplations">
+                    <a class='action-panel-form-clear' href='#'><span class='material-icons'>cancel</span></a>
+                    <input type="hidden" id="babDict" value="enes"><input type="hidden" id="babSearchUrl" value="https://en.bab.la/dictionary/english-spanish/">
+                </div>
+                                    <div class='action-panel-form-item action-panel-form-item-keyboard'>
+                        <a class='action-panel-form-keyboard' href='#'><span class='material-icons'>keyboard</span></a>
+                    </div>
+                                <div class='action-panel-form-item action-panel-form-item-submit'>
+                    <a class='action-panel-form-submit' href='javascript:babSearch()'>Translate<span class='material-icons'>arrow_forward</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<aside class="action-links">
+    <div class="container-fluid">
+        <div class="dict-switch-help">
+            <div class="h3">Switch dictionary</div>
+            <p>Did you know? All our dictionaries are bidirectional, meaning that you can look up words in both languages at the same time.</p>
+        </div>
+        <nav class="dict-select-wrapper">
+                                            <div class="dict-select-column">
+                    <div class="dict-select-portion-header">English Dictionaries</div>
+                    <ul>
+                                                    <li onclick="location.href='https://en.bab.la/dictionary/english-spanish/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-spanish/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag es">Spanish</span>
+                English – Spanish    </a>
+</li>                                                    <li onclick="location.href='https://en.bab.la/dictionary/english-arabic/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-arabic/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag eg">Arabic</span>
+                English – Arabic    </a>
+</li>                                                    <li onclick="location.href='https://en.bab.la/dictionary/english-chinese/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-chinese/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag cn">Chinese</span>
+                English – Chinese    </a>
+</li>                                                    <li onclick="location.href='https://en.bab.la/dictionary/english-czech/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-czech/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag cz">Czech</span>
+                English – Czech    </a>
+</li>                                                    <li onclick="location.href='https://en.bab.la/dictionary/english-danish/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-danish/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag dk">Danish</span>
+                English – Danish    </a>
+</li>                                                                            <li id="collapseDictsBlock1" class="collapse">
+                                <ul>
+                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-dutch/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-dutch/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag nl">Dutch</span>
+                English – Dutch    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-finnish/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-finnish/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag fi">Finnish</span>
+                English – Finnish    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-french/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-french/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag fr">French</span>
+                English – French    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-german/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-german/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag de">German</span>
+                English – German    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-greek/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-greek/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag gr">Greek</span>
+                English – Greek    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-hindi/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-hindi/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag in">Hindi</span>
+                English – Hindi    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-hungarian/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-hungarian/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag hu">Hungarian</span>
+                English – Hungarian    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-indonesian/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-indonesian/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag id">Indonesian</span>
+                English – Indonesian    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-italian/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-italian/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag it">Italian</span>
+                English – Italian    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-japanese/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-japanese/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag jp">Japanese</span>
+                English – Japanese    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-korean/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-korean/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag kr">Korean</span>
+                English – Korean    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-norwegian/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-norwegian/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag no">Norwegian</span>
+                English – Norwegian    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-polish/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-polish/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag pl">Polish</span>
+                English – Polish    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-portuguese/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-portuguese/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag pt-br">Portuguese</span>
+                English – Portuguese    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-romanian/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-romanian/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag ro">Romanian</span>
+                English – Romanian    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-russian/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-russian/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag ru">Russian</span>
+                English – Russian    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-swedish/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-swedish/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag se">Swedish</span>
+                English – Swedish    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-swahili/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-swahili/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag ke">Swahili</span>
+                English – Swahili    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-thai/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-thai/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag th">Thai</span>
+                English – Thai    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-turkish/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-turkish/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag tr">Turkish</span>
+                English – Turkish    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-vietnamese/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-vietnamese/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag vn">Vietnamese</span>
+                English – Vietnamese    </a>
+</li>                                                                            <li onclick="location.href='https://en.bab.la/dictionary/english-esperanto/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/english-esperanto/" class="action-links-toggle">
+        <span class="flag uk">English</span>
+                    <span class="flag eo">Esperanto</span>
+                English – Esperanto    </a>
+</li>                                                                    </ul>
+                            </li>
+                            <li>
+                                <a role="button" data-toggle="collapse" href="#collapseDictsBlock1" aria-expanded="false" aria-controls="collapseDictsBlock1" class="more collapsed">
+                                    <span class="material-icons">expand_more</span>
+                                    More English Dictionaries                                </a>
+                            </li>
+                                            </ul>
+                </div>
+                                            <div class="dict-select-column">
+                    <div class="dict-select-portion-header">Spanish Dictionaries</div>
+                    <ul>
+                                                    <li onclick="location.href='https://en.bab.la/dictionary/spanish-english/'+$('#bablasearch').val()">
+    <a href="https://en.bab.la/dictionary/spanish-english/" class="action-links-toggle">
+        <span class="flag es">Spanish</span>
+                    <span class="flag uk">English</span>
+                Spanish – English    </a>
+</li>                                                    <li onclick="location.href='https://es.bab.la/diccionario/espanol-aleman/'+$('#bablasearch').val()">
+    <a href="https://es.bab.la/diccionario/espanol-aleman/" class="action-links-toggle">
+        <span class="flag es">Spanish</span>
+                    <span class="flag de">German</span>
+                Spanish – German    </a>
+</li>                                                    <li onclick="location.href='https://es.bab.la/diccionario/espanol-frances/'+$('#bablasearch').val()">
+    <a href="https://es.bab.la/diccionario/espanol-frances/" class="action-links-toggle">
+        <span class="flag es">Spanish</span>
+                    <span class="flag fr">French</span>
+                Spanish – French    </a>
+</li>                                                    <li onclick="location.href='https://es.bab.la/diccionario/espanol-italiano/'+$('#bablasearch').val()">
+    <a href="https://es.bab.la/diccionario/espanol-italiano/" class="action-links-toggle">
+        <span class="flag es">Spanish</span>
+                    <span class="flag it">Italian</span>
+                Spanish – Italian    </a>
+</li>                                                    <li onclick="location.href='https://es.bab.la/diccionario/espanol-portugues/'+$('#bablasearch').val()">
+    <a href="https://es.bab.la/diccionario/espanol-portugues/" class="action-links-toggle">
+        <span class="flag es">Spanish</span>
+                    <span class="flag pt-br">Portuguese</span>
+                Spanish – Portuguese    </a>
+</li>                                                                    </ul>
+                </div>
+                                            <div class="dict-select-column">
+                    <div class="dict-select-portion-header">Other Dictionaries</div>
+                    <ul>
+                                                    <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-chinesisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-chinesisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag cn">Chinese</span>
+                German – Chinese    </a>
+</li>                                                    <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-daenisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-daenisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag dk">Danish</span>
+                German – Danish    </a>
+</li>                                                    <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-franzoesisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-franzoesisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag fr">French</span>
+                German – French    </a>
+</li>                                                    <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-italienisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-italienisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag it">Italian</span>
+                German – Italian    </a>
+</li>                                                    <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-niederlaendisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-niederlaendisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag nl">Dutch</span>
+                German – Dutch    </a>
+</li>                                                                            <li id="collapseDictsBlock3" class="collapse">
+                                <ul>
+                                                                            <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-polnisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-polnisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag pl">Polish</span>
+                German – Polish    </a>
+</li>                                                                            <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-portugiesisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-portugiesisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag pt-br">Portuguese</span>
+                German – Portuguese    </a>
+</li>                                                                            <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-russisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-russisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag ru">Russian</span>
+                German – Russian    </a>
+</li>                                                                            <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-schwedisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-schwedisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag se">Swedish</span>
+                German – Swedish    </a>
+</li>                                                                            <li onclick="location.href='https://de.bab.la/woerterbuch/deutsch-tuerkisch/'+$('#bablasearch').val()">
+    <a href="https://de.bab.la/woerterbuch/deutsch-tuerkisch/" class="action-links-toggle">
+        <span class="flag de">German</span>
+                    <span class="flag tr">Turkish</span>
+                German – Turkish    </a>
+</li>                                                                            <li onclick="location.href='https://it.bab.la/dizionario/italiano-francese/'+$('#bablasearch').val()">
+    <a href="https://it.bab.la/dizionario/italiano-francese/" class="action-links-toggle">
+        <span class="flag it">Italian</span>
+                    <span class="flag fr">French</span>
+                Italian – French    </a>
+</li>                                                                            <li onclick="location.href='https://it.bab.la/dizionario/italiano-romeno/'+$('#bablasearch').val()">
+    <a href="https://it.bab.la/dizionario/italiano-romeno/" class="action-links-toggle">
+        <span class="flag it">Italian</span>
+                    <span class="flag ro">Romanian</span>
+                Italian – Romanian    </a>
+</li>                                                                            <li onclick="location.href='https://pl.bab.la/slownik/polski-rosyjski/'+$('#bablasearch').val()">
+    <a href="https://pl.bab.la/slownik/polski-rosyjski/" class="action-links-toggle">
+        <span class="flag pl">Polish</span>
+                    <span class="flag ru">Russian</span>
+                Polish – Russian    </a>
+</li>                                                                    </ul>
+                            </li>
+                            <li>
+                                <a role="button" data-toggle="collapse" href="#collapseDictsBlock3" aria-expanded="false" aria-controls="collapseDictsBlock3" class="more collapsed">
+                                    <span class="material-icons">expand_more</span>
+                                    More English Dictionaries                                </a>
+                            </li>
+                                            </ul>
+                </div>
+                    </nav>
+    </div>
+</aside>    <div class='page'>
+        <nav class='breadcrumbs-nav'>
+            <ol class='breadcrumb'>
+                                                            <li><a href="/">bab.la</a></li>
+                                                                                <li><a href="/dictionary/">Dictionary</a></li>
+                                                                                <li><a href="https://en.bab.la/dictionary/english-spanish/">English-Spanish</a></li>
+                                                                                <li><a href="https://en.bab.la/dictionary/english-spanish/c/">C</a></li>
+                                                                                <li class="active"><strong> contemplations</strong></li>
+                                                </ol>
+        </nav>
+        <aside class='info-panel'>
+            <div id="topslot-container" class='info-wrapper'>
+    <div id="ad_topslot"><script>iaw.cmd.push(function() {iaw.display("ad_topslot"); });</script></div>
+</div>        </aside>
+        <div class='column-wrapper'>
+            <aside id="fixed-left" class="column-left">
+                <div class="info-wrapper">
+                    <div id="ad_leftslot"><script>iaw.cmd.push(function() { iaw.display("ad_leftslot"); });</script></div>                </div>
+            </aside>
+
+            <div class='content-column'><div class='content'>
+    <div class='quick-results container'>
+        <div class='quick-results-header'>
+            <h1 class="quick-results-h2">"contemplations" translation into Spanish</h1>
+                        <div class="quick-results-h1">
+                <div class="qr-flags">
+                    <span class='flag uk'>EN</span>
+                </div>
+                <div class="qr-word">
+                    <h2 class="h1">"contemplations" in Spanish</h2>
+                </div>
+            </div>
+        </div>
+                                <div class='quick-result-entry'>
+                <div class='quick-result-option'>
+                                            <a class="sound-inline bab-quick-sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/d/6/9/d6900da6f701d73222cf5e14489706cb.mp3', 'contemplations');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                                            <a href='#translationsdetails-en1' class="babQuickResult">contemplations</a>
+                                        <span class="suffix">{pl}</span>                                    </div>
+                <div class='quick-result-overview'>
+                    <span class='flag es'>ES</span>
+                    <ul class='sense-group-results'>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/contemplaciones' onclick="babTE('XRefs', 'es-en');" title="&quot;contemplaciones&quot; in English">contemplaciones</a></li>
+                                                                                                                                                                                    </ul>
+                </div>
+            </div>
+                                <div class='quick-result-entry'>
+                <div class='quick-result-option'>
+                                            <a class="sound-inline bab-quick-sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/4/9/5/4955ed75c60e476823e746fe5da901e7.mp3', 'contemplation');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                                            <a href='#translationsdetails-en2' class="babQuickResult">contemplation</a>
+                                        <span class="suffix">{noun}</span>                                    </div>
+                <div class='quick-result-overview'>
+                    <span class='flag es'>ES</span>
+                    <ul class='sense-group-results'>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/contemplación' onclick="babTE('XRefs', 'es-en');" title="&quot;contemplación&quot; in English">contemplación</a></li>
+                                                                                                                                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/reflexión' onclick="babTE('XRefs', 'es-en');" title="&quot;reflexión&quot; in English">reflexión</a></li>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/meditación' onclick="babTE('XRefs', 'es-en');" title="&quot;meditación&quot; in English">meditación</a></li>
+                                                                                                                                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/previsión' onclick="babTE('XRefs', 'es-en');" title="&quot;previsión&quot; in English">previsión</a></li>
+                                                                                                                                                                                                                                                                                                                                                                        </ul>
+                </div>
+            </div>
+                                <div class='quick-result-entry'>
+                <div class='quick-result-option'>
+                                            <a class="sound-inline bab-quick-sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/e/5/1/e518bb10f8e0c49e7cb3ee58be5275b6.mp3', 'contemplative');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                                            <a href='#translationsdetails-en3' class="babQuickResult">contemplative</a>
+                                        <span class="suffix">{adj.}</span>                                    </div>
+                <div class='quick-result-overview'>
+                    <span class='flag es'>ES</span>
+                    <ul class='sense-group-results'>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/contemplativa' onclick="babTE('XRefs', 'es-en');" title="&quot;contemplativa&quot; in English">contemplativa</a></li>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/contemplativo' onclick="babTE('XRefs', 'es-en');" title="&quot;contemplativo&quot; in English">contemplativo</a></li>
+                                                                                                                                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/pensativo' onclick="babTE('XRefs', 'es-en');" title="&quot;pensativo&quot; in English">pensativo</a></li>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/meditabundo' onclick="babTE('XRefs', 'es-en');" title="&quot;meditabundo&quot; in English">meditabundo</a></li>
+                                                                                                                                                                                    </ul>
+                </div>
+            </div>
+                                <div class='quick-result-entry'>
+                <div class='quick-result-option'>
+                                            <a class="sound-inline bab-quick-sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/0/1/3/013ff1ef85053a3907f868ca9a3322ea.mp3', 'contemplatively');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                                            <a href='#translationsdetails-en4' class="babQuickResult">contemplatively</a>
+                                        <span class="suffix">{adv.}</span>                                    </div>
+                <div class='quick-result-overview'>
+                    <span class='flag es'>ES</span>
+                    <ul class='sense-group-results'>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/de-manera-pensativa' onclick="babTE('XRefs', 'es-en');" title="&quot;de manera pensativa&quot; in English">de manera pensativa</a></li>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/pensativamente' onclick="babTE('XRefs', 'es-en');" title="&quot;pensativamente&quot; in English">pensativamente</a></li>
+                                                                                                                                                                                    </ul>
+                </div>
+            </div>
+                                <div class='quick-result-entry'>
+                <div class='quick-result-option'>
+                                            <a class="sound-inline bab-quick-sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/e/e/c/eece75ba09e0d90ea43e09c7ea061455.mp3', 'to contemplate');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                                            <a href='#translationsdetails-en5' class="babQuickResult">to contemplate</a>
+                                        <span class="suffix">{v.t.}</span>                                    </div>
+                <div class='quick-result-overview'>
+                    <span class='flag es'>ES</span>
+                    <ul class='sense-group-results'>
+                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/contemplar' onclick="babTE('XRefs', 'es-en');" title="&quot;contemplar&quot; in English">contemplar</a></li>
+                                                                                                                                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/prever' onclick="babTE('XRefs', 'es-en');" title="&quot;prever&quot; in English">prever</a></li>
+                                                                                                                                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/considerar' onclick="babTE('XRefs', 'es-en');" title="&quot;considerar&quot; in English">considerar</a></li>
+                                                                                                                                                                                                                                                                                                        <li><a href='https://en.bab.la/dictionary/spanish-english/meditar-sobre' onclick="babTE('XRefs', 'es-en');" title="&quot;meditar sobre&quot; in English">meditar sobre</a></li>
+                                                                                                                                                                                    </ul>
+                </div>
+            </div>
+        
+                        <div class="quick-result-entry">
+            <div class="toc-links-header">
+                <div class="h5">More information</div>
+            </div>
+            <div class="toc-links">
+                <ul>
+                                        <li><a href="#translationsdetails-en1" onclick="babTE('c','cnm','atrans');" class="scroll-link babQuickResult">Translations & Examples</a></li>
+                                                                                                        <li><a href="#synonyms" onclick="babTE('c','cnm','syn');" class="scroll-link babQuickResult">Synonyms</a></li>
+                                                                <li><a href="/conjugation/english/contemplate" title="&quot;to contemplate&quot; conjugation" onclick="babTE('c','cnm','conj');" class="scroll-link">Conjugation</a></li>
+                                    </ul>
+            </div>
+        </div>
+            </div>
+</div>
+    <div id="synonyms" class="content">
+        <div class="quick-results container">
+            <div class="quick-results-header">
+                <h2 class="section-label">pronunciation</h2>
+            </div>
+                            <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" title="pronunciation" width="560" height="315" src="https://www.youtube.com/embed/tViyW1Eceuw" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                    </div>
+    </div>
+        <div class="content" id="translationsdetails-en1">
+        <div class="result-block container">
+                            <h2 class="section-label"> Translations &amp; Examples</h2>
+                        <div class="result-block-header">
+                <div class="h3">
+                    <span class="flag uk">EN</span>
+                    <h3>
+                        <span>contemplations</span>
+                                                                        <span class="suffix">{plural}</span>                                                                                                                    </h3>
+                                            <a class="sound-inline" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/d/6/9/d6900da6f701d73222cf5e14489706cb.mp3', 'contemplations');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                    </div>
+            </div>
+            
+                                                        <div class="sense-group">
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplations</strong></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/4/0/d/40d76e08f8ab86f87c5d3e25f6e77147.mp3', 'contemplaciones');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/contemplaciones" onclick="babTE('XRefs', 'es-en');" title="&quot;contemplaciones&quot; in English">
+                                            <strong>contemplaciones</strong>
+                                        </a>
+                                         <span class="suffix" title="feminine plural">{f pl}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                    </div>
+    </div>
+    <aside class="info-panel" style="margin:auto">
+  <div class="info-wrapper">
+     <div id="ad_extraslot_1"></div>
+  </div>
+</aside>
+        <div class="content content-related" id="translationsdetails-en2">
+        <div class="result-block container">
+                        <div class="result-block-header">
+                <div class="h3">
+                    <span class="flag uk">EN</span>
+                    <h3>
+                        <span>contemplation</span>
+                                                                        <span class="suffix">{noun}</span>                                                                                                                    </h3>
+                                            <a class="sound-inline" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/4/9/5/4955ed75c60e476823e746fe5da901e7.mp3', 'contemplation');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                    </div>
+            </div>
+                            <div class="result-block-toc">
+                    <ol>
+                                                                                                        <li><a class="babAnchorSense" href="#sense1000164821">general</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000164822">"reflection"</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000164823">"of future event"</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000164824">"reflection", religion</a></li>
+                                            </ol>
+                </div>
+            
+                                                        <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000164821">
+                            1. general                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplation</strong></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/e/5/f/e5f6c8e86f5afe4c5dc1c69c2d620ccc.mp3', 'contemplación');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/contemplación" onclick="babTE('XRefs', 'es-en');" title="&quot;contemplación&quot; in English">
+                                            <strong>contemplación</strong>
+                                        </a>
+                                         <span class="suffix" title="feminine">{f}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en20" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8025784"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                <strong>Contemplation</strong> becomes the blessedness of the pure in heart (Mt 5:8).                                            </div>
+                                            <div class="dict-result">
+                                                <a aria-controls="Examples-en2" aria-expanded="false" data-toggle="collapse" href="#Examples-en2" role="button" class="icon-link"><i style="color:#0077CC;" class="material-icons">expand_more</i></a>                                                La <strong>contemplación</strong> llega a ser la bienaventuranza de los puros de corazón (Mt 5, 8).                                            </div>
+                                        </div>
+                                                                            <div class="more-examples collapse" id="Examples-en2">                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en21" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8054934"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                <strong>contemplation</strong> and the authenticity of the means which foster that search,                                            </div>
+                                            <div class="dict-result">
+                                                                                                en la <strong>contemplación</strong> y de los medios para conseguirla, y se debe                                            </div>
+                                        </div>
+                                                                                                                    <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en22" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8054951"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                radiant in the anticipated <strong>contemplation</strong> of Christ's face.                                            </div>
+                                            <div class="dict-result">
+                                                                                                espera y radiante en la <strong>contemplación</strong> anticipada de su rostro.                                            </div>
+                                        </div>
+                                                                        </div>                                                            </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000164822">
+                            2. "reflection"                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplation</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/heart-searching" onclick="babTE('XRefs', 'english-spanish');" title="&quot;heart-searching&quot; in Spanish">heart-searching</a>, <a href="https://en.bab.la/dictionary/english-spanish/meditation" onclick="babTE('XRefs', 'english-spanish');" title="&quot;meditation&quot; in Spanish">meditation</a>, <a href="https://en.bab.la/dictionary/english-spanish/reflection" onclick="babTE('XRefs', 'english-spanish');" title="&quot;reflection&quot; in Spanish">reflection</a>, <a href="https://en.bab.la/dictionary/english-spanish/rumination" onclick="babTE('XRefs', 'english-spanish');" title="&quot;rumination&quot; in Spanish">rumination</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/f/6/f/f6f4050fd163002429121b93e6e0b06b.mp3', 'reflexión');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/reflexión" onclick="babTE('XRefs', 'es-en');" title="&quot;reflexión&quot; in English">
+                                            <strong>reflexión</strong>
+                                        </a>
+                                         <span class="suffix" title="feminine">{f}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en30" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.statmt.org/europarl/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to statmt.org</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:1624011"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                We must be clear in our minds about the fact that <strong>contemplation</strong> of the past helps to build a better future.                                            </div>
+                                            <div class="dict-result">
+                                                                                                Hemos de tener claro el hecho de que la <strong>reflexión</strong> sobre el pasado contribuye a construir un futuro mejor.                                            </div>
+                                        </div>
+                                                                                                                                    </div>
+                                                                                <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplation</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/cogitation" onclick="babTE('XRefs', 'english-spanish');" title="&quot;cogitation&quot; in Spanish">cogitation</a>, <a href="https://en.bab.la/dictionary/english-spanish/meditation" onclick="babTE('XRefs', 'english-spanish');" title="&quot;meditation&quot; in Spanish">meditation</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/2/1/a/21abfce1842d8ed1dd9a5b3a73bcc648.mp3', 'meditación');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/meditación" onclick="babTE('XRefs', 'es-en');" title="&quot;meditación&quot; in English">
+                                            <strong>meditación</strong>
+                                        </a>
+                                         <span class="suffix" title="feminine">{f}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000164823">
+                            3. "of future event"                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplation</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/farsightedness" onclick="babTE('XRefs', 'english-spanish');" title="&quot;farsightedness&quot; in Spanish">farsightedness</a>, <a href="https://en.bab.la/dictionary/english-spanish/forecast" onclick="babTE('XRefs', 'english-spanish');" title="&quot;forecast&quot; in Spanish">forecast</a>, <a href="https://en.bab.la/dictionary/english-spanish/foresight" onclick="babTE('XRefs', 'english-spanish');" title="&quot;foresight&quot; in Spanish">foresight</a>, <a href="https://en.bab.la/dictionary/english-spanish/forethought" onclick="babTE('XRefs', 'english-spanish');" title="&quot;forethought&quot; in Spanish">forethought</a>, <a href="https://en.bab.la/dictionary/english-spanish/outlook" onclick="babTE('XRefs', 'english-spanish');" title="&quot;outlook&quot; in Spanish">outlook</a>, <a href="https://en.bab.la/dictionary/english-spanish/precaution" onclick="babTE('XRefs', 'english-spanish');" title="&quot;precaution&quot; in Spanish">precaution</a>, <a href="https://en.bab.la/dictionary/english-spanish/providence" onclick="babTE('XRefs', 'english-spanish');" title="&quot;providence&quot; in Spanish">providence</a>, <a href="https://en.bab.la/dictionary/english-spanish/anticipation" onclick="babTE('XRefs', 'english-spanish');" title="&quot;anticipation&quot; in Spanish">anticipation</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/4/f/d/4fdb809e7afb408bb3bad69a0dca626c.mp3', 'previsión');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/previsión" onclick="babTE('XRefs', 'es-en');" title="&quot;previsión&quot; in English">
+                                            <strong>previsión</strong>
+                                        </a>
+                                         <span class="suffix" title="feminine">{f}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000164824">
+                            4. "reflection", religion                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplation</strong></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/2/1/a/21abfce1842d8ed1dd9a5b3a73bcc648.mp3', 'meditación');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/meditación" onclick="babTE('XRefs', 'es-en');" title="&quot;meditación&quot; in English">
+                                            <strong>meditación</strong>
+                                        </a>
+                                         <span class="suffix" title="feminine">{f}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                    </div>
+    </div>
+            <div class="content content-related" id="translationsdetails-en3">
+        <div class="result-block container">
+                        <div class="result-block-header">
+                <div class="h3">
+                    <span class="flag uk">EN</span>
+                    <h3>
+                        <span>contemplative</span>
+                                                                        <span class="suffix">{adjective}</span>                                                                                                                    </h3>
+                                            <a class="sound-inline" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/e/5/1/e518bb10f8e0c49e7cb3ee58be5275b6.mp3', 'contemplative');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                    </div>
+            </div>
+                            <div class="result-block-toc">
+                    <ol>
+                                                                                                        <li><a class="babAnchorSense" href="#sense1000164831">general</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000164832">"look"</a></li>
+                                            </ol>
+                </div>
+            
+                                                        <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000164831">
+                            1. general                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplative</strong></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/d/5/6/d56cb2dea2cd92edf953d3c0a97415b7.mp3', 'contemplativa');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/contemplativa" onclick="babTE('XRefs', 'es-en');" title="&quot;contemplativa&quot; in English">
+                                            <strong>contemplativa</strong>
+                                        </a>
+                                         <span class="suffix" title="adjective feminine">{adj. f}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en70" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8055009"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                <strong>contemplative</strong> life and given the variety of their traditions, some aspects                                            </div>
+                                            <div class="dict-result">
+                                                <a aria-controls="Examples-en7" aria-expanded="false" data-toggle="collapse" href="#Examples-en7" role="button" class="icon-link"><i style="color:#0077CC;" class="material-icons">expand_more</i></a>                                                <strong>contemplativa</strong> y de sus tradiciones, algunas modalidades de separación                                            </div>
+                                        </div>
+                                                                            <div class="more-examples collapse" id="Examples-en7">                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en71" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8055161"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                <strong>contemplative</strong> life should ensure a level of preparation suited to the                                            </div>
+                                            <div class="dict-result">
+                                                                                                Institutos de vida <strong>contemplativa</strong> un nivel de preparación adecuada a                                            </div>
+                                        </div>
+                                                                                                                    <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en72" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8054863"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                As a reflection and radiation of their <strong>contemplative</strong> life, nuns offer to                                            </div>
+                                            <div class="dict-result">
+                                                                                                Como reflejo e irradiación de su vida <strong>contemplativa</strong>, las monjas                                            </div>
+                                        </div>
+                                                                        </div>                                                            </div>
+                                                                                <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplative</strong></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/b/1/f/b1fbf2667333e319b9e7d161a59cee52.mp3', 'contemplativo');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/contemplativo" onclick="babTE('XRefs', 'es-en');" title="&quot;contemplativo&quot; in English">
+                                            <strong>contemplativo</strong>
+                                        </a>
+                                         <span class="suffix" title="adjective masculine">{adj. m}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en80" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8025832"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                A <strong>contemplative</strong> monastery is a gift also for the local Church to which it belongs.                                            </div>
+                                            <div class="dict-result">
+                                                <a aria-controls="Examples-en8" aria-expanded="false" data-toggle="collapse" href="#Examples-en8" role="button" class="icon-link"><i style="color:#0077CC;" class="material-icons">expand_more</i></a>                                                Un monasterio <strong>contemplativo</strong> es un don también para la Iglesia local, a la que pertenece.                                            </div>
+                                        </div>
+                                                                            <div class="more-examples collapse" id="Examples-en8">                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en81" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8054886"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                A <strong>contemplative</strong> monastery is a gift also for the local Church to which                                            </div>
+                                            <div class="dict-result">
+                                                                                                Un monasterio <strong>contemplativo</strong> es un don también para la Iglesia                                            </div>
+                                        </div>
+                                                                                                                    <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en82" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8055094"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                <strong>contemplative</strong> silence can in fact be undermined when noise, news and talk                                            </div>
+                                            <div class="dict-result">
+                                                                                                En efecto, el silencio <strong>contemplativo</strong> puede vaciarse si la clausura se                                            </div>
+                                        </div>
+                                                                        </div>                                                            </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000164832">
+                            2. "look"                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplative</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/meditative" onclick="babTE('XRefs', 'english-spanish');" title="&quot;meditative&quot; in Spanish">meditative</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/8/8/0/880581485c239008ced485602234b314.mp3', 'pensativo');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/pensativo" onclick="babTE('XRefs', 'es-en');" title="&quot;pensativo&quot; in English">
+                                            <strong>pensativo</strong>
+                                        </a>
+                                         <span class="suffix" title="adjective">{adj.}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                                                <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplative</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/meditative" onclick="babTE('XRefs', 'english-spanish');" title="&quot;meditative&quot; in Spanish">meditative</a>, <a href="https://en.bab.la/dictionary/english-spanish/pensive" onclick="babTE('XRefs', 'english-spanish');" title="&quot;pensive&quot; in Spanish">pensive</a>, <a href="https://en.bab.la/dictionary/english-spanish/reflective" onclick="babTE('XRefs', 'english-spanish');" title="&quot;reflective&quot; in Spanish">reflective</a>, <a href="https://en.bab.la/dictionary/english-spanish/ruminant" onclick="babTE('XRefs', 'english-spanish');" title="&quot;ruminant&quot; in Spanish">ruminant</a>, <a href="https://en.bab.la/dictionary/english-spanish/ruminative" onclick="babTE('XRefs', 'english-spanish');" title="&quot;ruminative&quot; in Spanish">ruminative</a>, <a href="https://en.bab.la/dictionary/english-spanish/thoughtful" onclick="babTE('XRefs', 'english-spanish');" title="&quot;thoughtful&quot; in Spanish">thoughtful</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/e/2/2/e225da9e92c6766a7ce8d1306b90d7d5.mp3', 'meditabundo');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/meditabundo" onclick="babTE('XRefs', 'es-en');" title="&quot;meditabundo&quot; in English">
+                                            <strong>meditabundo</strong>
+                                        </a>
+                                         <span class="suffix" title="adjective">{adj.}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                    </div>
+    </div>
+    <aside class="info-panel" style="margin:auto">
+  <div class="info-wrapper">
+     <div id="ad_extraslot_2"></div>
+  </div>
+</aside>
+        <div class="content content-related" id="translationsdetails-en4">
+        <div class="result-block container">
+                        <div class="result-block-header">
+                <div class="h3">
+                    <span class="flag uk">EN</span>
+                    <h3>
+                        <span>contemplatively</span>
+                                                                        <span class="suffix">{adverb}</span>                                                                                                                    </h3>
+                                            <a class="sound-inline" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/0/1/3/013ff1ef85053a3907f868ca9a3322ea.mp3', 'contemplatively');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                    </div>
+            </div>
+            
+                                                        <div class="sense-group">
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplatively</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/pensively" onclick="babTE('XRefs', 'english-spanish');" title="&quot;pensively&quot; in Spanish">pensively</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/c/c/c/ccce0d4723157a178ca636c37ce5e80c.mp3', 'de manera pensativa');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/de-manera-pensativa" onclick="babTE('XRefs', 'es-en');" title="&quot;de manera pensativa&quot; in English">
+                                            <strong>de manera pensativa</strong>
+                                        </a>
+                                         <span class="suffix" title="adverb">{adv.}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                                                <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>contemplatively</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/pensively" onclick="babTE('XRefs', 'english-spanish');" title="&quot;pensively&quot; in Spanish">pensively</a>, <a href="https://en.bab.la/dictionary/english-spanish/reflectively" onclick="babTE('XRefs', 'english-spanish');" title="&quot;reflectively&quot; in Spanish">reflectively</a>, <a href="https://en.bab.la/dictionary/english-spanish/thoughtfully" onclick="babTE('XRefs', 'english-spanish');" title="&quot;thoughtfully&quot; in Spanish">thoughtfully</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/8/3/2/83265d378806fe62a75d698a80654a43.mp3', 'pensativamente');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/pensativamente" onclick="babTE('XRefs', 'es-en');" title="&quot;pensativamente&quot; in English">
+                                            <strong>pensativamente</strong>
+                                        </a>
+                                         <span class="suffix" title="adverb">{adv.}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                    </div>
+    </div>
+            <div class="content content-related" id="translationsdetails-en5">
+        <div class="result-block container">
+                        <div class="result-block-header">
+                <div class="h3">
+                    <span class="flag uk">EN</span>
+                    <h3>
+                        <span>to contemplate</span>
+                                                <span class="suffix">[<a href="/conjugation/english/contemplate" title="&quot;to contemplate&quot; conjugation">contemplated|contemplated</a>]</span>                        <span class="suffix">{transitive verb}</span>                                                                                                                    </h3>
+                                            <a class="sound-inline" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/en/e/e/c/eece75ba09e0d90ea43e09c7ea061455.mp3', 'to contemplate');" onclick="babTE('Sounds',' en ');">
+                            <div class="material-icons">volume_up</div>
+                        </a>
+                                    </div>
+            </div>
+                            <div class="result-block-toc">
+                    <ol>
+                                                                                                        <li><a class="babAnchorSense" href="#sense1000816211">general</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000816212">"expect"</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000816213">"ponder"</a></li>
+                                                                                <li><a class="babAnchorSense" href="#sense1000816214">"ponder", religion</a></li>
+                                            </ol>
+                </div>
+            
+                                                        <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000816211">
+                            1. general                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>to contemplate</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/behold" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to behold&quot; in Spanish">to behold</a>, <a href="https://en.bab.la/dictionary/english-spanish/look-at" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to look at&quot; in Spanish">to look at</a>, <a href="https://en.bab.la/dictionary/english-spanish/consider" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to consider&quot; in Spanish">to consider</a>, <a href="https://en.bab.la/dictionary/english-spanish/think-about" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to think about&quot; in Spanish">to think about</a>, <a href="https://en.bab.la/dictionary/english-spanish/gaze" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to gaze&quot; in Spanish">to gaze</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/4/8/2/482f1c97f444ae6a38199b051790ae53.mp3', 'contemplar');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/contemplar" onclick="babTE('XRefs', 'es-en');" title="&quot;contemplar&quot; in English">
+                                            <strong>contemplar</strong>
+                                        </a>
+                                         <span class="suffix">[<a href="/conjugation/spanish/contemplar" title="&quot;contemplar&quot; conjugation">contemplando|contemplado</a>]</span> <span class="suffix" title="transitive verb">{v.t.}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en130" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.europarl.europa.eu/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to European Parliament</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:12937242"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                Is it possible to <strong>contemplate</strong> a euro community that is voluntary in character?                                            </div>
+                                            <div class="dict-result">
+                                                <a aria-controls="Examples-en13" aria-expanded="false" data-toggle="collapse" href="#Examples-en13" role="button" class="icon-link"><i style="color:#0077CC;" class="material-icons">expand_more</i></a>                                                ¿Es posible <strong>contemplar</strong> una comunidad del euro que sea de tipo voluntario?                                            </div>
+                                        </div>
+                                                                            <div class="more-examples collapse" id="Examples-en13">                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en131" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.vatican.va/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to Vatican</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:8071825"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                <strong>contemplate</strong> and adore the Eucharistic Mystery, the memorial of the                                            </div>
+                                            <div class="dict-result">
+                                                                                                <strong>contemplar</strong> y adorar el misterio eucarístico, memorial del                                            </div>
+                                        </div>
+                                                                                                                    <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en132" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.statmt.org/europarl/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to statmt.org</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:2029744"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                My question is: has the time not come to <strong>contemplate</strong> a different kind of strategy?                                            </div>
+                                            <div class="dict-result">
+                                                                                                Me pregunto: ¿acaso no ha llegado ya el momento de <strong>contemplar</strong> algún tipo de estrategia diferente?                                            </div>
+                                        </div>
+                                                                        </div>                                                            </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000816212">
+                            2. "expect"                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>to contemplate</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/envisage" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to envisage&quot; in Spanish">to envisage</a>, <a href="https://en.bab.la/dictionary/english-spanish/predetermine" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to predetermine&quot; in Spanish">to predetermine</a>, <a href="https://en.bab.la/dictionary/english-spanish/visualize" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to visualize&quot; in Spanish">to visualize</a>, <a href="https://en.bab.la/dictionary/english-spanish/envision" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to envision&quot; in Spanish">to envision</a>, <a href="https://en.bab.la/dictionary/english-spanish/foreknow" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to foreknow&quot; in Spanish">to foreknow</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/b/8/0/b80651c9d3a85f868bcb954c304cba83.mp3', 'prever');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/prever" onclick="babTE('XRefs', 'es-en');" title="&quot;prever&quot; in English">
+                                            <strong>prever</strong>
+                                        </a>
+                                         <span class="suffix">[<a href="/conjugation/spanish/prever" title="&quot;prever&quot; conjugation">previendo|previsto</a>]</span> <span class="suffix" title="verb">{vb}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en140" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.europarl.europa.eu/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to European Parliament</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:13170144"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                Therefore, before we <strong>contemplate</strong> the accession of new countries, should not we first think about consolidating the Union of 25 Member States?                                            </div>
+                                            <div class="dict-result">
+                                                <a aria-controls="Examples-en14" aria-expanded="false" data-toggle="collapse" href="#Examples-en14" role="button" class="icon-link"><i style="color:#0077CC;" class="material-icons">expand_more</i></a>                                                Por consiguiente,¿no deberíamos pensar en consolidar la Unión de 25 Estados miembros antes de <strong>prever</strong> la adhesión de nuevos países?                                            </div>
+                                        </div>
+                                                                            <div class="more-examples collapse" id="Examples-en14">                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en141" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.statmt.org/europarl/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to statmt.org</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:1729895"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                Therefore, before we <strong>contemplate</strong> the accession of new countries, should not we first think about consolidating the Union of 25 Member States?                                            </div>
+                                            <div class="dict-result">
+                                                                                                Por consiguiente, ¿no deberíamos pensar en consolidar la Unión de 25 Estados miembros antes de <strong>prever</strong> la adhesión de nuevos países?                                            </div>
+                                        </div>
+                                                                                                                    <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en142" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.europarl.europa.eu/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to European Parliament</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:13342610"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                Out of solidarity with farmers, the Commission made an initial proposal and contemplated 3 proposals.                                            </div>
+                                            <div class="dict-result">
+                                                                                                Por solidaridad hacia los agricultores, la Comisión había, en su propuesta inicial, previsto un paquete de tres propuestas de reglamento.                                            </div>
+                                        </div>
+                                                                        </div>                                                            </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000816213">
+                            3. "ponder"                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>to contemplate</strong> <span class="suffix">(also: <a href="https://en.bab.la/dictionary/english-spanish/adjudge" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to adjudge&quot; in Spanish">to adjudge</a>, <a href="https://en.bab.la/dictionary/english-spanish/allow-for" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to allow for&quot; in Spanish">to allow for</a>, <a href="https://en.bab.la/dictionary/english-spanish/chew-over" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to chew over&quot; in Spanish">to chew over</a>, <a href="https://en.bab.la/dictionary/english-spanish/consider" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to consider&quot; in Spanish">to consider</a>, <a href="https://en.bab.la/dictionary/english-spanish/count" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to count&quot; in Spanish">to count</a>, <a href="https://en.bab.la/dictionary/english-spanish/debate" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to debate&quot; in Spanish">to debate</a>, <a href="https://en.bab.la/dictionary/english-spanish/deem" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to deem&quot; in Spanish">to deem</a>, <a href="https://en.bab.la/dictionary/english-spanish/hold" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to hold&quot; in Spanish">to hold</a>, <a href="https://en.bab.la/dictionary/english-spanish/look-at" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to look at&quot; in Spanish">to look at</a>, <a href="https://en.bab.la/dictionary/english-spanish/look-into" onclick="babTE('XRefs', 'english-spanish');" title="&quot;to look into&quot; in Spanish">to look into</a>)</span></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/0/0/0/00017ba23991316bf98c6f62d42ec477.mp3', 'considerar');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/considerar" onclick="babTE('XRefs', 'es-en');" title="&quot;considerar&quot; in English">
+                                            <strong>considerar</strong>
+                                        </a>
+                                         <span class="suffix">[<a href="/conjugation/spanish/considerar" title="&quot;considerar&quot; conjugation">considerando|considerado</a>]</span> <span class="suffix" title="verb">{vb}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en150" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.statmt.org/europarl/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to statmt.org</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:2261414"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                Within this context, it is impossible to <strong>contemplate</strong> free, fair and democratic elections.                                            </div>
+                                            <div class="dict-result">
+                                                <a aria-controls="Examples-en15" aria-expanded="false" data-toggle="collapse" href="#Examples-en15" role="button" class="icon-link"><i style="color:#0077CC;" class="material-icons">expand_more</i></a>                                                En ese contexto es imposible poder <strong>considerar</strong> unas elecciones libres, justas y democráticas.                                            </div>
+                                        </div>
+                                                                            <div class="more-examples collapse" id="Examples-en15">                                        <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en151" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.europarl.europa.eu/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to European Parliament</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:13467112"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                There is good reason to <strong>contemplate</strong> what ought to be done from here on.                                            </div>
+                                            <div class="dict-result">
+                                                                                                Hay buenas razones para <strong>considerar</strong> qué vamos a hacer en el futuro.                                            </div>
+                                        </div>
+                                                                                                                    <div class="dict-example">
+                                            <div class="dict-source">
+                                                <div class="icon-link-wrapper dropdown cs-source-link">
+                                                    <a id="resultinteract-en152" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="icon-link">
+                                                        <span class="material-icons">more_vert</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="http://www.statmt.org/europarl/" target="_blank" rel="noopener noreferrer nofollow"><span class="material-icons">open_in_new</span> Link to statmt.org</a></li>
+                                                        <li><a href="javascript:;" class="cs-flag" data-cs-id="csenes:2382668"><span class="material-icons">warning</span> Request revision</a></li>
+                                                    </ul>
+                                                </div>
+                                                We should be ready seriously to <strong>contemplate</strong> either extending the deadline or facing the consequences.                                            </div>
+                                            <div class="dict-result">
+                                                                                                Deberíamos realmente estar preparados para <strong>considerar</strong> ampliar el plazo o afrontar las consecuencias.                                            </div>
+                                        </div>
+                                                                        </div>                                                            </div>
+                                                            </div>
+                                            <div class="sense-group">
+                                            <div class="sense-group-header" id="sense1000816214">
+                            4. "ponder", religion                        </div>
+                                                                                                                                                                                            <div class="dict-entry">
+                                <div class="dict-translation">
+                                                                            <div class="dict-source"><strong>to contemplate</strong></div>
+                                                                        <div class="dict-result">
+                                                                                    <a class="sound" href="javascript:babTTS('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.sounds.prod/es/d/9/1/d912bd8733dceb842630079c4c8ee848.mp3', 'meditar sobre');" onclick="babTE('Sounds','es');">
+                                                <div class="material-icons">volume_up</div>
+                                            </a>
+                                                                                <a href="https://en.bab.la/dictionary/spanish-english/meditar-sobre" onclick="babTE('XRefs', 'es-en');" title="&quot;meditar sobre&quot; in English">
+                                            <strong>meditar sobre</strong>
+                                        </a>
+                                         <span class="suffix"></span> <span class="suffix" title="verb">{vb}</span>                                    </div>
+                                                                    </div>
+                                                                                                                                                                                                        </div>
+                                                            </div>
+                    </div>
+    </div>
+    <aside class="info-panel" style="margin:auto">
+  <div class="info-wrapper">
+     <div id="ad_extraslot_3"></div>
+  </div>
+</aside>
+
+<div id="synonyms" class="content">
+<div class="quick-results container">
+<div class="quick-results-header"><h2 class="section-label">Synonyms</h2><h3>Synonyms (English) for "contemplation":</h3></div><div class="quick-result-entry"><div class="quick-result-option">contemplation</div><div class="quick-result-overview"><span class="flag uk">English</span><ul class="sense-group-results"><li><a href="/dictionary/english-spanish/musing" onclick="babTE('XRefs', 'en-es');" title="&quot;musing&quot; in Spanish">musing</a></li><li><a href="/dictionary/english-spanish/reflection" onclick="babTE('XRefs', 'en-es');" title="&quot;reflection&quot; in Spanish">reflection</a></li><li><a href="/dictionary/english-spanish/reflexion" onclick="babTE('XRefs', 'en-es');" title="&quot;reflexion&quot; in Spanish">reflexion</a></li><li><a href="/dictionary/english-spanish/rumination" onclick="babTE('XRefs', 'en-es');" title="&quot;rumination&quot; in Spanish">rumination</a></li><li><a href="/dictionary/english-spanish/thoughtfulness" onclick="babTE('XRefs', 'en-es');" title="&quot;thoughtfulness&quot; in Spanish">thoughtfulness</a></li></ul></div></div><div class="quick-result-entry"><div class="quick-result-option">contemplative</div><div class="quick-result-overview"><span class="flag uk">English</span><ul class="sense-group-results"><li><a href="/dictionary/english-spanish/brooding" onclick="babTE('XRefs', 'en-es');" title="&quot;brooding&quot; in Spanish">brooding</a></li><li><a href="/dictionary/english-spanish/broody" onclick="babTE('XRefs', 'en-es');" title="&quot;broody&quot; in Spanish">broody</a></li><li><a href="/dictionary/english-spanish/meditative" onclick="babTE('XRefs', 'en-es');" title="&quot;meditative&quot; in Spanish">meditative</a></li><li><a href="/dictionary/english-spanish/musing" onclick="babTE('XRefs', 'en-es');" title="&quot;musing&quot; in Spanish">musing</a></li><li><a href="/dictionary/english-spanish/pensive" onclick="babTE('XRefs', 'en-es');" title="&quot;pensive&quot; in Spanish">pensive</a></li><li><a href="/dictionary/english-spanish/pondering" onclick="babTE('XRefs', 'en-es');" title="&quot;pondering&quot; in Spanish">pondering</a></li><li><a href="/dictionary/english-spanish/reflective" onclick="babTE('XRefs', 'en-es');" title="&quot;reflective&quot; in Spanish">reflective</a></li><li><a href="/dictionary/english-spanish/ruminative" onclick="babTE('XRefs', 'en-es');" title="&quot;ruminative&quot; in Spanish">ruminative</a></li></ul></div></div><footer class="synonym-copyright">Copyright <a href="http://wordnet.princeton.edu" target="_blank" rel="noopener noreferrer nofollow">&copy;&nbsp;Princeton University</a></footer></div>
+</div>
+<div id="similarWords" class="content">
+    <div class="quick-results container">
+        <div class="quick-results-header">
+            <h2 class="section-label">More by bab.la</h2>
+            <div class="h3">Other dictionary words</div>
+        </div>
+        <div class="quick-result-entry">
+            <div class="quick-result-overview" style="width:100%">
+                <span class="flag uk">English</span>
+                <ul class="sense-group-results">
+                    <li><a href="contemplate-run" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplate run&quot; in Spanish">contemplate run</a></li><li><a href="contemplate-the-alternative" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplate the alternative&quot; in Spanish">contemplate the alternative</a></li><li><a href="contemplate-the-meaning" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplate the meaning&quot; in Spanish">contemplate the meaning</a></li><li><a href="contemplate-the-possibility" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplate the possibility&quot; in Spanish">contemplate the possibility</a></li><li><a href="contemplate-the-prospect" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplate the prospect&quot; in Spanish">contemplate the prospect</a></li><li><a href="contemplating-a-career-in" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplating a career in&quot; in Spanish">contemplating a career in</a></li><li><a href="contemplating-divorce" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplating divorce&quot; in Spanish">contemplating divorce</a></li><li><a href="contemplating-marriage" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplating marriage&quot; in Spanish">contemplating marriage</a></li><li><a href="contemplating-retirement" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplating retirement&quot; in Spanish">contemplating retirement</a></li><li><a href="contemplation" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplation&quot; in Spanish">contemplation</a></li>                    <li><strong>contemplations</strong></li>
+                    <li><a href="contemplative" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative&quot; in Spanish">contemplative</a></li><li><a href="contemplative-life" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative life&quot; in Spanish">contemplative life</a></li><li><a href="contemplative-moments" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative moments&quot; in Spanish">contemplative moments</a></li><li><a href="contemplative-mood" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative mood&quot; in Spanish">contemplative mood</a></li><li><a href="contemplative-prayer" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative prayer&quot; in Spanish">contemplative prayer</a></li><li><a href="contemplative-silence" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative silence&quot; in Spanish">contemplative silence</a></li><li><a href="contemplative-space" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplative space&quot; in Spanish">contemplative space</a></li><li><a href="contemplatively" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemplatively&quot; in Spanish">contemplatively</a></li><li><a href="contemporaneity" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemporaneity&quot; in Spanish">contemporaneity</a></li><li><a href="contemporaneous" onclick="babTE('XRefs', 'english-spanish');" title="&quot;contemporaneous&quot; in Spanish">contemporaneous</a></li>                </ul>
+                <br>
+                <p>More translations in the English-<a class="muted-link" href="/dictionary/korean-english/">Korean dictionary</a>.</p>
+            </div>
+        </div>
+    </div>
+</div><div id="csFlagResponse" tabindex="-1" role="dialog" class="modal fade in">
+  <div role="document" class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="h4 modal-title"><span class="material-icons">comment</span>Request revision</div>
+      </div>
+      <div class="modal-body cs-thanks-body">
+        <p class="cs-thanks-message"></p>
+        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+      </div>
+    </div>
+  </div>
+</div><script>
+  //<![CDATA[
+    iaw.cmd.push(function() { 
+      var extraSlots = [];
+
+      for (var i = 0; i < 3; i++)
+        extraSlots.push('ad_extraslot_' + (i + 1));
+
+      window.setTimeout(function() { iaw.loadNewSlots(extraSlots); }, 500 );
+    });
+  //]]>
+</script>
+<div class="teaser-wrapper">
+    <div class="teaser magazine">
+        <div class="content">
+            <a href="/living-abroad/" onclick="babTE('c','dtb','la');" class="container">
+                <span class="section-label">Living abroad</span>
+                <span class="teaser-image" style="background-image:url('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/teasers/teaser-living-abroad.jpg')"></span>
+                <span class="teaser-header">Tips and Hacks for Living Abroad</span>
+                <span class="teaser-text">Everything you need to know about life in a foreign country.</span>
+                <span class="teaser-eyecatcher">Read more<span class="material-icons">&#xE5CC;</span></span>
+            </a>
+        </div>
+    </div>
+            <div class="teaser languages">
+            <div class="content">
+                <a href="/phrases/" onclick="babTE('c','dtb','pb');" class="container">
+                    <span class="section-label">Phrases</span>
+                    <span class="teaser-image" style="background-image:url('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/teasers/teaser-phrases.jpg') !important;"></span>
+                    <span class="teaser-header">Speak like a native</span>
+                    <span class="teaser-text">Useful phrases translated from English into 28 languages.</span>
+                    <span class="teaser-eyecatcher">See phrases<span class="material-icons">&#xE5CC;</span></span>
+                </a>
+            </div>
+        </div>
+    </div><div class="teaser-wrapper">
+<div class="teaser languages">
+  <div class="content">
+   <a href="/games/hangman" onclick="babTE('c','dtb','hm');" class="container">
+    <span class="section-label">Hangman</span>
+    <span class="teaser-image" style="background-image:url('https://s3-eu-west-1.amazonaws.com/com.idmgroup.lab.images.prod/img/teasers/teaser-hangman.jpg') !important;"></span>
+    <span class="teaser-header">Hangman</span>
+    <span class="teaser-text">Fancy a game? Or learning new words is more your thing? Why not have a go at them together!</span>
+    <span class="teaser-eyecatcher">Play now<span class="material-icons">&#xE5CC;</span></span>
+   </a>
+  </div>
+</div>
+<div class="teaser ad" style="text-align:center">
+  <aside class="info-panel" style="margin:auto">
+    <div class="info-wrapper">
+      <div id="ad_btmslot"><script>iaw.cmd.push(function() { iaw.display("ad_btmslot"); });</script></div>  </div>
+  </aside>
+</div>
+</div>
+<div class='site-footer'>
+<div class='container'>
+ <nav class='social-links'>
+  <div class="h5">Let's stay in touch</div>
+  <ul>
+   <li><a href="https://www.facebook.com/babla.languages" target="_blank" rel="noopener noreferrer nofollow" class="facebook" onclick="babTE('MenuLinks', 'facebook', 'en');"><span class="icomoon icon-facebook" title="Facebook"></span><span class="h-label"></span></a></li>
+   <li><a href="https://vk.com/bablaru" target="_blank" rel="noopener noreferrer nofollow" class="vk" onclick="babTE('MenuLinks', 'vk', 'en');"><span class="icomoon icon-vk" title="VK"></span><span class="h-label"></span></a></li>
+   <li><a href="https://www.instagram.com/babla.languages/" target="_blank" rel="noopener noreferrer nofollow" class="instagram" title="Instagram" onclick="babTE('MenuLinks', 'instagram', 'en');"><span class="icomoon icon-instagram"></span><span class="h-label"></span></a></li>
+   <li><a href="https://www.linkedin.com/company/bab-la---loving-languages" target="_blank" rel="noopener noreferrer nofollow" class="linkedin" title="LinkedIn" onclick="babTE('MenuLinks', 'linkedin', 'en');"><span class="icomoon icon-linkedin"></span><span class="h-label"></span></a></li>
+   <li><a href="https://www.youtube.com/user/bablalanguages/featured" target="_blank" rel="noopener noreferrer nofollow" class="youtube" title="YouTube" onclick="babTE('MenuLinks', 'youtube', 'en');"><span class="icomoon icon-youtube-play"></span><span class="h-label"></span></a></li>
+   <li><a href="https://twitter.com/babla" target="_blank" rel="noopener noreferrer nofollow" class="twitter" title="Twitter" onclick="babTE('MenuLinks', 'twitter', 'en');"><span class="icomoon icon-twitter"></span><span class="h-label"></span></a></li>
+  </ul>
+ </nav>
+ <div class='footer-nav-wrapper'>
+  <nav class='footer-nav'>
+   <div class='footer-nav-block'>
+    <div class='h5 footer-nav-header'>Dictionaries</div>
+    <ul>
+     <li><a href="/translator/" onclick="babTE('MenuLinks', 'translator', 'en');">Translator</a></li>
+     <li><a href="/dictionary/" onclick="babTE('MenuLinks', 'dictionary', 'en');">Dictionary</a></li>
+     <li><a href="/conjugation/" onclick="babTE('MenuLinks', 'conjugation', 'en');">Conjugation</a></li>
+     <li><a href="/quiz/" onclick="babTE('MenuLinks', 'quizzes', 'en');">Quizzes</a></li>
+     <li><a href="/games/" onclick="babTE('MenuLinks', 'games', 'en');">Games</a></li>
+     <li><a href="/phrases/" onclick="babTE('MenuLinks', 'phrases', 'en');">Phrases</a></li>
+    </ul>
+   </div>
+   <div class='footer-nav-block'>
+    <div class='h5 footer-nav-header'>Living abroad</div>
+    <ul>
+     <li><a href="/living-abroad/" onclick="babTE('MenuLinks', 'magazine', 'en');">Magazine</a></li>
+    </ul>
+   </div>
+   <div class='footer-nav-block'>
+    <div class='h5 footer-nav-header'>About bab.la</div>
+    <ul>
+     <li><a href="/company/" onclick="babTE('MenuLinks', 'about us', 'en');">About us</a></li>
+     <li><a href="/news/" onclick="babTE('MenuLinks', 'news', 'en');">News</a></li>
+     <li><a href="/company/contact/" onclick="babTE('MenuLinks', 'contact', 'en');">Contact</a></li>
+     <li><a href="/company/advertising" onclick="babTE('MenuLinks', 'advertising', 'en');">Advertising</a></li>
+     <li><a href="/company/jobs" onclick="babTE('MenuLinks', 'jobs', 'en');">Jobs</a></li>
+    </ul>
+   </div>
+  </nav>
+</div>
+ <footer>
+  <div class="col-sm-8 footer-copyright">
+   <p>Copyright &copy; IDM 2020, unless otherwise noted. <span class='rights'>All rights reserved.</span></p>
+   <nav class='legal-nav'>
+    <ul>
+     <li><a href="/company/terms-of-use" onclick="babTE('MenuLinks', 'terms of use', 'en');">Terms of Use</a></li>
+     <li><a href="/company/privacy-policy" onclick="babTE('MenuLinks', 'privacy policy', 'en');">Privacy Policy</a></li>
+     <li><a href="/company/cookies" onclick="babTE('MenuLinks', 'cookie policy', 'en');">Cookie Policy</a></li>
+     <li><a id="ot-sdk-btn" class="ot-sdk-show-settings" style="cursor:pointer;font-size:inherit;">Consent Management</a></li>
+    </ul>
+   </nav>
+      </div>
+ </footer>
+</div>
+</div>
+<aside class="back-to-top" style="display:none;"><a href="#top" role="button" class="icon-link scroll-link"><span class="material-icons">arrow_upward</span></a></aside>
+</div>
+<aside id="fixed-right" class="column-right">
+  <div class="info-wrapper">
+    <div id="ad_rightslot"><script>iaw.cmd.push(function() { iaw.display("ad_rightslot"); });</script></div>  </div>
+</aside>
+</div>
+</div>
+</main>
+<script>
+function babShowSound(){googletag.cmd.push(function(){googletag.display('');});}
+</script>
+<aside class="sound-layer"><div class="column-wrapper">
+<div class="sound-container"><div class="sound-layer-controls"><a href="javascript:babRepeatIt()" class="icon-link"><span class="material-icons">refresh</span></a><a href="#" class="icon-link sound-layer-off"><span class="material-icons">close</span></a></div><a href="javascript:babRepeatIt()" class="spoken-word"><span class="material-icons">volume_up</span><span id="wordSpoken"></span></a></div>
+    <aside class="info-panel"><div class="info-wrapper" id="sound-banner">
+        <div id="ad_stickyslot"></div>
+    </div></aside>
+</div></aside>
+<script defer src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script defer src="//static.bab.la/js/vendor/bootstrap.min.js"></script>
+<script defer src="//static.bab.la/js/vendor/scrollFixedTypeahead.min.js"></script>
+<script defer src="//static.bab.la/js/babla.js?v=1595858799"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        babInitSearchField("#bablasearch","d");$("#bablasearch").focus();$(".typeahead").typeahead("close");$("#bablasearch").select();
+  $(".babQuickResult").click(function(e) {
+    e.preventDefault();
+    var anchorId = $(this).attr("href");
+    var fixedPos = $(anchorId).offset().top - $("#fixed2").height();
+    $("html,body").animate({scrollTop:fixedPos}, 200);
+  });
+
+  $(".babAnchorSense").click(function(e) {
+    e.preventDefault();
+    var anchorId = $(this).attr("href");
+    var fixedPos = $(anchorId).offset().top - $("#fixed2").height();
+    $("html,body").animate({scrollTop:fixedPos}, 200);
+  });
+$("a.sound").on("click touchstart",function(event){$("body").addClass("sound-layer-in");});    });
+</script>
+<script>
+window.addEventListener("load", function(){
+
+// IDM - Disable cookie layer if CMP is displayed
+if(iaw.euConsentInfoUsed) return;
+window.cookieconsent.initialise({
+  "cookie":{
+  "name":"bConsent",
+  "domain": "en.bab.la"
+  },
+  "palette": {
+    "popup": {
+      "background": "#edeff5",
+      "text": "#6C6C79"
+    },
+    "button": {
+      "background": "#0077cc"
+    }
+  },
+content: {"message": "We use cookies to enhance your experience on our website. This website uses cookies that provide targeted advertising and which track your use of this website. By clicking ‘continue’ or by continuing to use our website, you are agreeing to our use of cookies. You can change your cookie settings at any time.","dismiss": "Continue","link": "Find out more","href": "https://global.oup.com/cookiepolicy" },dismissOnTimeout:2000,})});
+</script>
+<!--
+26-->
+</body>
+</html>
+

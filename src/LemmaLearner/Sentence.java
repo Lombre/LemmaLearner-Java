@@ -11,7 +11,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	private final String rawSentence;
 	private final short[] wordBeginningIndex;
 	private final short[] wordLengthIndex;
-	private final double scoreExponent = 4;
+	public final double SCORE_EXPONENT = 4;
 	
 	public Sentence(String rawSentence, List<String> rawWords) {
 		if (Short.MAX_VALUE <= rawSentence.length()) throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
@@ -174,9 +174,9 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		return wordBeginningIndex.length;
 	}
 
-	public double getScore(TextDatabase database, int numberOfTimesCounted) {
-		double lemmaScore = getLemmaScore(database, numberOfTimesCounted);
-		double conjugationScore = getConjugationScore(database, numberOfTimesCounted);
+	public double getScore(TextDatabase database, LearningConfigations config) {
+		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned());
+		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxNumberOfSentencesToLearn()): 0;
 		double score = lemmaScore + conjugationScore;
 		return score;
 	}
@@ -189,7 +189,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 				//The primary basis for the score is the frequency of the unlearned lemma.
 				score += lemma.getFrequency();
 			} else if (lemma.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(scoreExponent, lemma.getTimesLearned()));
+				double extraScore = 1.0/( Math.pow(SCORE_EXPONENT, lemma.getTimesLearned()));
 				score += extraScore;
 			} 
 		}
@@ -202,7 +202,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		var conjugations = getWordSet(database);
 		for (Conjugation conjugation : conjugations) {
 			if (conjugation.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(scoreExponent, conjugation.getTimesLearned()+2));
+				double extraScore = 1.0/( Math.pow(SCORE_EXPONENT, conjugation.getTimesLearned()+2));
 				score += extraScore;
 			} 
 		}
@@ -223,6 +223,17 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		} else {
 			return (Paragraph) originParagraphs.toArray()[0];
 		}
+	}
+
+	public boolean isUnended() {
+		char lastChar = rawSentence.charAt(rawSentence.length() - 1);
+		if (lastChar == '.' || lastChar == '!' || lastChar == '?' || lastChar == '"' || lastChar == '”') 
+			return true;
+		else return false;
+	}
+
+	public boolean startsWithLowerCase() {
+		return Character.isLowerCase(rawSentence.charAt(0));
 	}
 
 

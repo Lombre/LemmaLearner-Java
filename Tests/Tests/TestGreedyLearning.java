@@ -27,11 +27,13 @@ class TestGreedyLearning {
 	TextDatabase database;
 	Text parsedText;
 	GreedyLearner learner;
+	Configurations config;
 	
 	@BeforeEach
 	public void setUp() {
-		database = new TextDatabase(true, false);
-		learner = new GreedyLearner(database);
+		config = new Configurations();
+		database = new TextDatabase(config);
+		learner = new GreedyLearner(database, config);
 	}
 	
 
@@ -52,7 +54,6 @@ class TestGreedyLearning {
 		assertEquals(parsedText.getRawText(), expectedParagraph);
 		assertSame(parsedText, returnedText);
 		
-		GreedyLearner learner = new GreedyLearner(database);
 		PriorityQueue<Lemma> LemmasByFrequency = learner.getLemmasByFrequency();
 		Lemma hopefullyLemma3 = LemmasByFrequency.poll();
 		Lemma hopefullyLemma2 = LemmasByFrequency.poll();
@@ -84,7 +85,6 @@ class TestGreedyLearning {
 		assertEquals(expectedParagraph, parsedText.getRawText());
 		assertSame(parsedText, returnedText);
 		
-		GreedyLearner learner = new GreedyLearner(database);
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		var sentencesByUnlearnedLemmaFrequency = learner.getDirectlyLearnableSentencesByFrequency(learnedLemmas);
 		
@@ -97,7 +97,7 @@ class TestGreedyLearning {
 	
 
 	@Test
-	public void testSentencesAreScoredCorrectly() throws Exception {
+	public void testSentencesAreScoredCorrectlyNoConjugations() throws Exception {
 		String rawLemma1 = "one";
 		String rawLemma2 = "two";
 		String rawLemma3 = "three";
@@ -106,22 +106,22 @@ class TestGreedyLearning {
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
 		//Initalially the lemas should give a score of 1 each, as that are their frequencies.
-		assertEquals(1+1+1, learnedSentence.getScore(database, 10), 0.001);
+		assertEquals(1+1+1, learnedSentence.getScore(database, config), 0.001);
 		
 		Lemma lemma1 = database.allLemmas.get(rawLemma1);
 		Lemma lemma2 = database.allLemmas.get(rawLemma2);
 		Lemma lemma3 = database.allLemmas.get(rawLemma3);
 		
 		lemma1.incrementTimesLearned();
-		assertEquals(0.25+1+1, learnedSentence.getScore(database, 10), 0.001);
+		assertEquals(0.25+1+1, learnedSentence.getScore(database, config), 0.001);
 		lemma2.incrementTimesLearned();
-		assertEquals(0.25+0.25+1, learnedSentence.getScore(database, 10), 0.001);
+		assertEquals(0.25+0.25+1, learnedSentence.getScore(database, config), 0.001);
 		lemma3.incrementTimesLearned();
-		assertEquals(0.25+0.25+0.25, learnedSentence.getScore(database, 10), 0.001);
+		assertEquals(0.25+0.25+0.25, learnedSentence.getScore(database, config), 0.001);
 		
 
 		lemma2.incrementTimesLearned();
-		assertEquals(0.25+(1.0/16)+0.25, learnedSentence.getScore(database, 10), 0.001);
+		assertEquals(0.25+(1.0/16)+0.25, learnedSentence.getScore(database, config), 0.001);
 	}
 	
 	

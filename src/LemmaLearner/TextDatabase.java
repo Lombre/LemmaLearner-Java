@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
@@ -25,30 +26,28 @@ public class TextDatabase{
 	//All texts are assumed to be unique, with no duplicates. Uses text.name.
 	public HashMap<String, Text> allTexts = new HashMap<String, Text>(); 
 	
-	//All paragraphs, in relation to their texts, are assumed to be unique. Uses paragraph.paragraphID.
+	
 	public HashMap<String, Paragraph> allParagraphs = new HashMap<String, Paragraph>(); 
 	
 	//Sentences are not assumed to be unique. Uses sentence.rawSentence.
 	public HashMap<String, Sentence> allSentences = new HashMap<String, Sentence>();
 	
-	//Words are not assumed to be unique. Uses word.rawWord.
+	//Words are not assumed to be unique. Uses word.rawWord as the key.
 	public HashMap<String, Conjugation> allWords = new HashMap<String, Conjugation>();
 	
 	public HashMap<String, Lemma> allLemmas = new HashMap<String, Lemma>();
 	
-	final boolean shouldLoadSavedTexts;
-	final boolean shouldPrintText;
+	private final DatabaseConfigurations config;
 	
 	
-	public TextDatabase(boolean shouldLoadSavedTexts, boolean shouldPrintText) {
-		this.shouldLoadSavedTexts = shouldLoadSavedTexts;
-		this.shouldPrintText = shouldPrintText;
+	
+	public TextDatabase(DatabaseConfigurations config) {
+		this.config = config;
 	}
 	
 	public void addAllTextsInFolderToDatabase(String folderLocation) {
-		File folder = new File(folderLocation);
-		List<File> filesInFolder = Arrays.asList(folder.listFiles());
-		List<File> textFilesInFolder = filesInFolder.stream().filter(file -> isTextFile(file)).collect(Collectors.toList());
+		
+		List<File> textFilesInFolder = getTextFilesInFolder(folderLocation);
 		
 		//We want to measure the time taken to parse all the texts.
 		long absoluteStartTime = System.currentTimeMillis();		
@@ -60,7 +59,7 @@ public class TextDatabase{
 		for (int i = 0; i < textFilesInFolder.size(); i++) {
 			File subfile = textFilesInFolder.get(i);
 			
-			if (shouldPrintText)
+			if (config.shouldPrintText())
 				printProgressInAddingTextsToDatabase(textFilesInFolder, totalFileSpaceConsumption, accumulatedFileSpaceConsumption, i, subfile);
 			accumulatedFileSpaceConsumption += subfile.length();
 			
@@ -69,10 +68,16 @@ public class TextDatabase{
 		
 		initializeLemmas();
 		
-		if (shouldPrintText)
+		if (config.shouldPrintText())
 			printAllTextsAddedToDatabaseInformation(absoluteStartTime);
 		
-		
+	}
+
+	private List<File> getTextFilesInFolder(String folderLocation) {
+		File folder = new File(folderLocation);
+		List<File> filesInFolder = Arrays.asList(folder.listFiles());
+		List<File> textFilesInFolder = filesInFolder.stream().filter(file -> isTextFile(file)).collect(Collectors.toList());
+		return textFilesInFolder;
 	}
 
 	public void initializeLemmas() {
@@ -80,30 +85,56 @@ public class TextDatabase{
 		
 		List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
 		allConjugations.sort((word1, word2) -> word1.compareTo(word2));
+		//Dur desværre ikke rigtigt :/
+		List<Conjugation> unknownConjugations = allConjugations.stream()
+															   .filter(con -> !lemmatizer.knowsConjugation(con.getRawConjugation()))
+															   .collect(Collectors.toList());
 		
-		for (int i = 0; i < allConjugations.size(); i++) {
-			Conjugation currentConjugation = allConjugations.get(i);
-			String rawLemma = lemmatizer.getRawLemma(currentConjugation);
-			Lemma currentLemma;
-			if (allLemmas.containsKey(rawLemma))
-				currentLemma = allLemmas.get(rawLemma);
-			else {
-				currentLemma = new Lemma(rawLemma);
-				allLemmas.put(rawLemma, currentLemma);				
-			}
-			currentLemma.addConjugation(currentConjugation);
-			printLemmatizationProgress(allConjugations, i, currentConjugation, rawLemma);
+
+		List<Conjugation> knownConjugations = allConjugations.stream()
+															 .filter(con -> lemmatizer.knowsConjugation(con.getRawConjugation()))
+															 .collect(Collectors.toList());
+		System.out.println();
+		System.out.println("Number of new words: " + unknownConjugations.size());
+		System.out.println("Number of known words: " + knownConjugations.size());
+		System.out.println();
+		
+		for (int i = 0; i < unknownConjugations.size(); i++) {
+			Conjugation currentConjugation = unknownConjugations.get(i);
+			addConjugationToDatabase(lemmatizer, unknownConjugations, i, currentConjugation);
 		}
+		
+		for (int i = 0; i < knownConjugations.size(); i++) {
+			Conjugation currentConjugation = knownConjugations.get(i);
+			addConjugationToDatabase(lemmatizer, knownConjugations, i, currentConjugation);
+		}
+		
 		lemmatizer.save();	
-		if (shouldPrintText) {
-			System.out.println("A total of " + allWords.size() + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
+		if (config.shouldPrintText()) {
+			System.out.println("Total number of sentences: " + allSentences.size());
+			System.out.println("Total number of words: " + allSentences.values().stream().map(x -> x.getLemmaSet(this).size()).reduce(0, (x, y) -> x + y));
+			int numberOfConjugations = (allLemmas.containsKey(NOT_A_WORD_STRING))? (allWords.size() - allLemmas.get(NOT_A_WORD_STRING).getConjugations().size()): 0;
+			System.out.println("A total of " + allWords.size() + " words, a total of " + numberOfConjugations + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
 		}
 	}
 
-	private void printLemmatizationProgress(List<Conjugation> allConjugations, int i, Conjugation currentConjugation,
-			String rawLemma) {
-		if ((i % 100 == 0 || i < 1000) && shouldPrintText) {
-			System.out.println("Looking at word " + i + " of " + allConjugations.size() + " \"" + currentConjugation.getRawConjugation() + "\".");		
+	private void addConjugationToDatabase(Lemmatizer lemmatizer, List<Conjugation> allConjugations, int i, Conjugation currentConjugation) {
+		var currentSentences = currentConjugation.getSentences();
+		String rawLemma = lemmatizer.getRawLemma(currentConjugation);
+		Lemma currentLemma;
+		if (allLemmas.containsKey(rawLemma))
+			currentLemma = allLemmas.get(rawLemma);
+		else {
+			currentLemma = new Lemma(rawLemma);
+			allLemmas.put(rawLemma, currentLemma);				
+		}
+		currentLemma.addConjugation(currentConjugation);
+		printLemmatizationProgress(allConjugations.size(), i, currentConjugation, rawLemma);
+	}
+
+	private void printLemmatizationProgress(int numberOfConjugations, int i, Conjugation currentConjugation, String rawLemma) {
+		if ((i % 1 == 0 || i < 1000) && config.shouldPrintText()) {
+			System.out.println("Looking at word " + i + " of " + numberOfConjugations + " \"" + currentConjugation.getRawConjugation() + "\".");		
 		    System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
 		    System.out.println();
 		}
@@ -112,12 +143,13 @@ public class TextDatabase{
 	private void printAllTextsAddedToDatabaseInformation(long absoluteStartTime) {
 		long absoluteEndTime = System.currentTimeMillis();
 		float absoluteTimeUsed = ((float) (absoluteEndTime - absoluteStartTime))/1000/60; //In minutes		
-		System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");				
+		System.out.println("Parsed all texts in " + absoluteTimeUsed + " minutes.");	
 
 	}
 
 	private void printProgressInAddingTextsToDatabase(List<File> textFilesInFolder, long totalFileSpaceConsumption,
 			long accumulatedFileSpaceConsumption, int i, File subfile) {
+		
 		float percentSpaceAnalyzed = ((((float) accumulatedFileSpaceConsumption)/totalFileSpaceConsumption) * 100);
 		System.out.println("Parsed " +  String.format("%.2f", percentSpaceAnalyzed) + " % of all text, in terms of space.");
 		System.out.println("Analysing text " + (i+1) + " of " + textFilesInFolder.size() + ", " + subfile.getName());
@@ -127,6 +159,7 @@ public class TextDatabase{
 	public void parseTextAndAddToDatabase(File subfile) {
 		Text parsedText = parseTextFile(subfile);				
 		parsedText.save(getSavedTextFileName(subfile));
+		//parsedText.combineAllParagraphs();
 		parsedText.filterUnlearnableSentences();
 		addTextToDatabase(parsedText);		
 	}
@@ -154,10 +187,11 @@ public class TextDatabase{
 		File possibleSavedFile = new File(getSavedTextFileName(subfile));
 		try {					
 			//If the file have already been parsed and save, simply load that, as this is faster than parsing it again.
-			if (possibleSavedFile.exists() && shouldLoadSavedTexts) {
+			if (possibleSavedFile.exists() && config.shouldLoadSavedTexts()) {
 				return Text.load(possibleSavedFile.getAbsolutePath());													
 			} 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("The saved text: " + getSavedTextFileName(subfile) + " could not be loaded.");
 			System.out.println("Will try to read the original file instead.");
 		}
