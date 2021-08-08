@@ -115,5 +115,9 @@ public class TreePriorityQueue<E> {
 	public ArrayList<E> toList(){
 		return new ArrayList<E>(elementToPair.keySet());
 	}
+	
+	public String toString() {
+		return treeSet.toString();
+	}
 
 }

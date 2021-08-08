@@ -5,7 +5,7 @@ import java.util.*;
 
 public class ListSet<E> implements Set<E>, List<E>, Serializable{
 
-	private List<E> internalList = new ArrayList<E>();
+	private List<E> internalList = new LinkedList<E>();
 	private Set<E> internalSet = new TreeSet<E>();
 	
 	public ListSet() {

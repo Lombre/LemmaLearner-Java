@@ -14,7 +14,6 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
 
 import LemmaLearner.*;
@@ -47,7 +46,7 @@ class TestGreedyLearning {
 		String expectedSentence3 = Lemma3 + ".";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3;
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
@@ -78,7 +77,7 @@ class TestGreedyLearning {
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3 + " " + expectedSentence4 + " " + expectedSentence5;
 		
 
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database);
 		
 		assertEquals(1, database.allTexts.size());
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
@@ -103,7 +102,7 @@ class TestGreedyLearning {
 		String rawLemma3 = "three";
 		String expectedSentence = rawLemma1 + " " + rawLemma2 + " " + rawLemma3 + ".";
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
 		//Initalially the lemas should give a score of 1 each, as that are their frequencies.
 		assertEquals(1+1+1, learnedSentence.getScore(database, config), 0.001);
@@ -133,7 +132,7 @@ class TestGreedyLearning {
 		String Lemma3 = "three";
 		String expectedSentence = Lemma1 + " " + Lemma2 + " " + Lemma3 + ".";
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
@@ -185,7 +184,7 @@ class TestGreedyLearning {
 	}
 	
 	
-
+	
 
 	@Test
 	public void testLemmasAreLearnedOneByOne() throws Exception {

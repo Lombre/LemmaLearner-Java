@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.List;
 
-import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
 
 import LemmaLearner.*;
@@ -30,7 +29,7 @@ class TestParsing {
 	
 	@Test
 	void testCorrectTextName() throws IOException {
-		parsedText = database.parse("Test texts/singleWordWithPunctuation.txt", false);
+		parsedText = database.parseRawText("singleWordWithPunctuation.txt", "Test texts/singleWordWithPunctuation.txt");
 		assertEquals("singleWordWithPunctuation.txt", parsedText.getName());
 	}
 	
@@ -40,7 +39,7 @@ class TestParsing {
 		String wordPart1 = "Hej";
 		String wordPart2 = "med";
 		String wordPart3 = "dig";
-		String expectedSentence = "’" + wordPart1 + "’" + wordPart2 + "’" + wordPart3 + "’";
+		String expectedSentence = "'" + wordPart1 + "'" + wordPart2 + "'" + wordPart3 + "'";
 		
 		parsedText = TestTool.parseString(expectedSentence, database);
 		assertEquals(parsedText.getParagraphs().size(), 1);
@@ -64,7 +63,7 @@ class TestParsing {
 	@Test
 	void testWordSplitCorrectlySingleQuoteCommaCase() throws Exception {
 		String word = "Hej";
-		String expectedSentence = word + "’,";
+		String expectedSentence = word + "\',";
 		
 		parsedText = TestTool.parseString(expectedSentence, database);
 		assertEquals(parsedText.getParagraphs().size(), 1);
@@ -111,7 +110,7 @@ class TestParsing {
 		String expectedWord3 = "works";
 		String expectedParagraph = expectedWord1 + " " + expectedWord2 + " " + expectedWord3 + ".";
 				
-		parsedText = database.parse("Test texts/multiWordSentence.txt", false);		
+		parsedText = database.parseTextFile("Test texts/multiWordSentence.txt");		
 		assertEquals(parsedText.getParagraphs().size(), 1);
 		assertEquals(parsedText.getRawText(), expectedParagraph);
 		
@@ -142,7 +141,7 @@ class TestParsing {
 		String expectedSentence3 = "Third sentence?";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3;
 				
-		parsedText = database.parse("Test texts/multiSentenceParagraph.txt", false);		
+		parsedText = database.parseTextFile("Test texts/multiSentenceParagraph.txt");		
 		assertEquals(parsedText.getParagraphs().size(), 1);
 		assertEquals(parsedText.getRawText(), expectedParagraph);
 		
@@ -167,7 +166,7 @@ class TestParsing {
 		String expectedParagraph3 = "Third paragraph. This is even cooler!";
 		String expectedText = expectedParagraph1 + "\r\n\r\n" + expectedParagraph2 + "\r\n" + expectedParagraph3;
 				
-		parsedText = database.parse("Test texts/multiParagraphText.txt", false);		
+		parsedText = database.parseTextFile("Test texts/multiParagraphText.txt");		
 		assertEquals(3, parsedText.getParagraphs().size());
 		assertEquals(expectedText, parsedText.getRawText());
 		
@@ -186,7 +185,7 @@ class TestParsing {
 	void testParseSingleQuotedSentence() throws IOException {	
 		String expectedSentence = "“This. Should. Hopefully! Be... One Sentence!”.";
 
-		parsedText = database.parse("Test texts/singleQuotedSentence.txt", false);
+		parsedText = database.parseTextFile("Test texts/singleQuotedSentence.txt");
 		assertEquals(parsedText.getParagraphs().size(), 1);
 		assertEquals(parsedText.getRawText(), expectedSentence);
 		
@@ -202,10 +201,10 @@ class TestParsing {
 
 	@Test
 	void testParseNestedQuotedSentence() throws IOException {	
-		String expectedSentence = "“This. “Should. Hopefully! (Be...) One Sentence!””.";
-
+		String expectedSentence = "“This.  “Should. Hopefully! (Be...) One Sentence””.";
+		
 		parsedText = TestTool.parseString(expectedSentence, database);
-		assertEquals(parsedText.getParagraphs().size(), 1);
+		assertEquals(1, parsedText.getParagraphs().size());
 		assertEquals(parsedText.getRawText(), expectedSentence);
 		
 		Paragraph paragraph = (Paragraph) parsedText.getParagraphs().toArray()[0];
@@ -228,7 +227,7 @@ class TestParsing {
 
 	@Test
 	void testParseSentenceWithInterruptedQuotes() throws IOException {	
-		String expectedSentence = "This “Should.” Hopefully “Be...” “One Sentence”.";
+		String expectedSentence = "This (Should.) Hopefully 'Be...' \"One Sentence\".";
 
 		parsedText = TestTool.parseString(expectedSentence, database);
 		assertEquals(parsedText.getParagraphs().size(), 1);
@@ -290,8 +289,8 @@ class TestParsing {
 	
 	@Test
 	void testIgnoreUnclosedSentences() throws Exception {
-		String text1 = "This “Should hopefully be ignored as a sentece, but not as text.";
-		String text2 = "So should” this.";
+		String text1 = "This \"Should hopefully be ignored as a sentece, but not as text.";
+		String text2 = "So should\" this.";
 
 		assertEquals(TestTool.parseString(text1, database).getRawText(), text1);
 		assertEquals(TestTool.parseString(text1, database).getParagraphs().size(), 0);

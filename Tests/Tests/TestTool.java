@@ -18,14 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
 
 import LemmaLearner.*;
-import antlrGrammar.TextParsingGrammarParser;
-import antlrGrammar.TextParsingGrammarParser.StartContext;
-
 
 
 public class TestTool {
@@ -37,12 +32,12 @@ public class TestTool {
 	}
 	
 	public static Text parseString(String stringToParse, TextDatabase database, boolean shouldDisplayGUI) {
-		return database.parse(testTextName, CharStreams.fromString(stringToParse), shouldDisplayGUI);
+		return database.parseRawText(testTextName,  stringToParse);
 	}
 	
 	
-	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database, boolean shouldDisplayGUI) {
-		Text parsedText = database.parse(testTextName, CharStreams.fromString(stringToParse), shouldDisplayGUI);
+	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database) {
+		Text parsedText = database.parseRawText(testTextName, stringToParse);
 		database.addTextToDatabase(parsedText);
 		database.initializeLemmas();
 		return parsedText;
@@ -72,28 +67,5 @@ public class TestTool {
 		database.parseTextAndAddToDatabase(fileToParse);		
 		database.initializeLemmas();
 	}
-
-	public static void displayParserTree(TextParsingGrammarParser parser, StartContext startContext) {
-			JFrame frame = new JFrame("Antlr AST");
-			JPanel panel = new JPanel();
-			frame.setLayout(new BorderLayout());
-			frame.add(BorderLayout.CENTER, new JScrollPane(panel));
-			frame.setLocationRelativeTo(null);
-			
-			//JScrollPane scrollPane = new JScrollPane();
-			//scrollPane.setPreferredSize(new Dimension( 800,300));
-			panel.setAutoscrolls(true);
-			TreeViewer viewer = new TreeViewer(Arrays.asList(
-					parser.getRuleNames()),startContext);
-			viewer.setScale(1); // Scale a little
-			viewer.setAutoscrolls(true);
-			panel.add(viewer);			
-			//scrollPane.add(viewer);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setPreferredSize(new Dimension( 800,300));	
-			frame.pack();
-			frame.setVisible(true);
-	}
-	
 
 }

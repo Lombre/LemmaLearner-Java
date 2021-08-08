@@ -2,7 +2,7 @@ package LemmaLearner;
 
 import java.util.*;
 
-import org.antlr.v4.runtime.CharStream;
+//import org.antlr.v4.runtime.CharStream;
 
 
 public class Starter {
@@ -19,6 +19,9 @@ public class Starter {
 				
 		System.out.println("Start");
 		
+		//ManualParser parser = new ManualParser();
+		//parser.extractSentencesFromFile("Texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle");
+		
 		
 		if (shouldParseRealText) 
 			textDatabase.addAllTextsInFolderToDatabase("Texts");
@@ -26,7 +29,8 @@ public class Starter {
 			textDatabase.addAllTextsInFolderToDatabase("TextsToParse");		
 		
 		
-		learner.learnAllLemmas();		
+		List<Pair<Lemma, Sentence>> learningList = learner.learnAllLemmas();	
+		
 		System.out.println("End");
 		
 	}

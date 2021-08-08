@@ -7,25 +7,28 @@ import java.util.stream.Collectors;
 public class Sentence implements Serializable, Comparable<Sentence> {
 	
 	private Set<Paragraph> originParagraphs;
+	private Set<Lemma> lemmaSet = null;
 	private List<Sentence> subSentences;
+	private List<Paragraph> subParagraphs;
 	private final String rawSentence;
 	private final short[] wordBeginningIndex;
 	private final short[] wordLengthIndex;
-	public final double SCORE_EXPONENT = 4;
 	
 	public Sentence(String rawSentence, List<String> rawWords) {
-		if (Short.MAX_VALUE <= rawSentence.length()) throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
+		if (Short.MAX_VALUE <= rawSentence.length()) 
+			throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
 		this.rawSentence = rawSentence;
 		wordBeginningIndex = new short[rawWords.size()];
 		wordLengthIndex = new short[rawWords.size()];
 		setWordIndexes(rawSentence, rawWords);
 	}
 
-	public Sentence(String rawText, List<String> rawWords, List<Sentence> subSentences) {
-		this(rawText, rawWords);
-		this.subSentences = subSentences;
-	}
 
+	public Sentence(String rawText, List<String> rawWords, List<Paragraph> subParagraphs) {
+		this(rawText, rawWords);
+		this.subParagraphs = subParagraphs;
+	}
+	
 	private void setWordIndexes(String rawSentence, List<String> rawWords) {
 		String lowerCaseRawSentence = rawSentence.toLowerCase();
 		int lastEndingIndex = 0;
@@ -139,6 +142,12 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public Set<Lemma> getLemmaSet(TextDatabase database) {
+		//if (lemmaSet == null)
+		//	lemmaSet = getWordSet(database).stream()
+		//					.map(word -> word.getLemma())
+		//					.collect(Collectors.toCollection(HashSet::new));
+		//return lemmaSet;
+		
 		return getWordSet(database).stream()
 									.map(word -> word.getLemma())
 									.collect(Collectors.toCollection(HashSet::new));
@@ -175,21 +184,31 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public double getScore(TextDatabase database, LearningConfigations config) {
-		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned());
-		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxNumberOfSentencesToLearn()): 0;
-		double score = lemmaScore + conjugationScore;
+		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
+		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
+		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxNumberOfSentencesToLearn(), config.getScoreExponent()): 0;
+		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore);//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
 		return score;
 	}
-
-	private double getLemmaScore(TextDatabase database, int numberOfTimesCounted) {
+	
+	private double getUnlearnedLemmaFrequencyScore(TextDatabase database, int numberOfTimesCounted) {
 		double score = 0;
 		var lemmas = getLemmaSet(database);
 		for (Lemma lemma : lemmas) {
 			if (lemma.getTimesLearned() == 0) {
 				//The primary basis for the score is the frequency of the unlearned lemma.
 				score += lemma.getFrequency();
-			} else if (lemma.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(SCORE_EXPONENT, lemma.getTimesLearned()));
+			} 
+		}
+		return score;
+	}
+
+	private double getLemmaScore(TextDatabase database, int numberOfTimesCounted, double scoreExponent) {
+		double score = 0;
+		var lemmas = getLemmaSet(database);
+		for (Lemma lemma : lemmas) {
+			if (0 < lemma.getTimesLearned() && lemma.getTimesLearned() < numberOfTimesCounted){
+				double extraScore = 1.0/( Math.pow(scoreExponent, lemma.getTimesLearned()));
 				score += extraScore;
 			} 
 		}
@@ -197,12 +216,12 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 	
 
-	private double getConjugationScore(TextDatabase database, int numberOfTimesCounted) {
+	private double getConjugationScore(TextDatabase database, int numberOfTimesCounted, double scoreExponent) {
 		double score = 0;
 		var conjugations = getWordSet(database);
 		for (Conjugation conjugation : conjugations) {
 			if (conjugation.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(SCORE_EXPONENT, conjugation.getTimesLearned()+2));
+				double extraScore = 1.0/( Math.pow(scoreExponent, conjugation.getTimesLearned()+2));
 				score += extraScore;
 			} 
 		}
@@ -227,7 +246,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 
 	public boolean isUnended() {
 		char lastChar = rawSentence.charAt(rawSentence.length() - 1);
-		if (lastChar == '.' || lastChar == '!' || lastChar == '?' || lastChar == '"' || lastChar == '”') 
+		if (lastChar == '.' || lastChar == '!' || lastChar == '?' || lastChar == '"' )//|| lastChar == 'â€�') 
 			return true;
 		else return false;
 	}

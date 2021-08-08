@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>ANTLR files</name>
-			<type>2</type>
-			<location>C:/Users/jespe/eclipse-workspace/TextParsingGrammar/target/generated-sources/antlr4</location>
-		</link>
-	</linkedResources>
 </projectDescription>

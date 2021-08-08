@@ -2,19 +2,20 @@ package LemmaLearner;
 
 import java.util.*;
 
-
-
 public class GreedyLearner {
 	
 	private TextDatabase database;
-	private List<Pair<Lemma, Sentence>> orderOfLearnedLemmas = new ArrayList<Pair<Lemma, Sentence>>();
-	private Set<Lemma> learnedLemmas = new HashSet<Lemma>();	
-	private Set<Sentence> seenSentences = new HashSet<Sentence>();
+	private List<Pair<Lemma, Sentence>> orderOfLearnedLemmas;
+	private Set<Lemma> learnedLemmas;
+	private Set<Sentence> seenSentences;
 	private PriorityQueue<Lemma> lemmasByFrequency;
 	private TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency;
 	public static final String NOT_A_SENTENCE_STRING = "No sentence found.";
 	private final LearningConfigations config;
 	
+	
+	public HashMap<List<Lemma>, TreePriorityQueue<Sentence>> sentencesWithRequiredLemmas;
+	public HashMap<Lemma, ListSet<List<Lemma>>> lemmaToListSet = new  HashMap<Lemma, ListSet<List<Lemma>>>();
 
 	public GreedyLearner(TextDatabase database, LearningConfigations config) {
 		this.database = database;
@@ -23,9 +24,33 @@ public class GreedyLearner {
 	
 
 	private void initialize() {
+		orderOfLearnedLemmas = new ArrayList<Pair<Lemma, Sentence>>();
+		learnedLemmas = new HashSet<Lemma>();	
+		seenSentences = new HashSet<Sentence>();
 		LearningProgressPrinter.printLemmasWithHighNumberOfConjugations(database);				
 		lemmasByFrequency = getLemmasByFrequency();
 		directlyLearnableSentencesByFrequency = getDirectlyLearnableSentencesByFrequency(learnedLemmas);
+		
+		sentencesWithRequiredLemmas = new HashMap<List<Lemma>, TreePriorityQueue<Sentence>>();
+		var emptySet = new HashSet<Lemma>();
+		
+		
+		for (Sentence sentence : database.allSentences.values()) {
+			List<Lemma> unlearnedLemmas = sentence.getUnlearnedLemmas(emptySet, database);
+			unlearnedLemmas.sort((l1, l2) -> l1.getRawLemma().compareTo(l2.getRawLemma()));
+			int k = 1;
+			if (0 < unlearnedLemmas.size() ) {
+				if (sentencesWithRequiredLemmas.containsKey(unlearnedLemmas)) {
+					TreePriorityQueue<Sentence> sentenceQueue = sentencesWithRequiredLemmas.get(unlearnedLemmas);
+					sentenceQueue.add(sentence, sentence.getScore(database, config));
+				} else {
+					TreePriorityQueue<Sentence> sentenceQueue = getSentencePriorityQueue();
+					sentenceQueue.add(sentence, sentence.getScore(database, config));
+					sentencesWithRequiredLemmas.put(unlearnedLemmas, sentenceQueue);
+				}
+			}
+		}
+		System.out.println("k");
 	}
 
 	public List<Pair<Lemma, Sentence>> learnAllLemmas() {	
@@ -49,7 +74,8 @@ public class GreedyLearner {
 				learnLemmaFromDirectlyLearnableSentence(getBestScoringDirectlyLearnableSentenceWithNChoises(0));			
 		}	
 		
-		LearningProgressPrinter.printFinishedLearningLemmasInformation(absoluteStartTime, orderOfLearnedLemmas, learnedLemmas, database);
+		if (config.shouldPrintText())
+			LearningProgressPrinter.printFinishedLearningLemmasInformation(absoluteStartTime, orderOfLearnedLemmas, learnedLemmas, database);
 				
 		return orderOfLearnedLemmas;
 	}
@@ -72,7 +98,8 @@ public class GreedyLearner {
 		return directlyLearnableSentencesByFrequency.poll();
 	}
 
-	Scanner in = new Scanner(System.in); 
+	
+	Scanner inScanner = new Scanner(System.in); 
 	private Sentence getBestScoringDirectlyLearnableSentenceWithNChoises(int n) {	
 		
 		if (n == 0 || n == 1) {
@@ -95,7 +122,7 @@ public class GreedyLearner {
 		//TODO (*) Der er sikkert en bug hvis alle alternativerne bliver fjernet.
 		
 		//Let the user choose the desired sentence, and put all the remaining sentences back in the priority queue.
-		String input = in.nextLine();
+		String input = inScanner.nextLine();
 		if (input.matches("\\d+")) { //A sentence is chosen
 			int choiseIndex = Integer.valueOf(input) - 1; 
 			Sentence choise = alternatives.remove(choiseIndex);
@@ -128,7 +155,8 @@ public class GreedyLearner {
 			}
 		}		
 		
-		System.out.println("Learn initial sentence with total frequency score " + bestSentenceScore + ": " + bestScoringSentence.getRawSentence());
+		if (config.shouldPrintText())
+			System.out.println("Learn initial sentence with total frequency score " + bestSentenceScore + ": " + bestScoringSentence.getRawSentence());
 		seenSentences.add(bestScoringSentence);
 		
 		//Learn the lemmas in the sentence
@@ -156,7 +184,12 @@ public class GreedyLearner {
 
 
 	private Lemma learnLemmaFromDirectlyLearnableSentence(Sentence directlyLearnableSentence) {
-		Lemma lemmaToLearn = directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database).get(0);
+		var unlearnedLemmas = directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database); 
+		if (unlearnedLemmas.size() == 0) {
+			int i = 1;			
+			System.out.println(directlyLearnableSentence);
+		}
+		Lemma lemmaToLearn = unlearnedLemmas.get(0);
 		learnLemma(directlyLearnableSentence, lemmaToLearn);		
 		updateSentencesAssociatedWithLemmasInSentence(directlyLearnableSentence);		
 		return lemmaToLearn;
@@ -180,16 +213,19 @@ public class GreedyLearner {
 
 
 	private void learnLemma(Sentence directlyLearnableSentence, Lemma lemmaToLearn) {
+		
 		learnedLemmas.add(lemmaToLearn);
-		for (Lemma lemma : directlyLearnableSentence.getLemmaSet(database)) {
-			lemma.incrementTimesLearned();
-		}
-		for (Conjugation conjugation : directlyLearnableSentence.getWordSet(database)) {
-			conjugation.incrementTimesLearned();
-		}
+		
+		for (Lemma lemma : directlyLearnableSentence.getLemmaSet(database)) 
+			lemma.incrementTimesLearned();		
+		for (Conjugation conjugation : directlyLearnableSentence.getWordSet(database)) 
+			conjugation.incrementTimesLearned();		
+		
 		lemmasByFrequency.remove(lemmaToLearn);
+		
 		orderOfLearnedLemmas.add(new Pair<Lemma, Sentence>(lemmaToLearn, directlyLearnableSentence));
-		LearningProgressPrinter.printLearnedInformation(orderOfLearnedLemmas, database);
+		if (config.shouldPrintText())
+			LearningProgressPrinter.printLearnedInformation(orderOfLearnedLemmas, database);
 		updateDirectlyLearnableSentences(lemmaToLearn);			
 	}
 
@@ -203,7 +239,7 @@ public class GreedyLearner {
 
 
 	public TreePriorityQueue<Sentence> getDirectlyLearnableSentencesByFrequency(Set<Lemma> learnedLemmas) {
-		TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency = getSentencesByUnlearnedWordFrequency();
+		TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency = getSentencePriorityQueue();
 		for (Sentence sentence : database.allSentences.values()) {
 			if (sentence.isDirectlyLearnable(learnedLemmas, database) && 0 < sentence.getRawWordList().size()) {
 				directlyLearnableSentencesByFrequency.add(sentence, sentence.getScore(database, config));	
@@ -214,7 +250,7 @@ public class GreedyLearner {
 	}
 
 
-	public TreePriorityQueue<Sentence> getSentencesByUnlearnedWordFrequency() {
+	public TreePriorityQueue<Sentence> getSentencePriorityQueue() {
 		TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency = new TreePriorityQueue<Sentence>((sentenceScore1, sentenceScore2) -> Double.compare(-sentenceScore1, -sentenceScore2));
 		return directlyLearnableSentencesByFrequency;
 	}
@@ -224,6 +260,11 @@ public class GreedyLearner {
 		PriorityQueue<Lemma> lemmasByFrequency = new PriorityQueue<Lemma>((lemma1, lemma2) -> Integer.compare(lemma2.getFrequency(), lemma1.getFrequency()));
 		lemmasByFrequency.addAll(database.allLemmas.values());
 		return lemmasByFrequency;
+	}
+
+
+	public void resetLearning() {
+		database.resetLearning();		
 	}
 	
 	

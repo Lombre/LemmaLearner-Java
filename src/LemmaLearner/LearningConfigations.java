@@ -2,10 +2,18 @@ package LemmaLearner;
 
 public interface LearningConfigations {
 
-	int getMaxTimesLemmaShouldBeLearned();
+	
 
-	int getMaxNumberOfSentencesToLearn();
+	public void setScoreExponent(double newExponent);
+	
+	public double getScoreExponent();
+	
+	public int getMaxTimesLemmaShouldBeLearned();
 
-	boolean shouldConjugationsBeScored();
+	public int getMaxNumberOfSentencesToLearn();	
+
+	boolean shouldPrintText();
+
+	public boolean shouldConjugationsBeScored();
 
 }

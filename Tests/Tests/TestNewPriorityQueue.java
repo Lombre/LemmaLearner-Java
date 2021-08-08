@@ -15,7 +15,6 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
 
 import LemmaLearner.*;
@@ -36,7 +35,7 @@ class TestNewPriorityQueue {
 		config = new Configurations();
 		database = new TextDatabase(config);
 		learner = new GreedyLearner(database, config);
-		queue = learner.getSentencesByUnlearnedWordFrequency();
+		queue = learner.getSentencePriorityQueue();
 		
 	}
 	

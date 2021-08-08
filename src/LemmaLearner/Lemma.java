@@ -71,4 +71,8 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 	public Set<Conjugation> getConjugations() {
 		return conjugations;
 	}
+
+	public void resetLearning() {
+		timesLearned = 0;
+	}
 }

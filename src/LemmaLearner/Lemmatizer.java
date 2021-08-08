@@ -12,19 +12,20 @@ public class Lemmatizer {
 	private final String language;
 	private final Path lemmaFilePath;
 	private HashMap<String, List<String>> conjugationToLemmas = new HashMap<String, List<String>>();
-	private OnlineDictionary onlineDictionary;
+	//private OnlineDictionary onlineDictionary;
+	private WiktionaryDictionary dictionary;
 	
 	
 	public Lemmatizer(String language) {	
 		this.language = language;
 		lemmaFilePath = Paths.get(this.language.toLowerCase() + "_lemma.txt");
 		//initializeStandardLemmatizer(lemmaFilePath);
-		onlineDictionary = new OnlineDictionary(this.language);
-		onlineDictionary.load();
+		dictionary = new WiktionaryDictionary();
+		dictionary.load();
 	}
 	
 	void save() {
-		onlineDictionary.save();
+		dictionary.save();
 	}
 
 	private void initializeStandardLemmatizer(Path path) {
@@ -65,7 +66,7 @@ public class Lemmatizer {
 		}
 		String actualLemma;
 		try {
-			actualLemma = onlineDictionary.getLemmaFromConjugation(tempLemma);
+			actualLemma = dictionary.getLemmaFromConjugation(tempLemma);
 		} catch (Exception e) {
 			e.printStackTrace();
 			actualLemma =  TextDatabase.NOT_A_WORD_STRING;
@@ -74,11 +75,11 @@ public class Lemmatizer {
 	}
 
 	public boolean knowsConjugation(String rawConjugation) {
-		boolean knows =  conjugationToLemmas.containsKey(rawConjugation) || onlineDictionary.knowsConjugation(rawConjugation);
+		boolean knows =  conjugationToLemmas.containsKey(rawConjugation) || dictionary.knowsConjugation(rawConjugation);
 		if (!knows) 
 			knows = false;
-		knows =  conjugationToLemmas.containsKey(rawConjugation) || onlineDictionary.knowsConjugation(rawConjugation);
-		return conjugationToLemmas.containsKey(rawConjugation) || onlineDictionary.knowsConjugation(rawConjugation);
+		knows =  conjugationToLemmas.containsKey(rawConjugation) || dictionary.knowsConjugation(rawConjugation);
+		return conjugationToLemmas.containsKey(rawConjugation) || dictionary.knowsConjugation(rawConjugation);
 	}
 
 }

@@ -55,6 +55,7 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 
 	public void addToDatabase(TextDatabase textDatabase) {
 		if (textDatabase.allWords.containsKey(this.getRawConjugation())) {
+			
 			//The sentences have already been added, 
 			//so the word in the database simply also needs to refer to those sentences.
 			Conjugation databaseWord = textDatabase.allWords.get(this.getRawConjugation());
@@ -88,5 +89,9 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 	
 	public Integer getTimesLearned() {
 		return timesLearned;
+	}
+
+	public void resetLearning() {
+		timesLearned = 0;
 	}
 }

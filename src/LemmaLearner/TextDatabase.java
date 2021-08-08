@@ -2,6 +2,7 @@ package LemmaLearner;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collector;
@@ -9,13 +10,9 @@ import java.util.stream.Collectors;
 
 import javax.swing.*;
 
-import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.*;
 import org.nustaq.serialization.FSTConfiguration;
 
 import Tests.TestTool;
-import antlrGrammar.*;
-
 
 
 public class TextDatabase{
@@ -25,8 +22,7 @@ public class TextDatabase{
 
 	//All texts are assumed to be unique, with no duplicates. Uses text.name.
 	public HashMap<String, Text> allTexts = new HashMap<String, Text>(); 
-	
-	
+		
 	public HashMap<String, Paragraph> allParagraphs = new HashMap<String, Paragraph>(); 
 	
 	//Sentences are not assumed to be unique. Uses sentence.rawSentence.
@@ -133,7 +129,7 @@ public class TextDatabase{
 	}
 
 	private void printLemmatizationProgress(int numberOfConjugations, int i, Conjugation currentConjugation, String rawLemma) {
-		if ((i % 1 == 0 || i < 1000) && config.shouldPrintText()) {
+		if ((i % 100 == 0 || i < 1000) && config.shouldPrintText()) {
 			System.out.println("Looking at word " + i + " of " + numberOfConjugations + " \"" + currentConjugation.getRawConjugation() + "\".");		
 		    System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
 		    System.out.println();
@@ -157,8 +153,9 @@ public class TextDatabase{
 
 	@SuppressWarnings("IOException")
 	public void parseTextAndAddToDatabase(File subfile) {
-		Text parsedText = parseTextFile(subfile);				
-		parsedText.save(getSavedTextFileName(subfile));
+		Text parsedText = parseTextFile(subfile);		
+		if (config.shouldSaveTexts())
+			parsedText.save(getSavedTextFileName(subfile));
 		//parsedText.combineAllParagraphs();
 		parsedText.filterUnlearnableSentences();
 		addTextToDatabase(parsedText);		
@@ -169,9 +166,36 @@ public class TextDatabase{
 			//The could be made more simple, probably a function for each operation.
 			//However, it needs to be done sequentially to avoid concurrency errors.
 			parsedText.addToDatabase(this);
+			var parsedParagraphs = parsedText.getParagraphs();
 			
-			List<Paragraph> parsedParagraphs = parsedText.getParagraphs().stream().collect(Collectors.toList());
-			parsedParagraphs.forEach(paragraph -> paragraph.addToDatabase(this));
+			var localAllParagraphs = new ArrayList<Paragraph>();
+			var localAllSentences = new ArrayList<Sentence>();
+			var localAllWords = new ArrayList<Conjugation>();
+			
+			
+			
+
+			for (var paragraph : parsedParagraphs) {
+				localAllParagraphs.add(paragraph);
+				for (var sentence : paragraph.getSentences()) {
+					localAllSentences.add(sentence);
+					for (var rawWord : sentence.getRawWordSet()) {
+						var conjugation = new Conjugation(sentence, rawWord);
+						localAllWords.add(conjugation);
+					}
+				}
+			}
+			
+			for (Paragraph paragraph : localAllParagraphs) 
+				paragraph.addToDatabase(this);
+			
+			for (Sentence sentence : localAllSentences)
+				sentence.addToDatabase(this);
+			
+			for (Conjugation conjugation : localAllWords)
+				conjugation.addToDatabase(this);
+			
+			/*
 			
 			List<Sentence> parsedSentences = parsedParagraphs.stream().flatMap(paragraph -> paragraph.getSentences().stream())
 																	  .collect(Collectors.toList());
@@ -180,7 +204,13 @@ public class TextDatabase{
 			List<Conjugation> parsedWords = parsedSentences.stream().flatMap(sentence -> sentence.getRawWordSet().stream().map(rawWord -> new Conjugation(sentence, rawWord)))
 					  										 .collect(Collectors.toList());
 			parsedWords.forEach(word -> word.addToDatabase(this));
+			
+			*/
 		}
+	}
+	
+	public Text parseTextFile(String fileName) {	
+		return parseTextFile(new File(fileName));
 	}
 
 	private Text parseTextFile(File subfile) {
@@ -197,14 +227,9 @@ public class TextDatabase{
 		}
 		//If the loading failed, or if the text shouldn't be loaded, simply read it:
 
-		try {
-			Text parsedText = parse(subfile.getPath(), false);
-			return parsedText;
-		} catch (IOException e) {
-			e.printStackTrace();
-			//Signaling that the text could not be read or saved.
-			return null;
-		}				
+		ManualParser parser = new ManualParser();
+		Text parsedText = parser.parseFile(subfile);	
+		return parsedText;				
 	}
 
 	private String getSavedTextFileName(File subfile) {
@@ -217,23 +242,15 @@ public class TextDatabase{
 		return subfile.isFile() && subfile.getName().toLowerCase().endsWith((".txt"));
 	}
 		
-	public Text parse(String textLocation,  boolean shouldDisplayGUITree) throws IOException {
-		return parse(new File(textLocation).getName(), CharStreams.fromFileName(textLocation), shouldDisplayGUITree);
-	}
 	
-	public Text parse(String textName, CharStream input, boolean shouldDisplayGUITree) {
-		
-		final Lexer lexer = new TextParsingGrammarLexer(input);
-		final CommonTokenStream tokens = new CommonTokenStream(lexer);
-		final TextParsingGrammarParser parser = new TextParsingGrammarParser(tokens);
-		final TextParsingGrammarParser.StartContext startContext = parser.start();
-		final ANTLRvisitor.StartVisitor visitor = new ANTLRvisitor.StartVisitor(textName);		
+	public Text parseRawText(String textName, String rawText) {
+		final ManualParser parser = new ManualParser();
+		return parser.parseRawText(textName, rawText);
+	}
 
-		if (shouldDisplayGUITree)	
-			TestTool.displayParserTree(parser, startContext);		
-		
-		final Text resultText = visitor.visit(startContext);
-		return resultText;
+	public void resetLearning() {
+		allLemmas.values().forEach(x -> x.resetLearning());
+		allWords.values().forEach(x -> x.resetLearning());
 	}
 
 	

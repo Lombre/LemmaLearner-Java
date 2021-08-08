@@ -5,18 +5,18 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TextParser/ANTLR files"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="ANTLR files"/>
 	<classpathentry kind="src" path="Tests"/>
 	<classpathentry kind="src" path="fast-serialization-master/src/main/java"/>
+	<classpathentry kind="src" path="Jar-files"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Javalib/antlr-4.8-complete.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="Extra libraries/fst-3.0.1.jar"/>
 	<classpathentry kind="lib" path="Extra libraries/jackson-core-2.11.1.jar"/>
 	<classpathentry kind="lib" path="Extra libraries/objenesis-3.1.jar"/>
+	<classpathentry kind="lib" path="Jar-files/json-20210307.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

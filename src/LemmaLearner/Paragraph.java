@@ -22,7 +22,7 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	
 
 
-	public ListSet<Sentence> getSentences() {
+	public Set<Sentence> getSentences() {
 		return sentences;
 	}
 
@@ -84,6 +84,12 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	}
 
 	public Sentence getNthSentence(int n) {
-		return sentences.get(n);
+		throw new Error("Removed function."); 
+		//return sentences.get(n);
+	}
+
+	public void setSentences(List<Sentence> newParagraphSentences) {
+		sentences.clear();
+		sentences.addAll(newParagraphSentences);
 	}
 }

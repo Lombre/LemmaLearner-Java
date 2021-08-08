@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
 
 import LemmaLearner.*;
@@ -34,7 +33,7 @@ class TestDatabaseInsertion {
 	public void testEmptyTextInsertion_NoAddedParagraphsSentencesOrWords() throws Exception {
 		String expectedSentence = "";
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
@@ -54,7 +53,7 @@ class TestDatabaseInsertion {
 		String word3 = "works";
 		String expectedSentence = word1 + " " + word2 + " " + word3;
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get("test");
@@ -62,7 +61,7 @@ class TestDatabaseInsertion {
 		assertSame(returnedText, parsedText);
 		
 		assertEquals(database.allParagraphs.size(), 1);
-		Paragraph parsedParagraph = database.allParagraphs.get("test0");
+		Paragraph parsedParagraph = database.allParagraphs.get("test_0");
 		assertEquals(expectedSentence, parsedParagraph.getRawParagraph());
 		assertSame(parsedParagraph, parsedText.getParagraphs().toArray()[0]);
 		
@@ -92,7 +91,7 @@ class TestDatabaseInsertion {
 		String expectedText = repeatedSentence + "\r\n" + paragraph2;
 		
 
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedText, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedText, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get("test");
@@ -101,8 +100,8 @@ class TestDatabaseInsertion {
 		
 		//The paragraphs should be different, but be part of the same text.
 		assertEquals(database.allParagraphs.size(), 2);
-		Paragraph parsedParagraph1 = database.allParagraphs.get("test0");
-		Paragraph parsedParagraph2 = database.allParagraphs.get("test1");
+		Paragraph parsedParagraph1 = database.allParagraphs.get("test_0");
+		Paragraph parsedParagraph2 = database.allParagraphs.get("test_1");
 		Paragraph textParagraph1 = (Paragraph) parsedText.getParagraphs().toArray()[0];
 		Paragraph textParagraph2 = (Paragraph) parsedText.getParagraphs().toArray()[1];
 		assertEquals(repeatedSentence, parsedParagraph1.getRawParagraph());
@@ -113,6 +112,7 @@ class TestDatabaseInsertion {
 		assertSame(parsedText, parsedParagraph2.getOriginText());
 		assertNotSame(parsedParagraph1, parsedParagraph2);
 		
+		//The sentences are repeated, and thus only one should be saved.
 		assertEquals(database.allSentences.size(), 2);
 		
 		Sentence parsedSentence1 = database.allSentences.get(repeatedSentence);		
@@ -149,7 +149,7 @@ class TestDatabaseInsertion {
 		String expectedSentence3 = word3 + ".";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3;
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
@@ -176,7 +176,7 @@ class TestDatabaseInsertion {
 		String expectedSentence2 = "Not not here here.";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2;
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database, false);
+		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database);
 		
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);

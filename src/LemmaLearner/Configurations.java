@@ -4,11 +4,15 @@ public class Configurations implements LearningConfigations, DatabaseConfigurati
 
 	private int maxTimesLemmaShouldBeLearned = 10;
 
-	private int maxNumberOfSentencesToLearn = 12000;
+	private int maxNumberOfSentencesToLearn = 120000;	
+
+	private double SCORE_EXPONENT = 2;
 	
 	private boolean shouldConjugationsBeScored = true;
 	
-	private final boolean shouldLoadSavedTexts = true;
+	private final boolean shouldLoadSavedTexts = false;
+	
+	private final boolean shouldSaveTexts = false;
 	
 	private final boolean shouldPrintText = true;
 	
@@ -23,7 +27,12 @@ public class Configurations implements LearningConfigations, DatabaseConfigurati
 		return shouldPrintText;
 	}
 
-	
+
+	@Override
+	public double getScoreExponent() {
+		return SCORE_EXPONENT;
+	}
+
 	
 	@Override
 	public int getMaxTimesLemmaShouldBeLearned() {
@@ -40,11 +49,14 @@ public class Configurations implements LearningConfigations, DatabaseConfigurati
 		return shouldConjugationsBeScored;
 	}
 
-	
-	
-	
-	
-	
-	
+	@Override
+	public void setScoreExponent(double newExponent) {
+		this.SCORE_EXPONENT = newExponent;
+	}
+
+	@Override
+	public boolean shouldSaveTexts() {
+		return shouldSaveTexts;
+	}
 	
 }

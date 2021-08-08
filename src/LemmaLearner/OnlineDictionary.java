@@ -3,6 +3,7 @@ package LemmaLearner;
 import java.io.*;
 import java.net.*;
 import java.net.http.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
@@ -194,7 +195,7 @@ public class OnlineDictionary {
 		File savedDictionaryData = new File(fileDestination);
 		
 		if (savedDictionaryData.exists() && true) {
-			return Files.readString(savedDictionaryData.toPath());
+			return Files.readString(savedDictionaryData.toPath(), StandardCharsets.UTF_8);
 		} else {
 			String response = getDictionaryWebpage(actualWord);
 			

@@ -3,8 +3,6 @@ package LemmaLearner;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.CharStream;
-
 
 public class LearningProgressPrinter {
 
@@ -52,7 +50,9 @@ public class LearningProgressPrinter {
 		System.out.println("Number of conjugations that have been learned more than " + (i-1) + " times: " + (learnedConjugations.size() - sumNumberOfLemmas));
 	}
 
-	static void printNumberOfTimesLemmasHaveBeenLearned(TextDatabase database) {
+	
+	
+	public static void printNumberOfTimesLemmasHaveBeenLearned(TextDatabase database) {
 		HashMap<Integer, List<Lemma>> timesLemmasHaveBeenLearned = new HashMap<Integer, List<Lemma>>();
 		for (Lemma lemma : database.allLemmas.values()) {
 			if (timesLemmasHaveBeenLearned.containsKey(lemma.getTimesLearned())) {
@@ -169,7 +169,7 @@ public class LearningProgressPrinter {
 
 	public static void printLearnedInformation(List<Pair<Lemma, Sentence>> learningOrder, TextDatabase database) {
 		var learnedWordSentencePair = learningOrder.get(learningOrder.size() - 1);		
-		if (learningOrder.size() <= 1000 || (learningOrder.size()) % 1 == 0) {
+		if (learningOrder.size() <= 2000 || (learningOrder.size()) % 100 == 0) {
 			Paragraph paragraph = learnedWordSentencePair.getSecond().getAParagraph();
 			String rawParagraph;
 			if (paragraph != null) {
@@ -183,6 +183,25 @@ public class LearningProgressPrinter {
 								learnedWordSentencePair.getSecond());
 			System.out.println(learnedWordSentencePair.getSecond().getLemmatizedRawSentence(database));
 			//System.out.println(rawParagraph);
+			System.out.println();
+			
+		}
+		
+		printPercentageOfSentencesFullyKnown(learningOrder, database);
+	}
+
+	private static void printPercentageOfSentencesFullyKnown(List<Pair<Lemma, Sentence>> learningOrder,	TextDatabase database) {
+		if (learningOrder.size() % 3000 == 0) {
+			
+			var learnedLemmas = new HashSet<Lemma>(learningOrder.stream().map(pair -> pair.getFirst()).collect(Collectors.toList()));
+			int numberOfCompletelyKnownSentences = 0;
+			for (var sentence : database.allSentences.values()) {
+				if (sentence.hasNoNewLemmas(learnedLemmas, database))
+					numberOfCompletelyKnownSentences++;
+			}
+			
+			System.out.println("----------->" + numberOfCompletelyKnownSentences + " of " + database.allSentences.size() + " = " + (numberOfCompletelyKnownSentences*1.0 /database.allSentences.size()*100) + "%");
+			
 			System.out.println();
 			
 		}

@@ -1,5 +1,6 @@
 package Tests;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
@@ -14,7 +15,6 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.CharStreams;
 import org.junit.*;
 
 import LemmaLearner.*;
@@ -28,6 +28,14 @@ class TestLemmatizing {
 	Text parsedText;
 	GreedyLearner learner;
 	Configurations config;
+	WiktionaryDictionary dictionary = setUpDictionary();
+	
+	
+	public WiktionaryDictionary setUpDictionary() {
+		var dictionary = new WiktionaryDictionary();
+		dictionary.load();
+		return dictionary;
+	}
 	
 	@BeforeEach
 	public void setUp() {
@@ -40,7 +48,6 @@ class TestLemmatizing {
 	@Test
 	public void testOnlineDictionaryAcceptsActualNoun() throws Exception {
 		String actualWord = "king";
-		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(actualWord, conjugation);
 	}
@@ -49,7 +56,6 @@ class TestLemmatizing {
 	@Test
 	public void testOnlineDictionaryAcceptsActualVerb() throws Exception {
 		String actualWord = "kill";
-		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(actualWord, conjugation);
 	}
@@ -58,7 +64,6 @@ class TestLemmatizing {
 	public void testOnlineDictionaryHandlesNames() throws Exception {
 		String actualWord = "lucas";
 		String nonConjugatedWord = TextDatabase.NOT_A_WORD_STRING;
-		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(nonConjugatedWord, conjugation);
 	}
@@ -68,17 +73,22 @@ class TestLemmatizing {
 	public void testOnlineDictionaryHandlesNounConjugation() throws Exception {
 		String actualWord = "kings";
 		String nonConjugatedWord = "king";
-		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(nonConjugatedWord, conjugation);
 	}
+	
 
+	@Test
+	public void testHandleWeirdWords() throws Exception {
+		String word = "was";
+		String conjugation = dictionary.getLemmaFromConjugation(word);
+		assertEquals(conjugation, word);
+	}
 
 
 	@Test
 	public void testOnlineDictionaryRejectsNonWords() throws Exception {
 		String actualWord = "thisisnotaword";
-		OnlineDictionary dictionary = new OnlineDictionary("English");
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(TextDatabase.NOT_A_WORD_STRING, conjugation);
 	}	
