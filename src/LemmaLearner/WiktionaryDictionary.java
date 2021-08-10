@@ -111,7 +111,7 @@ public class WiktionaryDictionary implements Serializable {
 		if (!word.matches("\\p{L}+"))
 			return;
 		
-		if (!obj.has(conjugationField)  || Character.isUpperCase(word.charAt(0)))
+		if (!obj.has(conjugationField)  || word.chars().anyMatch(x -> Character.isUpperCase(x)))
 			return;
 	
 		//The word must then be a stem/lemma form, as it has conjugations:

@@ -47,8 +47,7 @@ public class Text implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Error("Saving file \"" + savedTextPath + "\" failed.");
-		}
-		
+		}	
 		
 	}
 	

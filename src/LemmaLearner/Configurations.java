@@ -2,7 +2,9 @@ package LemmaLearner;
 
 public class Configurations implements LearningConfigations, DatabaseConfigurations {
 
-	private int maxTimesLemmaShouldBeLearned = 10;
+	private final String language = "english";
+	
+	private int maxTimesLemmaShouldBeLearned = 0;
 
 	private int maxNumberOfSentencesToLearn = 120000;	
 

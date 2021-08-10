@@ -23,35 +23,6 @@ public class GreedyLearner {
 	}
 	
 
-	private void initialize() {
-		orderOfLearnedLemmas = new ArrayList<Pair<Lemma, Sentence>>();
-		learnedLemmas = new HashSet<Lemma>();	
-		seenSentences = new HashSet<Sentence>();
-		LearningProgressPrinter.printLemmasWithHighNumberOfConjugations(database);				
-		lemmasByFrequency = getLemmasByFrequency();
-		directlyLearnableSentencesByFrequency = getDirectlyLearnableSentencesByFrequency(learnedLemmas);
-		
-		sentencesWithRequiredLemmas = new HashMap<List<Lemma>, TreePriorityQueue<Sentence>>();
-		var emptySet = new HashSet<Lemma>();
-		
-		
-		for (Sentence sentence : database.allSentences.values()) {
-			List<Lemma> unlearnedLemmas = sentence.getUnlearnedLemmas(emptySet, database);
-			unlearnedLemmas.sort((l1, l2) -> l1.getRawLemma().compareTo(l2.getRawLemma()));
-			int k = 1;
-			if (0 < unlearnedLemmas.size() ) {
-				if (sentencesWithRequiredLemmas.containsKey(unlearnedLemmas)) {
-					TreePriorityQueue<Sentence> sentenceQueue = sentencesWithRequiredLemmas.get(unlearnedLemmas);
-					sentenceQueue.add(sentence, sentence.getScore(database, config));
-				} else {
-					TreePriorityQueue<Sentence> sentenceQueue = getSentencePriorityQueue();
-					sentenceQueue.add(sentence, sentence.getScore(database, config));
-					sentencesWithRequiredLemmas.put(unlearnedLemmas, sentenceQueue);
-				}
-			}
-		}
-		System.out.println("k");
-	}
 
 	public List<Pair<Lemma, Sentence>> learnAllLemmas() {	
 				
@@ -68,6 +39,15 @@ public class GreedyLearner {
 		
 		//Learns lemmas one by one.
 		while (!hasFinishedLearningLemmas()) {
+			/*
+			if (database.allSentences.get("“Your new digs,” I said.").getUnlearnedLemmas(learnedLemmas, database).size() == 0) {
+				System.out.println("Oh shit");
+				System.out.println(learnedLemmas.size());
+				System.out.println(orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1));
+				System.out.println(directlyLearnableSentencesByFrequency.toList().contains(database.allSentences.get("“Your new digs,” I said.")));
+			}
+			*/
+			
 			if (directlyLearnableSentencesByFrequency.isEmpty())
 				learnLemmaWithoutSentence();
 			else 						
@@ -78,6 +58,36 @@ public class GreedyLearner {
 			LearningProgressPrinter.printFinishedLearningLemmasInformation(absoluteStartTime, orderOfLearnedLemmas, learnedLemmas, database);
 				
 		return orderOfLearnedLemmas;
+	}
+	
+
+	private void initialize() {
+		
+		orderOfLearnedLemmas = new ArrayList<Pair<Lemma, Sentence>>();
+		learnedLemmas = new HashSet<Lemma>();	
+		seenSentences = new HashSet<Sentence>();	
+		lemmasByFrequency = getLemmasByFrequency();
+		directlyLearnableSentencesByFrequency = getDirectlyLearnableSentencesByFrequency(learnedLemmas);
+		
+		sentencesWithRequiredLemmas = new HashMap<List<Lemma>, TreePriorityQueue<Sentence>>();
+		var emptySet = new HashSet<Lemma>();
+		
+		//What was the point of this?
+		for (Sentence sentence : database.allSentences.values()) {
+			List<Lemma> unlearnedLemmas = sentence.getUnlearnedLemmas(emptySet, database);
+			unlearnedLemmas.sort((l1, l2) -> l1.getRawLemma().compareTo(l2.getRawLemma()));
+			if (0 < unlearnedLemmas.size() ) {
+				if (sentencesWithRequiredLemmas.containsKey(unlearnedLemmas)) {
+					TreePriorityQueue<Sentence> sentenceQueue = sentencesWithRequiredLemmas.get(unlearnedLemmas);
+					sentenceQueue.add(sentence, sentence.getScore(database, config));
+				} else {
+					TreePriorityQueue<Sentence> sentenceQueue = getSentencePriorityQueue();
+					sentenceQueue.add(sentence, sentence.getScore(database, config));
+					sentencesWithRequiredLemmas.put(unlearnedLemmas, sentenceQueue);
+				}
+			}
+		}
+		
 	}
 
 
@@ -172,6 +182,7 @@ public class GreedyLearner {
 		//Only sentences which contain the newly learned lemma, will actually be affected.
 		//If there are no longer any new lemmas in them, they should be removed,
 		//but if there is a single new lemma in them, they are a potential candidate for learning that lemma.
+		
 		for (Sentence sentence : newlyLearnedLemma.getSentences()) {
 			if (directlyLearnableSentencesByFrequency.contains(sentence) && sentence.hasNoNewLemmas(learnedLemmas, database)) {
 				directlyLearnableSentencesByFrequency.remove(sentence);

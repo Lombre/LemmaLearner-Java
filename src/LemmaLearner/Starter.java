@@ -10,7 +10,7 @@ public class Starter {
 	public static void main(String[] args) throws Exception {
 		
 		//Settings
-		boolean shouldParseRealText = false;
+		boolean shouldParseRealText = true;
 		
 		Configurations config = new Configurations();
 		
@@ -18,10 +18,6 @@ public class Starter {
 		GreedyLearner learner = new GreedyLearner(textDatabase, config);
 				
 		System.out.println("Start");
-		
-		//ManualParser parser = new ManualParser();
-		//parser.extractSentencesFromFile("Texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle");
-		
 		
 		if (shouldParseRealText) 
 			textDatabase.addAllTextsInFolderToDatabase("Texts");

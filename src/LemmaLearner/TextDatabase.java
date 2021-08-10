@@ -1,5 +1,7 @@
 package LemmaLearner;
 
+import static org.junit.Assert.assertTrue;
+
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
@@ -18,7 +20,7 @@ import Tests.TestTool;
 public class TextDatabase{
 	
 	
-	public static final String NOT_A_WORD_STRING = "NotAWord";
+	public static final String NOT_A_WORD_STRING = "notaword";
 
 	//All texts are assumed to be unique, with no duplicates. Uses text.name.
 	public HashMap<String, Text> allTexts = new HashMap<String, Text>(); 
@@ -29,8 +31,10 @@ public class TextDatabase{
 	public HashMap<String, Sentence> allSentences = new HashMap<String, Sentence>();
 	
 	//Words are not assumed to be unique. Uses word.rawWord as the key.
+	//The word MUST be uncapetilized.
 	public HashMap<String, Conjugation> allWords = new HashMap<String, Conjugation>();
-	
+
+	//The lemma MUST be uncapetilized.
 	public HashMap<String, Lemma> allLemmas = new HashMap<String, Lemma>();
 	
 	private final DatabaseConfigurations config;
@@ -79,7 +83,11 @@ public class TextDatabase{
 	public void initializeLemmas() {
 		Lemmatizer lemmatizer = new Lemmatizer("English");
 		
+		
 		List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
+		
+		
+		/*
 		allConjugations.sort((word1, word2) -> word1.compareTo(word2));
 		//Dur desværre ikke rigtigt :/
 		List<Conjugation> unknownConjugations = allConjugations.stream()
@@ -104,6 +112,11 @@ public class TextDatabase{
 			Conjugation currentConjugation = knownConjugations.get(i);
 			addConjugationToDatabase(lemmatizer, knownConjugations, i, currentConjugation);
 		}
+		*/
+		
+		for (var conjugation : allConjugations) {
+			addConjugationToDatabase(lemmatizer, conjugation);
+		}
 		
 		lemmatizer.save();	
 		if (config.shouldPrintText()) {
@@ -112,8 +125,70 @@ public class TextDatabase{
 			int numberOfConjugations = (allLemmas.containsKey(NOT_A_WORD_STRING))? (allWords.size() - allLemmas.get(NOT_A_WORD_STRING).getConjugations().size()): 0;
 			System.out.println("A total of " + allWords.size() + " words, a total of " + numberOfConjugations + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
 		}
-	}
+		
+		
+		
 
+		
+		//Verify that the database is synchronized:
+		
+		
+		System.out.println(new ArrayList<String>(allLemmas.keySet()).toString());
+		//Words in sentences are in the database:
+		for (Sentence sentence : allSentences.values()) {
+			for	(Conjugation word : sentence.getWordSet(this)) {
+				//It should be the exact same word.
+				assertTrue(allWords.get(word.getRawConjugation()) == word);					
+			}
+			
+			
+			for	(Lemma lemma : sentence.getLemmaSet(this)) {
+				//It should be the exact same word.
+				var databaseLemma = allLemmas.get(lemma.getRawLemma());
+				if (databaseLemma != lemma && !lemma.getRawLemma().equals("notaword")) {
+					System.out.println(lemma);
+					System.out.println(Arrays.asList(lemma.getConjugations().toArray()).toString());
+					
+				}
+				//assertTrue(databaseLemma == lemma);					
+			}
+			
+			
+		}
+		
+		for (var word : allWords.values()) {
+			for (var sentence : word.getSentences()) {
+				//It should be the exact same sentence:
+				assertTrue(allSentences.get(sentence.getRawSentence()) == sentence);
+			}
+		}
+		
+
+		for (var lemma : allLemmas.values()) {
+			for (var sentence : lemma.getSentences()) {
+				//It should be the exact same sentence:
+				assertTrue(allSentences.get(sentence.getRawSentence()) == sentence);
+			}
+		}
+					
+		
+	}
+	
+	private void addConjugationToDatabase(Lemmatizer lemmatizer, Conjugation currentConjugation) {
+		
+		String rawLemma = lemmatizer.getRawLemma(currentConjugation);
+		Lemma currentLemma;
+		if (allLemmas.containsKey(rawLemma))
+			currentLemma = allLemmas.get(rawLemma);
+		else {
+			currentLemma = new Lemma(rawLemma);
+			allLemmas.put(rawLemma, currentLemma);				
+		}
+		currentLemma.addConjugation(currentConjugation);
+		//printLemmatizationProgress(currentConjugation, rawLemma);
+	}          
+	
+	/*
 	private void addConjugationToDatabase(Lemmatizer lemmatizer, List<Conjugation> allConjugations, int i, Conjugation currentConjugation) {
 		var currentSentences = currentConjugation.getSentences();
 		String rawLemma = lemmatizer.getRawLemma(currentConjugation);
@@ -127,6 +202,7 @@ public class TextDatabase{
 		currentLemma.addConjugation(currentConjugation);
 		printLemmatizationProgress(allConjugations.size(), i, currentConjugation, rawLemma);
 	}
+	*/
 
 	private void printLemmatizationProgress(int numberOfConjugations, int i, Conjugation currentConjugation, String rawLemma) {
 		if ((i % 100 == 0 || i < 1000) && config.shouldPrintText()) {
@@ -168,6 +244,8 @@ public class TextDatabase{
 			parsedText.addToDatabase(this);
 			var parsedParagraphs = parsedText.getParagraphs();
 			
+			
+			/*
 			var localAllParagraphs = new ArrayList<Paragraph>();
 			var localAllSentences = new ArrayList<Sentence>();
 			var localAllWords = new ArrayList<Conjugation>();
@@ -194,8 +272,7 @@ public class TextDatabase{
 			
 			for (Conjugation conjugation : localAllWords)
 				conjugation.addToDatabase(this);
-			
-			/*
+			*/
 			
 			List<Sentence> parsedSentences = parsedParagraphs.stream().flatMap(paragraph -> paragraph.getSentences().stream())
 																	  .collect(Collectors.toList());
@@ -205,7 +282,7 @@ public class TextDatabase{
 					  										 .collect(Collectors.toList());
 			parsedWords.forEach(word -> word.addToDatabase(this));
 			
-			*/
+			
 		}
 	}
 	
