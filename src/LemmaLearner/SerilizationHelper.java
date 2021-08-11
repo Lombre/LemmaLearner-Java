@@ -15,11 +15,9 @@ public class SerilizationHelper {
 	
 	public static void save(Object objectToSave, String fileLocation) {
 		try {
-			FSTConfiguration conf = FSTConfiguration.createDefaultConfiguration();
 			FileOutputStream fileOutputStream = new FileOutputStream(fileLocation);
 			FSTObjectOutput out = conf.getObjectOutput(fileOutputStream);
 		    out.writeObject(objectToSave);
-		    // DON'T out.close() when using factory method;
 		    out.flush();
 		    fileOutputStream.close();
 		} catch (Exception e) {

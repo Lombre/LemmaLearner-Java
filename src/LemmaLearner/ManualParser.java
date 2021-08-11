@@ -126,9 +126,8 @@ public class ManualParser {
 			if (isAtStartOfSubsentence(curChar)) {
 				//Parse the subsentence.
 				
-				Character closeCurChar = openCharToCloseChar.get(curChar);
 				
-				int curEndSentenceIndex = rawParagraph.indexOf(closeCurChar, i + 1);
+				int curEndSentenceIndex = getCorrespondingClosingCharPosition(rawParagraph, i);
 				if (curEndSentenceIndex == -1) {
 					//System.out.println("---------> " + rawParagraph);
 					return null;
@@ -173,6 +172,35 @@ public class ManualParser {
 		return paragraph;
 	}
 
+	private int getCorrespondingClosingCharPosition(String rawParagraph, int indexOfOpeningChar) {
+		
+		var openingChar = rawParagraph.charAt(indexOfOpeningChar);
+		var closingChar = openCharToCloseChar.get(openingChar);
+			
+		//If there are nested openings, for example ((())), we need to handle this.
+		//This can be done by counting the openChars
+		
+		var currentPosition = indexOfOpeningChar;
+		var openingCharCount = 1;
+		
+		while (0 < openingCharCount){
+			int indexOfNextOpeningChar = rawParagraph.indexOf(openingChar, currentPosition+1);
+			int indexOfNextClosingChar = rawParagraph.indexOf(closingChar, currentPosition+1);
+			
+			if (indexOfNextClosingChar == -1) 
+				return -1;
+			else if (indexOfNextOpeningChar < indexOfNextClosingChar && indexOfNextOpeningChar != -1) {
+				openingCharCount++;
+				currentPosition = indexOfNextOpeningChar;
+			} else {
+				openingCharCount--;
+				currentPosition = indexOfNextClosingChar;
+			}
+		}		
+		
+		return currentPosition;
+	}
+
 	private static boolean isAtStartOfSubsentence(char curChar) {
 		return openCharToCloseChar.containsKey(curChar);
 	}
@@ -185,15 +213,13 @@ public class ManualParser {
 		return punctuationSet.contains(curChar) && paragraph.charAt(i + 1) == ' ';
 	}
 
-	static String regex = "(?U)[^\\p{Alpha}]+(\'[^\\\\p{Alpha}]+)?";
-	static Pattern pattern = Pattern.compile(regex);
+	
+	private static String regex = "(?U)[^\\p{Alpha}]+(\'[^\\\\p{Alpha}]+)?";
+	private static Pattern pattern = Pattern.compile(regex);
 	private static List<String> getWordsInSentence(String sentence) {
-		//"(?U)[^\\p{Alpha}']+"
-		String regex = "(?U)[^\\p{Alpha}]+(\'[^\\\\p{Alpha}]+)?"; //"(?U)[^\\p{Alpha}']+"; 
 		var wordArray = pattern.split(sentence);
 		var words = new ArrayList<String>(Arrays.asList(wordArray));
 		words.removeIf(word -> word.equals(""));
-		//words.replaceAll(word -> (word.contains("\'")? word.split("'")[0]: word));
 		return words.stream().map(word -> word.toLowerCase()).collect(Collectors.toList());
 	}
 
