@@ -3,7 +3,6 @@ package Tests;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 
 import static org.junit.Assert.*;
 
@@ -28,13 +27,12 @@ class TestLemmatizing {
 	Text parsedText;
 	GreedyLearner learner;
 	Configurations config;
-	WiktionaryDictionary dictionary = setUpDictionary();
+	static WiktionaryDictionary dictionary;
 	
-	
-	public WiktionaryDictionary setUpDictionary() {
-		var dictionary = new WiktionaryDictionary();
+	@BeforeAll
+	public static void setUpDictionary() {
+		dictionary = new WiktionaryDictionary();
 		dictionary.load();
-		return dictionary;
 	}
 	
 	@BeforeEach

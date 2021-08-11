@@ -17,7 +17,6 @@ public class Text implements Serializable{
 	private final String name;
 	private final String rawText; 
 	private final Set<Paragraph> paragraphs;
-	private final static FSTConfiguration conf = FSTConfiguration.createDefaultConfiguration();
 	
 	public Text(String textName, String rawText, List<Paragraph> paragraphs) {
 		this.name = textName;
@@ -37,31 +36,11 @@ public class Text implements Serializable{
 	}
 	
 	public void save(String savedTextPath) {		
-		try {
-			FileOutputStream fileOutputStream = new FileOutputStream(savedTextPath);
-			FSTObjectOutput out = conf.getObjectOutput(fileOutputStream);
-		    out.writeObject( this);
-		    // DON'T out.close() when using factory method;
-		    out.flush();
-		    fileOutputStream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Error("Saving file \"" + savedTextPath + "\" failed.");
-		}	
-		
+		SerilizationHelper.save(this, savedTextPath);
 	}
 	
-	public static Text load(String savedTextPath) throws ClassNotFoundException, IOException {
-		
-		
-		
-	    FileInputStream fileInputStream = new FileInputStream(savedTextPath);
-	    FSTObjectInput in = new FSTObjectInput(fileInputStream);
-	    Text result = (Text) in.readObject();
-	    in.close();
-	    return result;
-	    
-		
+	public static Text load(String savedTextPath) {
+	    return (Text) SerilizationHelper.load(savedTextPath);		
 	}
 
 

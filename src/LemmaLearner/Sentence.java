@@ -123,15 +123,19 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 
 	public int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		Set<Lemma> lemmas = this.getLemmaSet(database);
-		int lemmasInSentence = lemmas.size();
-		lemmas.retainAll(learnedLemmas);
-		int lemmasInSentenceLearned = lemmas.size();
-		int numberOfUnlearnedLemmas = lemmasInSentence - lemmasInSentenceLearned;
+		int numberOfLemmasInSentence = lemmas.size();
+		int numberOfLemmasInSentenceLearned = 0;
+		for (var lemma : lemmas) {
+			if (learnedLemmas.contains(lemma))
+				numberOfLemmasInSentenceLearned++;
+		}
+		int numberOfUnlearnedLemmas = numberOfLemmasInSentence - numberOfLemmasInSentenceLearned;
 		return numberOfUnlearnedLemmas;
 	}
 	
 	public Set<Conjugation> getWordSet(TextDatabase database) {
-		return new HashSet<Conjugation>(getWordList(database));
+		var wordList = getWordList(database);
+		return new HashSet<Conjugation>(wordList);
 	}
 
 	private List<Lemma> getLemmaList(TextDatabase database) {
@@ -147,11 +151,12 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		//					.map(word -> word.getLemma())
 		//					.collect(Collectors.toCollection(HashSet::new));
 		//return lemmaSet;
-		
-		return getWordSet(database).stream()
-									.map(word -> word.getLemma())
-									.collect(Collectors.toCollection(HashSet::new));
-		
+		var wordSet = getWordSet(database);
+		var lemmaSet = new HashSet<Lemma>();
+		for (var word : wordSet) {
+			lemmaSet.add(word.getLemma());
+		}
+		return Collections.unmodifiableSet(lemmaSet);		
 	}
 
 	public List<Conjugation> getWordList(TextDatabase database) {

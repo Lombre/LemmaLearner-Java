@@ -36,24 +36,18 @@ public class WiktionaryDictionary implements Serializable {
 	public String getLemmaFromConjugation(String conjugation) {
 		if (conjugationToLemma.containsKey(conjugation)) {
 			var lemmas = conjugationToLemma.get(conjugation);
-			if (3 <= lemmas.size()) {				
-				System.out.println(conjugation + " -> " + lemmas);
-			}
 			
 			if (lemmas.contains(conjugation)) {
 				if (lemmas.size() == 2) {
 					var otherLemmas = new TreeSet(lemmas);
 					otherLemmas.remove(conjugation);
 					return (String) otherLemmas.toArray()[0];					
-				}
-				else {
+				} else {
 					return conjugation;
 				}
-			} 
-			else 
+			} else 
 				return (String) lemmas.toArray()[0];
-		}
-		else return TextDatabase.NOT_A_WORD_STRING;
+		} else return TextDatabase.NOT_A_WORD_STRING;
 	}
 	
 
@@ -176,19 +170,7 @@ public class WiktionaryDictionary implements Serializable {
 
 	
 	public void save() {
-		try {
-			FSTConfiguration conf = FSTConfiguration.createDefaultConfiguration();
-			FileOutputStream fileOutputStream = new FileOutputStream(SAVED_DICTIONARY_PATH);
-			FSTObjectOutput out = conf.getObjectOutput(fileOutputStream);
-		    out.writeObject(conjugationToLemma);
-		    // DON'T out.close() when using factory method;
-		    out.flush();
-		    fileOutputStream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Error("Saving file \"" + SAVED_DICTIONARY_PATH + "\" failed.");
-		}		
-		
+		SerilizationHelper.save(conjugationToLemma, SAVED_DICTIONARY_PATH);
 	}
 	
 	
@@ -213,12 +195,9 @@ public class WiktionaryDictionary implements Serializable {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	private TreeMap<String, Set<String>> loadSavedDictionary() throws Exception {
-		FileInputStream fileInputStream = new FileInputStream(SAVED_DICTIONARY_PATH);
-	    FSTObjectInput in = new FSTObjectInput(fileInputStream);
-	    TreeMap<String, Set<String>> result = (TreeMap<String, Set<String>>) in.readObject();
-	    in.close();
-	    return result;
+	    return (TreeMap<String, Set<String>>) SerilizationHelper.load(SAVED_DICTIONARY_PATH);
 	}
 
 	

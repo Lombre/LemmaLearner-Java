@@ -82,95 +82,21 @@ public class TextDatabase{
 
 	public void initializeLemmas() {
 		Lemmatizer lemmatizer = new Lemmatizer("English");
-		
-		
-		List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
-		
-		
-		/*
-		allConjugations.sort((word1, word2) -> word1.compareTo(word2));
-		//Dur desværre ikke rigtigt :/
-		List<Conjugation> unknownConjugations = allConjugations.stream()
-															   .filter(con -> !lemmatizer.knowsConjugation(con.getRawConjugation()))
-															   .collect(Collectors.toList());
-		
-
-		List<Conjugation> knownConjugations = allConjugations.stream()
-															 .filter(con -> lemmatizer.knowsConjugation(con.getRawConjugation()))
-															 .collect(Collectors.toList());
-		System.out.println();
-		System.out.println("Number of new words: " + unknownConjugations.size());
-		System.out.println("Number of known words: " + knownConjugations.size());
-		System.out.println();
-		
-		for (int i = 0; i < unknownConjugations.size(); i++) {
-			Conjugation currentConjugation = unknownConjugations.get(i);
-			addConjugationToDatabase(lemmatizer, unknownConjugations, i, currentConjugation);
-		}
-		
-		for (int i = 0; i < knownConjugations.size(); i++) {
-			Conjugation currentConjugation = knownConjugations.get(i);
-			addConjugationToDatabase(lemmatizer, knownConjugations, i, currentConjugation);
-		}
-		*/
-		
-		for (var conjugation : allConjugations) {
+				
+		//List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
+				
+		for (var conjugation : allWords.values()) {
 			addConjugationToDatabase(lemmatizer, conjugation);
 		}
 		
 		lemmatizer.save();	
+		
 		if (config.shouldPrintText()) {
 			System.out.println("Total number of sentences: " + allSentences.size());
 			System.out.println("Total number of words: " + allSentences.values().stream().map(x -> x.getLemmaSet(this).size()).reduce(0, (x, y) -> x + y));
 			int numberOfConjugations = (allLemmas.containsKey(NOT_A_WORD_STRING))? (allWords.size() - allLemmas.get(NOT_A_WORD_STRING).getConjugations().size()): 0;
 			System.out.println("A total of " + allWords.size() + " words, a total of " + numberOfConjugations + " unique conjugations and " + allLemmas.size() + " lemmas are found in all the texts combined.");		
-		}
-		
-		
-		
-
-		
-		//Verify that the database is synchronized:
-		
-		
-		System.out.println(new ArrayList<String>(allLemmas.keySet()).toString());
-		//Words in sentences are in the database:
-		for (Sentence sentence : allSentences.values()) {
-			for	(Conjugation word : sentence.getWordSet(this)) {
-				//It should be the exact same word.
-				assertTrue(allWords.get(word.getRawConjugation()) == word);					
-			}
-			
-			
-			for	(Lemma lemma : sentence.getLemmaSet(this)) {
-				//It should be the exact same word.
-				var databaseLemma = allLemmas.get(lemma.getRawLemma());
-				if (databaseLemma != lemma && !lemma.getRawLemma().equals("notaword")) {
-					System.out.println(lemma);
-					System.out.println(Arrays.asList(lemma.getConjugations().toArray()).toString());
-					
-				}
-				//assertTrue(databaseLemma == lemma);					
-			}
-			
-			
-		}
-		
-		for (var word : allWords.values()) {
-			for (var sentence : word.getSentences()) {
-				//It should be the exact same sentence:
-				assertTrue(allSentences.get(sentence.getRawSentence()) == sentence);
-			}
-		}
-		
-
-		for (var lemma : allLemmas.values()) {
-			for (var sentence : lemma.getSentences()) {
-				//It should be the exact same sentence:
-				assertTrue(allSentences.get(sentence.getRawSentence()) == sentence);
-			}
-		}
-					
+		}					
 		
 	}
 	

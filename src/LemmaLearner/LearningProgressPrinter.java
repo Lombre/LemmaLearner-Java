@@ -187,7 +187,7 @@ public class LearningProgressPrinter {
 			
 		}
 		
-		printPercentageOfSentencesFullyKnown(learningOrder, database);
+		//printPercentageOfSentencesFullyKnown(learningOrder, database);
 	}
 
 	private static void printPercentageOfSentencesFullyKnown(List<Pair<Lemma, Sentence>> learningOrder,	TextDatabase database) {
