@@ -1,20 +1,14 @@
 package LemmaLearner;
 
-import static org.junit.Assert.assertTrue;
-
-import java.awt.*;
 import java.io.*;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.List;
-import java.util.stream.Collector;
+import java.util.concurrent.atomic.*;
 import java.util.stream.Collectors;
 
-import javax.swing.*;
-
-import org.nustaq.serialization.FSTConfiguration;
-
-import Tests.TestTool;
+import Configurations.Configurations;
+import Configurations.DatabaseConfigurations;
+import Lemmatization.Lemmatizer;
+import TextDataStructures.*;
 
 
 public class TextDatabase{
@@ -49,28 +43,40 @@ public class TextDatabase{
 		
 		List<File> textFilesInFolder = getTextFilesInFolder(folderLocation);
 		
-		//We want to measure the time taken to parse all the texts.
-		long absoluteStartTime = System.currentTimeMillis();		
-		long totalFileSpaceConsumption = textFilesInFolder.stream()
-											  .map(file -> file.length())
-											  .reduce(0L, (subtotal, element) -> subtotal + element);
-		long accumulatedFileSpaceConsumption = 0L;		
+		if (config.shouldPrintText())
+			System.out.println(textFilesInFolder.size() + " texts in folder " + folderLocation + ".");
 		
-		for (int i = 0; i < textFilesInFolder.size(); i++) {
-			File subfile = textFilesInFolder.get(i);
+		
+		//We want to measure the time taken to parse all the texts.
+		AtomicLong absoluteStartTime = new AtomicLong(System.currentTimeMillis());		
+		AtomicLong totalFileSpaceConsumption = new AtomicLong(textFilesInFolder.stream()
+															  .map(file -> file.length())
+															  .reduce(0L, (subtotal, element) -> subtotal + element));
+		AtomicLong accumulatedFileSpaceConsumption = new AtomicLong(0);			
+		AtomicInteger parsedTextCounter = new AtomicInteger(0);
+		
+		List<Text> parsedTexts = textFilesInFolder.stream()
+						 			  			  .map(textFile -> parseTextFile(textFile, parsedTextCounter, totalFileSpaceConsumption, accumulatedFileSpaceConsumption))
+						 			  			  .collect(Collectors.toList());
+		parsedTexts.forEach(text -> text.filterUnlearnableSentences());
+		parsedTexts.forEach(text -> addTextToDatabase(text));
 			
-			if (config.shouldPrintText())
-				printProgressInAddingTextsToDatabase(textFilesInFolder, totalFileSpaceConsumption, accumulatedFileSpaceConsumption, i, subfile);
-			accumulatedFileSpaceConsumption += subfile.length();
-			
-			parseTextAndAddToDatabase(subfile);
-		}
 		
 		initializeLemmas();
 		
 		if (config.shouldPrintText())
-			printAllTextsAddedToDatabaseInformation(absoluteStartTime);
+			printAllTextsAddedToDatabaseInformation(absoluteStartTime.get());
 		
+	}
+
+	private Text parseTextFile(File textFile, AtomicInteger parsedTextCount, AtomicLong totalFileSpaceConsumption, AtomicLong accumulatedFileSpaceConsumption) {
+		
+		if (config.shouldPrintText())
+			printProgressInAddingTextsToDatabase(textFile, parsedTextCount, totalFileSpaceConsumption, accumulatedFileSpaceConsumption);
+		accumulatedFileSpaceConsumption.addAndGet(textFile.length());
+		Text text = parseTextFile(textFile);
+		parsedTextCount.incrementAndGet();
+		return text;
 	}
 
 	private List<File> getTextFilesInFolder(String folderLocation) {
@@ -81,7 +87,7 @@ public class TextDatabase{
 	}
 
 	public void initializeLemmas() {
-		Lemmatizer lemmatizer = new Lemmatizer("English");
+		Lemmatizer lemmatizer = new Lemmatizer(config.getLanguage());
 				
 		//List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
 				
@@ -111,15 +117,6 @@ public class TextDatabase{
 		}
 		currentLemma.addConjugation(currentConjugation);
 	}          
-	
-
-	private void printLemmatizationProgress(int numberOfConjugations, int i, Conjugation currentConjugation, String rawLemma) {
-		if ((i % 100 == 0 || i < 1000) && config.shouldPrintText()) {
-			System.out.println("Looking at word " + i + " of " + numberOfConjugations + " \"" + currentConjugation.getRawConjugation() + "\".");		
-		    System.out.println("Word \"" + currentConjugation.getRawConjugation() + "\" has lemma \"" + rawLemma + "\".");
-		    System.out.println();
-		}
-	}
 
 	private void printAllTextsAddedToDatabaseInformation(long absoluteStartTime) {
 		long absoluteEndTime = System.currentTimeMillis();
@@ -128,12 +125,11 @@ public class TextDatabase{
 
 	}
 
-	private void printProgressInAddingTextsToDatabase(List<File> textFilesInFolder, long totalFileSpaceConsumption,
-			long accumulatedFileSpaceConsumption, int i, File subfile) {
+	private void printProgressInAddingTextsToDatabase(File textFile, AtomicInteger parsedTextCount, AtomicLong totalFileSpaceConsumption, AtomicLong accumulatedFileSpaceConsumption) {
 		
-		float percentSpaceAnalyzed = ((((float) accumulatedFileSpaceConsumption)/totalFileSpaceConsumption) * 100);
+		float percentSpaceAnalyzed = ((((float) accumulatedFileSpaceConsumption.get())/totalFileSpaceConsumption.get()) * 100);
 		System.out.println("Parsed " +  String.format("%.2f", percentSpaceAnalyzed) + " % of all text, in terms of space.");
-		System.out.println("Analysing text " + (i+1) + " of " + textFilesInFolder.size() + ", " + subfile.getName());
+		System.out.println("Analysing text " + (parsedTextCount.get()+1) + ", " + textFile.getName());
 	}
 
 	@SuppressWarnings("IOException")
@@ -189,9 +185,13 @@ public class TextDatabase{
 		}
 		//If the loading failed, or if the text shouldn't be loaded, simply read it:
 
-		ManualParser parser = new ManualParser();
+		ManualParser parser = new ManualParser((Configurations) config);
 		Text parsedText = parser.parseFile(subfile);	
 		return parsedText;				
+	}
+	
+	private void filterUnlearnableSentences(Text text) {
+		
 	}
 
 	private String getSavedTextFileName(File subfile) {
@@ -206,7 +206,7 @@ public class TextDatabase{
 		
 	
 	public Text parseRawText(String textName, String rawText) {
-		final ManualParser parser = new ManualParser();
+		final ManualParser parser = new ManualParser((Configurations) config);
 		return parser.parseRawText(textName, rawText);
 	}
 

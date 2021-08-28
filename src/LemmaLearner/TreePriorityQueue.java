@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 import LemmaLearner.*;
 
 public class TreePriorityQueue<E> {
-	TreeSet<Pair<List<E>, Double>> treeSet;
+	TreeSet<SortablePair<List<E>, Double>> treeSet;
 	//Primarily used for removing elements
-	HashMap<E, Pair<List<E>, Double>> elementToPair = new HashMap<E, Pair<List<E>, Double>>();
+	HashMap<E, SortablePair<List<E>, Double>> elementToPair = new HashMap<E, SortablePair<List<E>, Double>>();
 	//Primarily used for adding elements
-	HashMap<Double, Pair<List<E>, Double>> scoreToPair = new HashMap<Double, Pair<List<E>, Double>>();
+	HashMap<Double, SortablePair<List<E>, Double>> scoreToPair = new HashMap<Double, SortablePair<List<E>, Double>>();
 	
 	public TreePriorityQueue(Comparator<? super Double> comparator) {
 		//The comparetor looks at the Double of the pairs in the treeset.
-		treeSet = new TreeSet<Pair<List<E>, Double>>((pair1, pair2) -> comparator.compare(pair1.getSecond(), pair2.getSecond()));
+		treeSet = new TreeSet<SortablePair<List<E>, Double>>((pair1, pair2) -> comparator.compare(pair1.getSecond(), pair2.getSecond()));
 	} 
 	
 	public E poll() {
@@ -62,14 +62,14 @@ public class TreePriorityQueue<E> {
 	
 	public boolean remove(E o) {
 		E element = (E) o;
-		Pair<List<E>, Double> listWithScore = elementToPair.get(element);
+		SortablePair<List<E>, Double> listWithScore = elementToPair.get(element);
 		treeSet.remove(listWithScore);
 		scoreToPair.remove(listWithScore.getSecond());
 		elementToPair.remove(element);
 		listWithScore.getFirst().remove(element);
 		if (0 < listWithScore.getFirst().size()) {
 			//The list needs to get added back in:
-			Pair<List<E>, Double> updatedListWithScore = listWithScore;
+			SortablePair<List<E>, Double> updatedListWithScore = listWithScore;
 			scoreToPair.put(updatedListWithScore.getSecond(), updatedListWithScore);
 			treeSet.add(updatedListWithScore);
 		}				
@@ -88,7 +88,7 @@ public class TreePriorityQueue<E> {
 		  if (!elementToPair.containsKey(e)) 
 			  throw new Error("Element " + e + " cannot be replaced, as it is not contained in the queue to start with.");
 		  remove(e); 
-		  Pair<E, Double> newPair = new Pair<E, Double>(e, score); 		
+		  SortablePair<E, Double> newPair = new SortablePair<E, Double>(e, score); 		
 		  add(e, score);
 		  return true; 
 		 
@@ -104,7 +104,7 @@ public class TreePriorityQueue<E> {
 			//A new list needs to be created.
 			List<E> singeltonList = new ArrayList<E>();
 			singeltonList.add(e);
-			var listWithScore = new Pair<List<E>, Double>(singeltonList, score);
+			var listWithScore = new SortablePair<List<E>, Double>(singeltonList, score);
 			treeSet.add(listWithScore);
 			elementToPair.put(e, listWithScore);
 			scoreToPair.put(score, listWithScore);

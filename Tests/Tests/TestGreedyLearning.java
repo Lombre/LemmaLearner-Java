@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 
+import Configurations.Configurations;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -17,6 +19,9 @@ import java.util.stream.Collectors;
 import org.junit.*;
 
 import LemmaLearner.*;
+import TextDataStructures.Lemma;
+import TextDataStructures.Sentence;
+import TextDataStructures.Text;
 
 
 
@@ -104,7 +109,7 @@ class TestGreedyLearning {
 		
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
-		//Initalially the lemas should give a score of 1 each, as that are their frequencies.
+		//Initially the lemmas should give a score of 1 each, as that are their frequencies.
 		assertEquals(1+1+1, learnedSentence.getScore(database, config), 0.001);
 		
 		Lemma lemma1 = database.allLemmas.get(rawLemma1);
@@ -164,7 +169,7 @@ class TestGreedyLearning {
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
 		database.parseTextAndAddToDatabase(fileToParse);
 		database.initializeLemmas();
-		List<Pair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
+		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
 			var currentLemma = learningOrder.get(i).getFirst();
 			var currentSentence = learningOrder.get(i).getSecond();
@@ -192,7 +197,7 @@ class TestGreedyLearning {
 		//Thus each new sentence must contain exactly one new lemma.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
 		TestTool.parseText(fileToParse, database);
-		List<Pair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
+		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		//Is notaword lemma.
 		learnedLemmas.add(learningOrder.get(0).getFirst());

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Configurations.Configurations;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 import org.junit.*;
 
 import LemmaLearner.*;
+import Lemmatization.WiktionaryDictionary;
+import TextDataStructures.Text;
 
 
 
@@ -31,7 +35,7 @@ class TestLemmatizing {
 	
 	@BeforeAll
 	public static void setUpDictionary() {
-		dictionary = new WiktionaryDictionary();
+		dictionary = new WiktionaryDictionary("english");
 		dictionary.load();
 	}
 	
@@ -90,5 +94,18 @@ class TestLemmatizing {
 		String conjugation = dictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(TextDatabase.NOT_A_WORD_STRING, conjugation);
 	}	
+	
+
+	@Test
+	public void testOtherLanguages() throws Exception {
+		var otherLanguageDictionary = new WiktionaryDictionary("danish");
+		//Lemmatizer lemmatizer = new Lemmatizer("danish");
+		otherLanguageDictionary.load();
+		String actualWord = "kåbe";
+		String expectedLemma = "kåbe";
+		String conjugation = otherLanguageDictionary.getLemmaFromConjugation(actualWord);
+		assertEquals(expectedLemma, conjugation);
+	}	
+	
 
 }

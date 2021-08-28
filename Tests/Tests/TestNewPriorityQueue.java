@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 
+import Configurations.Configurations;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 import org.junit.*;
 
 import LemmaLearner.*;
+import TextDataStructures.Sentence;
+import TextDataStructures.Text;
 
 
 

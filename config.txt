@@ -1,0 +1,18 @@
+Language = English
+
+MaxNumberOfSentencesToLearn = 120000
+
+MaxTimesLemmaShouldBeLearned = 10
+
+ScoreExponent = 2
+
+ShouldConjugationsBeScored = True
+
+ShouldLoadDictionary = True
+
+ShouldLoadSavedTexts = False
+
+ShouldPrintText = True
+
+ShouldSaveTexts = False
+

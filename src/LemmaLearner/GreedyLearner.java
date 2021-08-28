@@ -2,10 +2,15 @@ package LemmaLearner;
 
 import java.util.*;
 
+import Configurations.LearningConfigations;
+import TextDataStructures.Conjugation;
+import TextDataStructures.Lemma;
+import TextDataStructures.Sentence;
+
 public class GreedyLearner {
 	
 	private TextDatabase database;
-	private List<Pair<Lemma, Sentence>> orderOfLearnedLemmas;
+	private List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas;
 	private Set<Lemma> learnedLemmas;
 	private Set<Sentence> seenSentences;
 	private PriorityQueue<Lemma> lemmasByFrequency;
@@ -24,7 +29,7 @@ public class GreedyLearner {
 	
 
 
-	public List<Pair<Lemma, Sentence>> learnAllLemmas() {	
+	public List<SortablePair<Lemma, Sentence>> learnAllLemmas() {	
 				
 		long absoluteStartTime = System.currentTimeMillis();
 		initialize();
@@ -63,7 +68,7 @@ public class GreedyLearner {
 
 	private void initialize() {
 		
-		orderOfLearnedLemmas = new ArrayList<Pair<Lemma, Sentence>>();
+		orderOfLearnedLemmas = new ArrayList<SortablePair<Lemma, Sentence>>();
 		learnedLemmas = new HashSet<Lemma>();	
 		seenSentences = new HashSet<Sentence>();	
 		lemmasByFrequency = getLemmasByFrequency();
@@ -196,10 +201,6 @@ public class GreedyLearner {
 
 	private Lemma learnLemmaFromDirectlyLearnableSentence(Sentence directlyLearnableSentence) {
 		var unlearnedLemmas = directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database); 
-		if (unlearnedLemmas.size() == 0) {
-			int i = 1;			
-			System.out.println(directlyLearnableSentence);
-		}
 		Lemma lemmaToLearn = unlearnedLemmas.get(0);
 		learnLemma(directlyLearnableSentence, lemmaToLearn);		
 		updateSentencesAssociatedWithLemmasInSentence(directlyLearnableSentence);		
@@ -234,7 +235,7 @@ public class GreedyLearner {
 		
 		lemmasByFrequency.remove(lemmaToLearn);
 		
-		orderOfLearnedLemmas.add(new Pair<Lemma, Sentence>(lemmaToLearn, directlyLearnableSentence));
+		orderOfLearnedLemmas.add(new SortablePair<Lemma, Sentence>(lemmaToLearn, directlyLearnableSentence));
 		if (config.shouldPrintText())
 			LearningProgressPrinter.printLearnedInformation(orderOfLearnedLemmas, database);
 		updateDirectlyLearnableSentences(lemmaToLearn);			

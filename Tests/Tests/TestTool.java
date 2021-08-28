@@ -21,6 +21,8 @@ import javax.swing.JScrollPane;
 import org.junit.*;
 
 import LemmaLearner.*;
+import TextDataStructures.Sentence;
+import TextDataStructures.Text;
 
 
 public class TestTool {

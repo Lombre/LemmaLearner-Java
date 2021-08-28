@@ -3,6 +3,10 @@ package LemmaLearner;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import TextDataStructures.Conjugation;
+import TextDataStructures.Lemma;
+import TextDataStructures.Sentence;
+
 
 public class LearningProgressPrinter {
 
@@ -77,7 +81,7 @@ public class LearningProgressPrinter {
 		System.out.println();
 	}
 
-	public static void printFinishedLearningLemmasInformation(long absoluteStartTime, List<Pair<Lemma, Sentence>> learningOrder, Set<Lemma> learnedLemmas, TextDatabase database) {
+	public static void printFinishedLearningLemmasInformation(long absoluteStartTime, List<SortablePair<Lemma, Sentence>> learningOrder, Set<Lemma> learnedLemmas, TextDatabase database) {
 		
 		List<Lemma> lemmasLearnedFromSentences = learningOrder.stream()
 															.filter(pair -> !pair.getSecond().getRawSentence().equals(GreedyLearner.NOT_A_SENTENCE_STRING))
@@ -97,7 +101,7 @@ public class LearningProgressPrinter {
 		//printerNumberOfTimesLemmasHaveBeenLearned(learningOrder);
 	}
 
-	private static void printerNumberOfTimesLemmasHaveBeenLearned(List<Pair<Lemma, Sentence>> learningOrder) {
+	private static void printerNumberOfTimesLemmasHaveBeenLearned(List<SortablePair<Lemma, Sentence>> learningOrder) {
 		for (int i = 0; i < learningOrder.size(); i++) {
 			Lemma lemma = learningOrder.get(i).getFirst();
 			System.out.println((i+1) + ") " + lemma + " -> " + lemma.getTimesLearned());
@@ -107,7 +111,7 @@ public class LearningProgressPrinter {
 	private static void printerNumberOfIgnorableSentences(TextDatabase database) {
 		//A test of methods to filter out redundant sentences, to minimize computation time.
 		
-		HashSet<Pair<Lemma, Lemma>> seenLemmaPairs = new HashSet<Pair<Lemma, Lemma>>();
+		HashSet<SortablePair<Lemma, Lemma>> seenLemmaPairs = new HashSet<SortablePair<Lemma, Lemma>>();
 		HashMap<Lemma, Integer> timesLemmaSeen = new HashMap<Lemma, Integer>();
 		database.allLemmas.values().stream().forEach(lemma -> timesLemmaSeen.put(lemma, 0));
 		int ignorableSentences = 0;
@@ -139,10 +143,10 @@ public class LearningProgressPrinter {
 	
 
 
-	private static boolean containOnlyRedundantLemmaPairs(HashSet<Pair<Lemma, Lemma>> seenLemmaPairs, List<Lemma> sentenceLemmas) {
+	private static boolean containOnlyRedundantLemmaPairs(HashSet<SortablePair<Lemma, Lemma>> seenLemmaPairs, List<Lemma> sentenceLemmas) {
 		for (int i = 0; i < sentenceLemmas.size(); i++) {
 			for (int j = i + 1; j < sentenceLemmas.size(); j++) {
-				var lemmaPair1 = new Pair<Lemma, Lemma>(sentenceLemmas.get(i), sentenceLemmas.get(j));
+				var lemmaPair1 = new SortablePair<Lemma, Lemma>(sentenceLemmas.get(i), sentenceLemmas.get(j));
 				//var lemmaPair2 = new Pair<Lemma, Lemma>(sentenceLemmas.get(j), sentenceLemmas.get(i));
 				if (!seenLemmaPairs.contains(lemmaPair1)) {
 					return false;
@@ -153,11 +157,11 @@ public class LearningProgressPrinter {
 	}
 	
 
-	private static void addPairsOfLemmasToSeenLemmaPairs(HashSet<Pair<Lemma, Lemma>> seenLemmaPairs, List<Lemma> sentenceLemmas) {
+	private static void addPairsOfLemmasToSeenLemmaPairs(HashSet<SortablePair<Lemma, Lemma>> seenLemmaPairs, List<Lemma> sentenceLemmas) {
 		for (int i = 0; i < sentenceLemmas.size(); i++) {
 			for (int j = i + 1; j < sentenceLemmas.size(); j++) {
-				var lemmaPair1 = new Pair<Lemma, Lemma>(sentenceLemmas.get(i), sentenceLemmas.get(j));
-				var lemmaPair2 = new Pair<Lemma, Lemma>(sentenceLemmas.get(j), sentenceLemmas.get(i));
+				var lemmaPair1 = new SortablePair<Lemma, Lemma>(sentenceLemmas.get(i), sentenceLemmas.get(j));
+				var lemmaPair2 = new SortablePair<Lemma, Lemma>(sentenceLemmas.get(j), sentenceLemmas.get(i));
 				if (!seenLemmaPairs.contains(lemmaPair1)) {
 					seenLemmaPairs.add(lemmaPair1);
 					seenLemmaPairs.add(lemmaPair2);
@@ -167,21 +171,19 @@ public class LearningProgressPrinter {
 	}
 
 
-	public static void printLearnedInformation(List<Pair<Lemma, Sentence>> learningOrder, TextDatabase database) {
-		var learnedWordSentencePair = learningOrder.get(learningOrder.size() - 1);		
+	public static void printLearnedInformation(List<SortablePair<Lemma, Sentence>> learningOrder, TextDatabase database) {
 		if (learningOrder.size() <= 2000 || (learningOrder.size()) % 100 == 0) {
-			Paragraph paragraph = learnedWordSentencePair.getSecond().getAParagraph();
-			String rawParagraph;
-			if (paragraph != null) {
-				rawParagraph = paragraph.getRawParagraph();
-			} else {
-				rawParagraph = "No paragraph.";
+			var learnedWordSentencePair = learningOrder.get(learningOrder.size() - 1);		
+			var word = learnedWordSentencePair.getFirst();
+			var sentence = learnedWordSentencePair.getSecond();
+			
+			System.out.println((learningOrder.size()) + ", " + word + ", " + word.getFrequency() + ": " + sentence);
+			var originParagraph = sentence.getAParagraph();
+			if (originParagraph != null) {
+				var originText = originParagraph.getOriginText();
+				System.out.println("From: " + originText.getName());				
 			}
-			System.out.println((learningOrder.size()) + ", " +  
-								learnedWordSentencePair.getFirst() + ", " + 
-								learnedWordSentencePair.getFirst().getFrequency() + ": " + 
-								learnedWordSentencePair.getSecond());
-			System.out.println(learnedWordSentencePair.getSecond().getLemmatizedRawSentence(database));
+			System.out.println(sentence.getLemmatizedRawSentence(database));
 			//System.out.println(rawParagraph);
 			System.out.println();
 			
@@ -190,7 +192,7 @@ public class LearningProgressPrinter {
 		//printPercentageOfSentencesFullyKnown(learningOrder, database);
 	}
 
-	private static void printPercentageOfSentencesFullyKnown(List<Pair<Lemma, Sentence>> learningOrder,	TextDatabase database) {
+	private static void printPercentageOfSentencesFullyKnown(List<SortablePair<Lemma, Sentence>> learningOrder,	TextDatabase database) {
 		if (learningOrder.size() % 3000 == 0) {
 			
 			var learnedLemmas = new HashSet<Lemma>(learningOrder.stream().map(pair -> pair.getFirst()).collect(Collectors.toList()));

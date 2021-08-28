@@ -12,33 +12,76 @@ import java.util.regex.*;
 import java.util.stream.*;
 import org.json.*;
 
+import Configurations.ParsingConfigurations;
+import TextDataStructures.Paragraph;
+import TextDataStructures.Sentence;
+import TextDataStructures.Text;
+
 
 //https://kaikki.org/dictionary/
 public class ManualParser {
 	
-	private final static TreeMap<Character, Character> openCharToCloseChar = new TreeMap<Character, Character>(){{
+	private ParsingConfigurations config;
+	
+	private final Map<Character, Character> openCharToCloseChar = new TreeMap<Character, Character>(){{
 		put('\"', '\"'); 
 		put('(',')');
 		put('[', ']');
 		put('“', '”');
 		put('‘', '’');
+		put('„', '“');
 	}};
 	
-	private final static TreeSet<Character> punctuationSet = new TreeSet<Character>(){{
+	private final Set<Character> punctuationSet = new TreeSet<Character>(){{
 		add('.'); add('?'); add('!');		
 	}};
 
+	private final Set<String> abbreviationSet;
+
 	private final String newlines = "[\n\r]";
 	
+	public ManualParser(ParsingConfigurations configurations) {
+		this.config = configurations;
+		abbreviationSet = loadAbbreviations();
+	}	
+	
+
+
+	private Set<String> loadAbbreviations() {
+		List<String> rawAbbreviations;
+		String filePath = "Abbreviations/" + config.getLanguage() + ".txt";
+		try {
+			rawAbbreviations = Files.readAllLines(Path.of(filePath));
+		} catch (IOException e) {
+			System.out.println("No relevant abbreviations file found at: " + filePath);
+			return new TreeSet<String>();
+		}
+		
+		Set<String> abbreviations = new TreeSet<String>();
+		for (String abbreviation : rawAbbreviations) {
+			if (abbreviation.charAt(abbreviation.length() - 1) != '.') {
+				System.out.println("Abbreviations must end with a '.', see: " + abbreviation);
+				continue;
+			} else {
+				//No matter what is written in the abbreviation file, 
+				//we include different versions of the same abbreviation.
+				abbreviations.add(abbreviation.toLowerCase());
+				abbreviations.add(abbreviation.toUpperCase());
+				abbreviations.add(abbreviation.toUpperCase().charAt(0) + abbreviation.substring(1).toLowerCase());
+			}
+		}
+		
+		return abbreviations;
+	}
+
 	
 	public Text parseFile(final File file){
-		String fileName = Path.of(file.getPath()).toString();
 		String rawText;
 		try {
 			rawText = Files.readString(Path.of(file.getPath()),  StandardCharsets.UTF_8);
 		} catch (IOException e) {			
 			e.printStackTrace();
-			return null;
+			throw new Error("Error when trying to parse Wikitionary file: " + file.toString());
 		}	
 		
 		String textName = file.getName();
@@ -64,7 +107,6 @@ public class ManualParser {
 			System.out.println();
 			i++;
 		}
-		
 		
 		TreeSet<String> allWords = new TreeSet<String>();
 		paragraphs.forEach(paragraph -> 
@@ -100,6 +142,7 @@ public class ManualParser {
 		return input;
 	}
 	
+	private static int numberOfAbbreviations = 0;
 	private Paragraph getParagraphFromRawParagraph(String rawParagraph, String textName) {
 		
 		int curPositionInSentence = 0;
@@ -107,10 +150,7 @@ public class ManualParser {
 		
 		
 		
-		List<Sentence> sentences = new ArrayList<Sentence>();
-		
-		
-		
+		List<Sentence> sentences = new ArrayList<Sentence>();		
 		List<String> rawWords = new ArrayList<String>();
 		List<Paragraph> subParagraphs = new ArrayList<Paragraph>();
 				
@@ -124,34 +164,22 @@ public class ManualParser {
 			char curChar = rawParagraph.charAt(i);
 			
 			if (isAtStartOfSubsentence(curChar)) {
-				//Parse the subsentence.
+				//Parse the subsentence. Like some in parenthesis.				
 				
-				
-				int curEndSentenceIndex = getCorrespondingClosingCharPosition(rawParagraph, i);
-				if (curEndSentenceIndex == -1) {
-					//System.out.println("---------> " + rawParagraph);
+				i = extractSubSentences(rawParagraph, textName, curPositionInSentence, sentences, rawWords, subParagraphs, i);	
+				if (i == -1) //It was unparsable
 					return null;
-				}
 				
-				
-				//Add all the words before the subsentences
-				var startRawSentence = rawParagraph.substring(curPositionInSentence, i);
-				rawWords.addAll(getWordsInSentence(startRawSentence));
-				var rawSubParagraph = rawParagraph.substring(i + 1, curEndSentenceIndex);
-				var subParagraph= getParagraphFromRawParagraph(rawSubParagraph, textName + "_" + sentences.size() + "_" + subParagraphs.size());
-				if (subParagraph == null) 
-					return null;
-				subParagraphs.add(subParagraph);
-				
-				for (var sentence: subParagraph.getSentences())
-					rawWords.addAll(sentence.getRawWordList());				
-				i = curEndSentenceIndex;
-				
-				curPositionInSentence = i + 1;				
-			} 
-			
-			
-			if (isAtEndOfSentence(rawParagraph, i) || isAtPunctuation(rawParagraph, i, curChar)) {
+				//The frame of reference now shifts to after the subsentence, as it has been parsed.		
+				curPositionInSentence = i;
+				continue;
+			} else if (isAtAbbreviation(i, rawParagraph)) {
+				//Abbreviations should be ignored.
+				numberOfAbbreviations++;
+				if (numberOfAbbreviations % 100 == 0)
+					System.out.println("Nice! " + numberOfAbbreviations);
+				continue;
+			} else if (isAtEndOfParagraph(rawParagraph, i) || isAtPunctuation(rawParagraph, i, curChar)) {
 				
 				var rawEndOfSentence = rawParagraph.substring(curPositionInSentence, i+1);
 				var endSentenceWords = getWordsInSentence(rawEndOfSentence);
@@ -165,11 +193,50 @@ public class ManualParser {
 				curSentenceStartIndex = i+1;
 				rawWords = new ArrayList<String>();
 				subParagraphs = new ArrayList<Paragraph>();
+				continue;
 			}
 		}
 		Paragraph paragraph = new Paragraph(rawParagraph, sentences);
 		paragraph.setParagraphID(textName);
 		return paragraph;
+	}
+
+	
+	private boolean isAtAbbreviation(int index, String rawParagraph) {
+		if (!isAtEndOfParagraph(rawParagraph, index) && isAtPunctuation(rawParagraph, index, rawParagraph.charAt(index))) {
+			
+			for (String abbreviation : abbreviationSet) {
+				if (index - abbreviation.length() + 1 < 0) 
+					continue;				
+				else if (rawParagraph.startsWith(abbreviation, index - abbreviation.length() + 1) &&
+						(index - abbreviation.length() < 0 || rawParagraph.charAt(index - abbreviation.length()) == ' '))
+					return true;
+			}
+			
+		}
+		
+		return false;
+	}
+
+	private int extractSubSentences(String rawParagraph, String textName, int curPositionInSentence,
+			List<Sentence> sentences, List<String> rawWords, List<Paragraph> subParagraphs, int i) {
+		int curEndSentenceIndex = getCorrespondingClosingCharPosition(rawParagraph, i);
+		if (curEndSentenceIndex == -1)
+			return -1;				
+		
+		//Add all the words before the subsentences
+		var startRawSentence = rawParagraph.substring(curPositionInSentence, i);
+		rawWords.addAll(getWordsInSentence(startRawSentence));
+		var rawSubParagraph = rawParagraph.substring(i + 1, curEndSentenceIndex);
+		
+		//Now the actual subsentence.
+		var subParagraph= getParagraphFromRawParagraph(rawSubParagraph, textName + "_" + sentences.size() + "_" + subParagraphs.size());
+		if (subParagraph == null) //Something is unparsable in the subsentence.
+			return -1;
+		subParagraphs.add(subParagraph);
+		for (var sentence: subParagraph.getSentences())
+			rawWords.addAll(sentence.getRawWordList());
+		return curEndSentenceIndex;
 	}
 
 	private int getCorrespondingClosingCharPosition(String rawParagraph, int indexOfOpeningChar) {
@@ -201,15 +268,15 @@ public class ManualParser {
 		return currentPosition;
 	}
 
-	private static boolean isAtStartOfSubsentence(char curChar) {
+	private boolean isAtStartOfSubsentence(char curChar) {
 		return openCharToCloseChar.containsKey(curChar);
 	}
 
-	private static boolean isAtEndOfSentence(String paragraph, int i) {
+	private static boolean isAtEndOfParagraph(String paragraph, int i) {
 		return i + 1 == paragraph.length();
 	}
 
-	private static boolean isAtPunctuation(String paragraph, int i, char curChar) {
+	private boolean isAtPunctuation(String paragraph, int i, char curChar) {
 		return punctuationSet.contains(curChar) && paragraph.charAt(i + 1) == ' ';
 	}
 

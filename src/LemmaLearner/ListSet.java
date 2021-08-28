@@ -167,5 +167,11 @@ public class ListSet<E> implements Set<E>, List<E>, Serializable{
 		internalList.addAll(index, collection);
 		return true;
 	}
+	
+
+	@Override
+	public String toString() {
+		return internalList.toString();
+	}
 
 }
