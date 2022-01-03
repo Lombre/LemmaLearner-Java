@@ -16,6 +16,8 @@ import Configurations.ParsingConfigurations;
 import TextDataStructures.Paragraph;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
+import TextDataStructures.TranslatedParagraph;
+import TextDataStructures.TranslatedText;
 
 
 //https://kaikki.org/dictionary/
@@ -30,6 +32,8 @@ public class ManualParser {
 		put('“', '”');
 		put('‘', '’');
 		put('„', '“');
+		put('¿', '?');
+		put('¡', '!');
 	}};
 	
 	private final Set<Character> punctuationSet = new TreeSet<Character>(){{
@@ -139,6 +143,7 @@ public class ManualParser {
 
 	private String removeUnneccessaryChars(String input) {
 		input = input.replace("\t", "");
+		input = input.replace("\\N", " ");
 		return input;
 	}
 	
@@ -147,7 +152,9 @@ public class ManualParser {
 		
 		int curPositionInSentence = 0;
 		int curSentenceStartIndex = 0;
-		
+		if (rawParagraph.equals("¡Transformación!")) {//Transform!
+			int j = 1;
+		}
 		
 		
 		List<Sentence> sentences = new ArrayList<Sentence>();		
@@ -172,21 +179,19 @@ public class ManualParser {
 				
 				//The frame of reference now shifts to after the subsentence, as it has been parsed.		
 				curPositionInSentence = i;
+				if (isAtEndOfParagraph(rawParagraph, i)) {
+					extractSentence(rawParagraph, curPositionInSentence, curSentenceStartIndex, sentences, rawWords, subParagraphs, i);					
+				} 
 				continue;
 			} else if (isAtAbbreviation(i, rawParagraph)) {
 				//Abbreviations should be ignored.
 				numberOfAbbreviations++;
-				if (numberOfAbbreviations % 100 == 0)
-					System.out.println("Nice! " + numberOfAbbreviations);
+				//if (numberOfAbbreviations % 100 == 0)
+				//	System.out.println("Nice! " + numberOfAbbreviations);
 				continue;
 			} else if (isAtEndOfParagraph(rawParagraph, i) || isAtPunctuation(rawParagraph, i, curChar)) {
 				
-				var rawEndOfSentence = rawParagraph.substring(curPositionInSentence, i+1);
-				var endSentenceWords = getWordsInSentence(rawEndOfSentence);
-				rawWords.addAll(endSentenceWords);
-				String rawSentence = rawParagraph.substring(curSentenceStartIndex, i+1).trim();
-				var currentSentence = new Sentence(rawSentence, rawWords, subParagraphs);
-				sentences.add(currentSentence);
+				extractSentence(rawParagraph, curPositionInSentence, curSentenceStartIndex, sentences, rawWords, subParagraphs, i);
 				
 				//Clearing for new sentence.
 				curPositionInSentence = i+1;
@@ -199,6 +204,18 @@ public class ManualParser {
 		Paragraph paragraph = new Paragraph(rawParagraph, sentences);
 		paragraph.setParagraphID(textName);
 		return paragraph;
+	}
+
+
+
+	private void extractSentence(String rawParagraph, int curPositionInSentence, int curSentenceStartIndex,
+			List<Sentence> sentences, List<String> rawWords, List<Paragraph> subParagraphs, int i) {
+		var rawEndOfSentence = rawParagraph.substring(curPositionInSentence, i+1);
+		var endSentenceWords = getWordsInSentence(rawEndOfSentence);
+		rawWords.addAll(endSentenceWords);
+		String rawSentence = rawParagraph.substring(curSentenceStartIndex, i+1).trim();
+		var currentSentence = new Sentence(rawSentence, rawWords, subParagraphs);
+		sentences.add(currentSentence);
 	}
 
 	
@@ -288,6 +305,34 @@ public class ManualParser {
 		var words = new ArrayList<String>(Arrays.asList(wordArray));
 		words.removeIf(word -> word.equals(""));
 		return words.stream().map(word -> word.toLowerCase()).collect(Collectors.toList());
+	}
+
+	
+
+	private List<TranslatedParagraph> getParagraphsFromTranslatedText(String textName, List<String> rawUntranslatedParagraphs, List<String> rawTranslatedParagraphs) {	
+		List<TranslatedParagraph> paragraphs = new ArrayList<TranslatedParagraph>();
+		//List<List<List<String>>> paragraphs = new ArrayList<List<List<String>>>();
+		
+		for (int i = 0; i < rawUntranslatedParagraphs.size(); i++) {
+			var rawUntranslatedParagraph = rawUntranslatedParagraphs.get(i);
+			var rawTranslatedParagraph = rawTranslatedParagraphs.get(i);
+
+			Paragraph untranslatedParagraph = getParagraphFromRawParagraph(rawUntranslatedParagraph, textName + "_" + i);
+			Paragraph translatedParagraph = getParagraphFromRawParagraph(rawTranslatedParagraph, textName + "_" + i);
+			if (untranslatedParagraph != null && translatedParagraph != null) {
+				TranslatedParagraph combinedParagraph = new TranslatedParagraph(untranslatedParagraph, translatedParagraph);
+				paragraphs.add(combinedParagraph);		
+			}
+		}
+		return paragraphs;
+	}
+
+
+	public TranslatedText parseTwinTextFile(String textName, String rawEnglishText, String rawSpanishText, List<String> rawEnglishParagraphs, List<String> rawSpanishParagraphs) {
+		
+		List<TranslatedParagraph> combinedParagraphs = getParagraphsFromTranslatedText(textName, rawSpanishParagraphs, rawEnglishParagraphs);
+		var combinedText = new TranslatedText(textName, rawSpanishText, rawEnglishText, combinedParagraphs);
+		return combinedText;
 	}
 
 }

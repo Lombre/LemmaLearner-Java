@@ -12,16 +12,24 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	 */
 	private static final long serialVersionUID = 565211008957338879L;
 	
-	private Text originText;
+	private ParagraphParent parent;
 	private String paragraphID;
-	private final String rawParagraph;
-	private final ListSet<Sentence> sentences;
+	protected final String rawParagraph;
+	protected final ListSet<Sentence> sentences;
+	
+
 	
 	public Paragraph(String rawParagraph, Collection<Sentence> sentences) {
 		this.rawParagraph = rawParagraph;
 		this.sentences = new ListSet<Sentence>(sentences);
 		this.sentences.forEach(sentence -> sentence.setInitialOriginParagraph(this));
 	}
+	
+	public Paragraph(String rawParagraph, Collection<Sentence> sentences, String paragraphID) {
+		this(rawParagraph, sentences);
+		setParagraphID(paragraphID);
+	}
+
 
 	public String getRawParagraph() {		
 		return rawParagraph;
@@ -51,7 +59,9 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	}
 	
 	public void addToDatabase(TextDatabase textDatabase) {
-		if (textDatabase.allParagraphs.containsKey(paragraphID)) {
+		if (paragraphID == null) {
+			throw new Error("No paragraphID set.");
+		} else if (textDatabase.allParagraphs.containsKey(paragraphID)) {
 			throw new Error("The paragraph with the ID " + paragraphID + " aldready exists in the database.");
 		} else {
 			textDatabase.allParagraphs.put(paragraphID, this);
@@ -78,11 +88,13 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	}
 
 	public Text getOriginText() {
-		return originText;
+		if (parent instanceof Text) {
+			return (Text) parent;			
+		} else throw new Error("The current paragraph: \"" + rawParagraph + "\" does not have a text as a parent.");
 	}
 
 	public void setOriginText(Text text) {
-		this.originText = text;
+		this.parent = (ParagraphParent) text;
 	}
 
 	@Override
@@ -98,5 +110,29 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 	public void setSentences(List<Sentence> newParagraphSentences) {
 		sentences.clear();
 		sentences.addAll(newParagraphSentences);
+	}
+
+	public Paragraph getParagraphWithSentencesFilteredOnLength(int minSentenceLength, int maxSentenceLength) {
+		var filteredSentences = new ArrayList<Sentence>();
+		for (Sentence sentence : sentences) {
+			if (sentence.getWordCount() < minSentenceLength) {
+				//The sentence is removed
+			} else if ( sentence.getWordCount() <= maxSentenceLength) {
+				filteredSentences.add(sentence);
+			} else {
+				Collection<Sentence> subSentences = sentence.getSubSentencesOfCorrectLength(this, minSentenceLength, maxSentenceLength);
+				if (0 < subSentences.size())
+					filteredSentences.addAll(subSentences);
+			}
+		}
+		var returnParagraph =  new Paragraph(rawParagraph, filteredSentences, paragraphID);
+		returnParagraph.setOriginText(getOriginText());
+		return returnParagraph;
+	}
+
+	public Sentence asSentence(Paragraph originParagraph) {
+		Sentence sentenceForm = new Sentence(this.rawParagraph, getAllRawWords());
+		sentenceForm.setInitialOriginParagraph(originParagraph);
+		return sentenceForm;
 	}
 }

@@ -7,7 +7,7 @@ import Configurations.LearningConfigations;
 import LemmaLearner.TextDatabase;
 import LemmaLearner.*;
 
-public class Sentence implements Serializable, Comparable<Sentence> {
+public class Sentence implements Serializable, Comparable<Sentence>, ParagraphParent {
 	
 	private Set<Paragraph> originParagraphs;
 	private Set<Lemma> lemmaSet = null;
@@ -59,9 +59,8 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}	
 	
 	public String getLemmatizedRawSentence(TextDatabase database) {
-		if (wordBeginningIndex.length == 0) {
+		if (wordBeginningIndex.length == 0) 
 			return getRawSentence();
-		}
 		List<Conjugation> conjugations = getWordList(database);
 		String lemmatizedRawSentence = "";
 		lemmatizedRawSentence += rawSentence.substring(0, wordBeginningIndex[0]);
@@ -122,7 +121,7 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 		int numberOfUnlearnedLemmas = getNumberOfUnlearnedLemmas(learnedLemmas, database);
 		return numberOfUnlearnedLemmas == 1;
 	}
-
+	
 	public int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		Set<Lemma> lemmas = this.getLemmaSet(database);
 		int numberOfLemmasInSentence = lemmas.size();
@@ -191,13 +190,27 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	}
 
 	public double getScore(TextDatabase database, LearningConfigations config) {
+		var lemmaSet = getLemmaSet(database);
 		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
 		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
 		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent()): 0;
-		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore);//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
+		double notawordModifier = getNotAWordModifier(database);
+		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore)*notawordModifier;//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
 		return score;
 	}
 	
+	private double getNotAWordModifier(TextDatabase database) {
+		double modifier = 1;
+		var lemmaList = getLemmaList(database);		
+		for (var lemma : lemmaList) {
+			if (lemma.getRawLemma().equals(database.NOT_A_WORD_STRING)) {
+				modifier *= 0.85;
+			}
+		}
+		return modifier;
+	}
+
+
 	private double getUnlearnedLemmaFrequencyScore(TextDatabase database, int numberOfTimesCounted) {
 		double score = 0;
 		var lemmas = getLemmaSet(database);
@@ -262,6 +275,25 @@ public class Sentence implements Serializable, Comparable<Sentence> {
 	public Collection<Paragraph> getSubParagraphs() {
 		// TODO Auto-generated method stub
 		return subParagraphs;
+	}
+
+
+	public Collection<Sentence> getSubSentencesOfCorrectLength(Paragraph originParagraph, int minSentenceLength, int maxSentenceLength){
+		Collection<Sentence> filteredSentences = new ArrayList<Sentence>();
+		//The sentence is to large, but maybe it contains subparagraphs that are good?
+		for (Paragraph subParagraph : subParagraphs) {
+			Sentence subParagraphSentence = subParagraph.asSentence(originParagraph);
+			if (minSentenceLength <= subParagraphSentence.getWordCount() && subParagraphSentence.getWordCount() <= maxSentenceLength) {
+				filteredSentences.add(subParagraphSentence);
+			} else {
+				//Reduce the paragraph:
+				Paragraph filteredSubParagraph = subParagraph.getParagraphWithSentencesFilteredOnLength(minSentenceLength, maxSentenceLength);
+				filteredSubParagraph.setOriginText(getAParagraph().getOriginText());
+				if (0 < filteredSubParagraph.getSentences().size())
+					filteredSubParagraph.getSentences().forEach(subSentence -> filteredSentences.add(subSentence));
+			}
+		}
+		return filteredSentences;
 	}
 
 

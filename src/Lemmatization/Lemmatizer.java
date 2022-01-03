@@ -13,19 +13,18 @@ import TextDataStructures.*;
 
 public class Lemmatizer {
 	
-	private final String language;
 	private final Path lemmaFilePath;
 	private HashMap<String, List<String>> conjugationToLemmas = new HashMap<String, List<String>>();
 	//private OnlineDictionary onlineDictionary;
 	private WiktionaryDictionary dictionary;
-	private LemmatizationConfigurations configs;
+	private final LemmatizationConfigurations config;
 	
 	
-	public Lemmatizer(String language) {	
-		this.language = language;
-		lemmaFilePath = Paths.get(this.language.toLowerCase() + "_lemma.txt");
+	public Lemmatizer(LemmatizationConfigurations config) {	
+		this.config = config;
+		lemmaFilePath = Paths.get(config.getLanguage().toLowerCase() + "_lemma.txt");
 		//initializeStandardLemmatizer(lemmaFilePath);
-		dictionary = new WiktionaryDictionary(language);
+		dictionary = new WiktionaryDictionary(config.getLanguage());
 		dictionary.load();
 	}
 	

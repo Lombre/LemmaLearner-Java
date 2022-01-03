@@ -3,6 +3,7 @@
 
 
 #Specific directories
+bin/
 Other texts/
 Websites/
 Texts/
@@ -10,6 +11,7 @@ Test texts/
 wiktionary files/
 TextsToParse/
 *.saved
+subtitles/
 
 
 ### Java ###

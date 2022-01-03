@@ -38,8 +38,6 @@ For the programmers: The learning is done in a greedy manner, mostly because I'm
  - Make Anki output.
 
  - Make it able to use subtitle files as an input.
- 
- - Make it handle abbrevations like mr. and dr.
 
 
 

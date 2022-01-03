@@ -9,24 +9,41 @@ import org.nustaq.serialization.FSTObjectOutput;
 
 import LemmaLearner.*;
 
-public class Text implements Serializable{
+public class Text implements Serializable, ParagraphParent{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1010024096455553264L;
-	private final String name;
-	private final String rawText; 
-	private final Set<Paragraph> paragraphs;
+	protected final String name;
+	protected final String rawText; 
+	protected Set<Paragraph> paragraphs;
+		
+	protected Text(String textName, String rawText) {
+		this.name = textName;
+		this.rawText = rawText;
+	}
 	
 	public Text(String textName, String rawText, List<Paragraph> paragraphs) {
 		this.name = textName;
 		this.rawText = rawText;
 		this.paragraphs = new ListSet<Paragraph>(paragraphs);
-		this.paragraphs.forEach(paragraph->paragraph.setOriginText(this));
+		setOriginText(paragraphs);
 	}
 
 	
+	private void setOriginText(Collection<Paragraph> paragraphs) {
+		for (Paragraph paragraph : paragraphs) {
+			paragraph.setOriginText(this);
+			for (var sentence : paragraph.getSentences()) {
+				if (sentence.getSubParagraphs() != null && 0 < sentence.getSubParagraphs().size()) {
+					setOriginText(sentence.getSubParagraphs());
+				}
+			}
+		}
+	}
+
+
 	public String getName() {
 		return name;
 	}
@@ -72,40 +89,29 @@ public class Text implements Serializable{
 
 	private void filterSentencesBasedOnLength(int minSentenceLength, int maxSentenceLength) {
 		
-		//List<Paragraph> originalParagraphs = new ArrayList<Paragraph>(paragraphs);
-		List<Paragraph> remainingParagraphs = new ArrayList<Paragraph>(paragraphs);
 		
-		for (Paragraph paragraph : paragraphs) {
-			
-			List<Sentence> originalParagraphSentences = new ArrayList<Sentence>(paragraph.getSentences());
-			//This will be the new sentences in the paragraph, when all the bad sentences have been removed.
-			List<Sentence> newParagraphSentences = new ArrayList<Sentence>();
-			
-			
-			for (Sentence sentence : originalParagraphSentences) {
-				
-				if (sentence.getWordCount() < minSentenceLength){
-					//It should not be necessary to remove the pointers from the sentence itself
-				} else if (maxSentenceLength < sentence.getWordCount()) {
-					//If the sentence is to long, we can replace it with its subsentences, if it has any.
-					
-					for (Paragraph subParagraph : sentence.getSubParagraphs()) {
-						
-					}
-				} else {
-					newParagraphSentences.add(sentence);
-				}
-			}
-			
-			paragraph.setSentences(newParagraphSentences);
-			
-			if (0 < paragraph.getSentences().size()) {
-				remainingParagraphs.add(paragraph);
-			}
-		}
+		int initalNumberOfSentences = paragraphs.stream()
+												.map(paragraph -> paragraph.getSentences().size())
+												.reduce((a, b) -> a + b).get();
 		
+		
+
+		List<Paragraph> originalParagraphs = new ArrayList<Paragraph>(paragraphs);
 		paragraphs.clear();
-		paragraphs.addAll(remainingParagraphs);
+		
+		for (Paragraph paragraph : originalParagraphs) {
+			Paragraph revisedParagraph = paragraph.getParagraphWithSentencesFilteredOnLength(minSentenceLength, maxSentenceLength);
+			if (0 < revisedParagraph.getSentences().size()) 
+				paragraphs.add(revisedParagraph);
+		}		
+
+		int laterNumberOfSentences = paragraphs.stream()
+												.map(paragraph -> paragraph.getSentences().size())
+												.reduce((a, b) -> a + b).get();
+		
+		
+		//System.out.println("Initial number of sentences: " + initalNumberOfSentences);
+		//System.out.println("Later number of sentences: " + laterNumberOfSentences);
 		
 	}
 

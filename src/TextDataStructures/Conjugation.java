@@ -26,6 +26,10 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 		return rawConjugation;
 	}
 	
+	public boolean hasLemmaSet() {
+		return lemma != null;
+	}
+	
 	public Lemma getLemma() {
 		if (lemma == null)
 			throw new NullPointerException();

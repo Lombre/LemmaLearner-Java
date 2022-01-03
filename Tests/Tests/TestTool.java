@@ -40,7 +40,7 @@ public class TestTool {
 	
 	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database) {
 		Text parsedText = database.parseRawText(testTextName, stringToParse);
-		database.addTextToDatabase(parsedText);
+		database.addTextToDatabase(parsedText, null);
 		database.initializeLemmas();
 		return parsedText;
 	}

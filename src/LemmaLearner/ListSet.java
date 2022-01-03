@@ -3,7 +3,9 @@ package LemmaLearner;
 import java.io.Serializable;
 import java.util.*;
 
-public class ListSet<E> implements Set<E>, List<E>, Serializable{
+import TextDataStructures.Paragraph;
+
+public class ListSet<E> implements List<E>, Serializable, Set<E>{
 
 	private List<E> internalList = new LinkedList<E>();
 	private Set<E> internalSet = new TreeSet<E>();

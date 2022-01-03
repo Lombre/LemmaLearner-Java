@@ -3,6 +3,7 @@ package LemmaLearner;
 import java.util.*;
 
 import Configurations.Configurations;
+import GUI.*;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 
@@ -13,8 +14,10 @@ public class Starter {
 	
 	public static void main(String[] args) throws Exception {
 		
+		/*
+		  
 		//Settings
-		boolean shouldParseRealText = true;
+		boolean shouldParseRealText = false;
 				
 		Configurations config = new Configurations();
 		
@@ -31,9 +34,16 @@ public class Starter {
 		List<SortablePair<Lemma, Sentence>> learningList = learner.learnAllLemmas();	
 		
 		
-		
-		
 		System.out.println("End");
+		*/
+		
+		
+		ConsoleGUI gui;
+		if (true) 
+			gui = new ConsoleGUI();
+
+		gui = new ConsoleGUI();
+		Mediator mediator = new Mediator(gui);
 		
 	}
 	
