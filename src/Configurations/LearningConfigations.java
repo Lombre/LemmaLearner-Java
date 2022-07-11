@@ -10,4 +10,6 @@ public interface LearningConfigations extends BaseTestable {
 
 	public boolean shouldConjugationsBeScored();
 
+	public boolean shouldNegativelyScoreNonWords();
+	
 }

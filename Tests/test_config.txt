@@ -12,6 +12,8 @@ ShouldLoadDictionary = False
 
 ShouldLoadSavedTexts = False
 
+ShouldNegativelyScoreNonWords = True
+
 ShouldPrintText = False
 
 ShouldSaveTexts = False

@@ -153,4 +153,8 @@ public class Configurations implements ParsingConfigurations,
 		return getConfigurationBoolean("ShouldSaveTexts");
 	}
 	
+	public boolean shouldNegativelyScoreNonWords() {
+		return getConfigurationBoolean("ShouldNegativelyScoreNonWords");
+	}
+	
 }

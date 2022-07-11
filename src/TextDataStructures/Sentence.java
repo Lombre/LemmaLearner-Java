@@ -147,11 +147,6 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	}
 
 	public Set<Lemma> getLemmaSet(TextDatabase database) {
-		//if (lemmaSet == null)
-		//	lemmaSet = getWordSet(database).stream()
-		//					.map(word -> word.getLemma())
-		//					.collect(Collectors.toCollection(HashSet::new));
-		//return lemmaSet;
 		var wordSet = getWordSet(database);
 		var lemmaSet = new HashSet<Lemma>();
 		for (var word : wordSet) {
@@ -194,7 +189,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
 		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
 		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent()): 0;
-		double notawordModifier = 1; //getNotAWordModifier(database);
+		double notawordModifier = (config.shouldNegativelyScoreNonWords())? getNotAWordModifier(database): 1;
 		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore)*notawordModifier;//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
 		return score;
 	}

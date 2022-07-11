@@ -111,6 +111,7 @@ class TestGreedyLearning {
 		
 		// We need to say that the config should not take conjugations into account
 		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
+		TestTool.changeConfigField(config, "ShouldNegativelyScoreNonWords", "false");
 		
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
@@ -172,6 +173,7 @@ class TestGreedyLearning {
 		//This assumes no extra scoring for conjugations or learning lemmas again
 		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
 		TestTool.changeConfigField(config, "MaxTimesLemmaShouldBeLearned", "1");
+		TestTool.changeConfigField(config, "ShouldNegativelyScoreNonWords", "false");
 		
 		//If it is done greedily, the invariant that there is no Lemma w2 learned after another Lemma w1,
 		//Such that w1.frequency < w2.frequency, unless w1 participates in the sentence used to learn w2,
