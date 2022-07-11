@@ -11,7 +11,7 @@ import TextDataStructures.Sentence;
 public class LearningProgressPrinter {
 
 	public static void printLemmasWithHighNumberOfConjugations(TextDatabase database) {
-		if (false) {
+		if (true) {
 			
 			for (Lemma lemma : database.allLemmas.values()) {
 				if (10 <= lemma.getConjugations().size()) {

@@ -16,6 +16,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.*;
 
 import LemmaLearner.*;
@@ -23,6 +24,7 @@ import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
 
+import GUI.ConsoleGUI;
 
 
 class TestGreedyLearning {
@@ -35,7 +37,7 @@ class TestGreedyLearning {
 	
 	@BeforeEach
 	public void setUp() {
-		config = new Configurations();
+		config = new Configurations("Tests/test_config.txt");
 		database = new TextDatabase(config);
 		learner = new GreedyLearner(database, config);
 	}
@@ -107,25 +109,28 @@ class TestGreedyLearning {
 		String rawLemma3 = "three";
 		String expectedSentence = rawLemma1 + " " + rawLemma2 + " " + rawLemma3 + ".";
 		
+		// We need to say that the config should not take conjugations into account
+		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
+		
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
 		//Initially the lemmas should give a score of 1 each, as that are their frequencies.
-		assertEquals(1+1+1, learnedSentence.getScore(database, config), 0.001);
+		assertEquals((1+1+1)*(1+1+1), learnedSentence.getScore(database, config), 0.001);
 		
 		Lemma lemma1 = database.allLemmas.get(rawLemma1);
 		Lemma lemma2 = database.allLemmas.get(rawLemma2);
 		Lemma lemma3 = database.allLemmas.get(rawLemma3);
 		
 		lemma1.incrementTimesLearned();
-		assertEquals(0.25+1+1, learnedSentence.getScore(database, config), 0.001);
+		assertEquals((1+1)*(1+1+0.5), learnedSentence.getScore(database, config), 0.001);
 		lemma2.incrementTimesLearned();
-		assertEquals(0.25+0.25+1, learnedSentence.getScore(database, config), 0.001);
-		lemma3.incrementTimesLearned();
-		assertEquals(0.25+0.25+0.25, learnedSentence.getScore(database, config), 0.001);
+		assertEquals((1)*(1 + 0.5 + 0.5), learnedSentence.getScore(database, config), 0.001);
+		lemma2.incrementTimesLearned();
+		assertEquals((1)*(1 + 0.25 + 0.5), learnedSentence.getScore(database, config), 0.001);
 		
 
-		lemma2.incrementTimesLearned();
-		assertEquals(0.25+(1.0/16)+0.25, learnedSentence.getScore(database, config), 0.001);
+		lemma3.incrementTimesLearned();
+		assertEquals(0, learnedSentence.getScore(database, config), 0.001);
 	}
 	
 	
@@ -163,11 +168,16 @@ class TestGreedyLearning {
 
 	@Test
 	public void testLemmasAreLearnedGreedily() throws Exception {
+		
+		//This assumes no extra scoring for conjugations or learning lemmas again
+		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
+		TestTool.changeConfigField(config, "MaxTimesLemmaShouldBeLearned", "1");
+		
 		//If it is done greedily, the invariant that there is no Lemma w2 learned after another Lemma w1,
 		//Such that w1.frequency < w2.frequency, unless w1 participates in the sentence used to learn w2,
 		//or w2 is learnt without a sentence.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
-		database.parseTextAndAddToDatabase(fileToParse);
+		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());
 		database.initializeLemmas();
 		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {

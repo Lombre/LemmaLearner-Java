@@ -13,7 +13,7 @@ public class GreedyLearner {
 	private TextDatabase database;
 	private List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas;
 	private Set<Lemma> learnedLemmas;
-	private Set<Sentence> seenSentences;
+	private Set<Sentence> seenSentences = new HashSet<Sentence>();
 	private PriorityQueue<Lemma> lemmasByFrequency;
 	private TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency;
 	public static final String NOT_A_SENTENCE_STRING = "No sentence found.";
@@ -40,16 +40,19 @@ public class GreedyLearner {
 		while (!hasFinishedLearningLemmas()) {			
 			learnNextLemma();		
 			
-			
-			if (orderOfLearnedLemmas.size() % 100 == 0) {
-				var learnedLemmas = orderOfLearnedLemmas.stream().map(pair -> pair.getFirst());
-				int totalNumberOfOccurencesOfLearnedLemmas = learnedLemmas.map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
-				int totalNumberOfLemmaOccurences = database.allLemmas.values().stream().map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
-				System.out.println("Learned lemmas " + totalNumberOfOccurencesOfLearnedLemmas + 
-								   " of " + totalNumberOfLemmaOccurences + 
-								   " fraction " + 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences +
-								   " or 1 out of " + 1/(1 - 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences));
+
+			if (config.shouldPrintText()) {
+				if (orderOfLearnedLemmas.size() % 100 == 0) {
+					var learnedLemmas = orderOfLearnedLemmas.stream().map(pair -> pair.getFirst());
+					int totalNumberOfOccurencesOfLearnedLemmas = learnedLemmas.map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
+					int totalNumberOfLemmaOccurences = database.allLemmas.values().stream().map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
+					System.out.println("Learned lemmas " + totalNumberOfOccurencesOfLearnedLemmas + 
+							" of " + totalNumberOfLemmaOccurences + 
+							" fraction " + 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences +
+							" or 1 out of " + 1/(1 - 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences));
+				}				
 			}
+			
 		}	
 		
 		if (config.shouldPrintText())
@@ -88,7 +91,6 @@ public class GreedyLearner {
 		
 		orderOfLearnedLemmas = new ArrayList<SortablePair<Lemma, Sentence>>();
 		learnedLemmas = new HashSet<Lemma>();	
-		seenSentences = new HashSet<Sentence>();	
 		lemmasByFrequency = getLemmasByFrequency();
 		directlyLearnableSentencesByFrequency = getDirectlyLearnableSentencesByFrequency(learnedLemmas);		
 	}
@@ -239,10 +241,19 @@ public class GreedyLearner {
 
 
 	public Lemma learnLemmaFromDirectlyLearnableSentence(Sentence directlyLearnableSentence) {
-		var unlearnedLemmas = directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database); 
-		Lemma lemmaToLearn = unlearnedLemmas.get(0);
+		Lemma lemmaToLearn = getSingleUnlearnedLemma(directlyLearnableSentence);
 		learnLemma(directlyLearnableSentence, lemmaToLearn);		
 		updateSentencesAssociatedWithLemmasInSentence(directlyLearnableSentence);		
+		return lemmaToLearn;
+	}
+
+
+
+	private Lemma getSingleUnlearnedLemma(Sentence directlyLearnableSentence) {
+		var unlearnedLemmas = directlyLearnableSentence.getUnlearnedLemmas(learnedLemmas, database); 
+		if (unlearnedLemmas.size() != 1) 
+			throw new Error("Error: The sentence \"" + directlyLearnableSentence + "\" contained more or less than a single unlearned lemma. Unlearned lemmas: " + unlearnedLemmas);
+		Lemma lemmaToLearn = unlearnedLemmas.get(0);
 		return lemmaToLearn;
 	}
 

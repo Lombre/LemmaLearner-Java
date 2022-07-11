@@ -3,6 +3,8 @@ package Tests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Configurations.Configurations;
+
 import static org.junit.Assert.*;
 
 import java.awt.BorderLayout;
@@ -12,14 +14,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.*;
 
+import GUI.ConsoleGUI;
 import LemmaLearner.*;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
@@ -40,7 +45,7 @@ public class TestTool {
 	
 	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database) {
 		Text parsedText = database.parseRawText(testTextName, stringToParse);
-		database.addTextToDatabase(parsedText, null);
+		database.addTextToDatabase(parsedText, new ConsoleGUI());
 		database.initializeLemmas();
 		return parsedText;
 	}
@@ -66,8 +71,17 @@ public class TestTool {
 	}
 
 	public static void parseText(File fileToParse, TextDatabase database) {
-		database.parseTextAndAddToDatabase(fileToParse);		
+		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());		
 		database.initializeLemmas();
+	}
+	
+	public static void changeConfigField(Configurations config, String field, String value) {
+		try {
+			var map = (Map<String, String>) FieldUtils.readField(config, "configurationKeyToValue", true);
+			map.put(field, value);
+		} catch (IllegalAccessException e) {
+			throw new Error();
+		}
 	}
 
 }

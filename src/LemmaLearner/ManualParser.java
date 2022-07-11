@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.*;
 import java.util.stream.*;
-import org.json.*;
+//import org.json.*;
 
 import Configurations.ParsingConfigurations;
 import TextDataStructures.Paragraph;
@@ -29,11 +29,10 @@ public class ManualParser {
 		put('\"', '\"'); 
 		put('(',')');
 		put('[', ']');
-		put('“', '”');
-		put('‘', '’');
-		put('„', '“');
-		put('¿', '?');
-		put('¡', '!');
+		put('â€œ', 'â€');
+		put('â€˜', 'â€™');
+		put('Â¿', '?');
+		put('Â¡', '!');
 	}};
 	
 	private final Set<Character> punctuationSet = new TreeSet<Character>(){{
@@ -152,7 +151,7 @@ public class ManualParser {
 		
 		int curPositionInSentence = 0;
 		int curSentenceStartIndex = 0;
-		if (rawParagraph.equals("¡Transformación!")) {//Transform!
+		if (rawParagraph.equals("ï¿½Transformaciï¿½n!")) {//Transform!
 			int j = 1;
 		}
 		

@@ -194,7 +194,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
 		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
 		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent()): 0;
-		double notawordModifier = getNotAWordModifier(database);
+		double notawordModifier = 1; //getNotAWordModifier(database);
 		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore)*notawordModifier;//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
 		return score;
 	}
@@ -227,7 +227,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		double score = 0;
 		var lemmas = getLemmaSet(database);
 		for (Lemma lemma : lemmas) {
-			if (0 < lemma.getTimesLearned() && lemma.getTimesLearned() < numberOfTimesCounted){
+			if (lemma.getTimesLearned() < numberOfTimesCounted){
 				double extraScore = 1.0/( Math.pow(scoreExponent, lemma.getTimesLearned()));
 				score += extraScore;
 			} 

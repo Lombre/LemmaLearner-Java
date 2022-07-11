@@ -1,6 +1,5 @@
 package TextDataStructures;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,8 @@ public class TranslatedText extends Text{
 		List<TranslatedParagraph> combinedParagraphs = new ArrayList<TranslatedParagraph>();
 		var englishParagraphs = new ArrayList<Paragraph>(englishText.getParagraphs());
 		var spanishParagraphs = new ArrayList<Paragraph>(spanishText.getParagraphs());
-		assertEquals(englishParagraphs.size(), spanishParagraphs.size(), "Error: Mismatch between number of paragraphs in translated and untranslated text.");
+		if (englishParagraphs.size() != spanishParagraphs.size())
+			throw new Error("Error: Mismatch between number of paragraphs in translated and untranslated text.");
 		for (int i = 0; i < spanishParagraphs.size(); i++) {
 			var combinedParagraph = new TranslatedParagraph(spanishParagraphs.get(i), englishParagraphs.get(i));
 			combinedParagraphs.add(combinedParagraph);

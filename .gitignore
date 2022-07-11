@@ -12,7 +12,7 @@ wiktionary files/
 TextsToParse/
 *.saved
 subtitles/
-
+lib/
 
 ### Java ###
 # Compiled class file
@@ -28,7 +28,7 @@ subtitles/
 .mtj.tmp/
 
 # Package Files #
-*.jar
+
 *.war
 *.nar
 *.ear

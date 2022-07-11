@@ -121,7 +121,11 @@ public class TextDatabase{
 
 	private List<File> getTextFilesInFolder(String folderLocation) {
 		File folder = new File(folderLocation);
+		if (!folder.exists())
+			throw new Error("Text folder " + folder.getAbsolutePath() + " does not exist.");
 		List<File> filesInFolder = Arrays.asList(folder.listFiles());
+		if (filesInFolder.size() == 0)
+			throw new Error("Text folder " + folder.getAbsolutePath() + " is empty");
 		List<File> textFilesInFolder = filesInFolder.stream().filter(file -> isTextFile(file)).collect(Collectors.toList());
 		return textFilesInFolder;
 	}
@@ -176,13 +180,13 @@ public class TextDatabase{
 	}
 
 	@SuppressWarnings("IOException")
-	public void parseTextAndAddToDatabase(File subfile) {
+	public void parseTextAndAddToDatabase(File subfile, ProgressPrinter progressPrinter) {
 		Text parsedText = parseTextFile(subfile);		
 		if (config.shouldSaveTexts())
 			parsedText.save(getSavedTextFileName(subfile));
 		//parsedText.combineAllParagraphs();
 		parsedText.filterUnlearnableSentences();
-		addTextToDatabase(parsedText, null);		
+		addTextToDatabase(parsedText, progressPrinter);		
 	}
 
 	public void addTextToDatabase(Text parsedText, ProgressPrinter progressPrinter) {

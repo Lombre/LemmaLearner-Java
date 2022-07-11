@@ -8,6 +8,7 @@ import Configurations.Configurations;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 
 import org.junit.*;
@@ -169,7 +170,7 @@ class TestParsing {
 		String expectedParagraph1 = "First paragraph. This is cool.";
 		String expectedParagraph2 = "Second paragraph. This is also cool.";
 		String expectedParagraph3 = "Third paragraph. This is even cooler!";
-		String expectedText = expectedParagraph1 + "\r\n\r\n" + expectedParagraph2 + "\r\n" + expectedParagraph3;
+		String expectedText = expectedParagraph1 + "\n\n" + expectedParagraph2 + "\n" + expectedParagraph3;
 				
 		parsedText = database.parseTextFile("Test texts/multiParagraphText.txt");		
 		assertEquals(3, parsedText.getParagraphs().size());

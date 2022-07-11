@@ -3,7 +3,6 @@ package LemmaLearner;
 import java.io.Serializable;
 import java.util.*;
 
-import TextDataStructures.Paragraph;
 
 public class ListSet<E> implements List<E>, Serializable, Set<E>{
 
@@ -11,7 +10,6 @@ public class ListSet<E> implements List<E>, Serializable, Set<E>{
 	private Set<E> internalSet = new TreeSet<E>();
 	
 	public ListSet() {
-		// TODO Auto-generated constructor stub
 	}
 	
 

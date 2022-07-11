@@ -80,13 +80,6 @@ class TestLemmatizing {
 	}
 	
 
-	@Test
-	public void testHandleWeirdWords() throws Exception {
-		String word = "was";
-		String conjugation = dictionary.getLemmaFromConjugation(word);
-		assertEquals(conjugation, word);
-	}
-
 
 	@Test
 	public void testOnlineDictionaryRejectsNonWords() throws Exception {
@@ -101,8 +94,8 @@ class TestLemmatizing {
 		var otherLanguageDictionary = new WiktionaryDictionary("danish");
 		//Lemmatizer lemmatizer = new Lemmatizer("danish");
 		otherLanguageDictionary.load();
-		String actualWord = "kåbe";
-		String expectedLemma = "kåbe";
+		String actualWord = "kÃ¸be";
+		String expectedLemma = "kÃ¸be";
 		String conjugation = otherLanguageDictionary.getLemmaFromConjugation(actualWord);
 		assertEquals(expectedLemma, conjugation);
 	}	

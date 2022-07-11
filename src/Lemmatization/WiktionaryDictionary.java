@@ -1,6 +1,5 @@
 package Lemmatization;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -62,7 +61,7 @@ public class WiktionaryDictionary implements Serializable {
 			if (lemmas.contains(conjugation)) {
 				if (lemmas.size() == 2 && shouldOverGeneralizeLemmas) {
 					//Here we say that in the case that two lemmas are associated with a conjugation,
-					//Take the one that does not match the conjugation. For beautifully it would be beautiful.
+					//Take the one that does not match the conjugation. For "beautifully" it would be "beautiful".
 					//This cuts down on the number of lemmas, but sometimes mistakes are made.				
 					//s is for example taken lemmatized to "?".
 					var otherLemmas = new TreeSet<String>(lemmas);
@@ -146,14 +145,10 @@ public class WiktionaryDictionary implements Serializable {
 		
 		for (var conjugation : conjugations) {
 			String conjugationWord;
-			try {
-				conjugationWord = ((JSONObject) conjugation).getString("form").toLowerCase();
-				
-			} catch (Exception e) {
-				throw new Error();
-				// TODO: handle exception
-			}
-			if (!conjugationToLemma.containsKey(conjugationWord)) {
+			conjugationWord = ((JSONObject) conjugation).getString("form").toLowerCase();
+			if (!conjugationWord.matches("\\p{L}+")) {
+				continue;
+			} else if (!conjugationToLemma.containsKey(conjugationWord)) {
 				conjugationToLemma.put(conjugationWord, new TreeSet<String>() {{add(word);}});
 			} else {
 				var lemmas = conjugationToLemma.get(conjugationWord);
@@ -208,7 +203,10 @@ public class WiktionaryDictionary implements Serializable {
 		try {
 			myFile.createNewFile();
 			FileWriter myWriter = new FileWriter(myFile.getAbsolutePath(), StandardCharsets.UTF_8);
-			for (String conjugation : conjugationToLemma.keySet()) {
+			var conjugations = conjugationToLemma.keySet();
+			var sortedConjugations = new ArrayList<String>(conjugations);
+			Collections.sort(sortedConjugations);
+			for (String conjugation : sortedConjugations) {
 				String conjugationString = conjugation + " " + alternativeConjLemmaSeperator + " ";
 				var lemmas = conjugationToLemma.get(conjugation).toArray();
 				for(int i = 0; i < lemmas.length - 1; i++) {
@@ -267,7 +265,8 @@ public class WiktionaryDictionary implements Serializable {
 		for (String dictionaryEntry : dictionaryEntries) {
 			dictionaryEntry = dictionaryEntry.toLowerCase();
 			var splitEntry = dictionaryEntry.split(alternativeConjLemmaSeperator);
-			assertEquals(splitEntry.length, 2);
+			if (splitEntry.length != 2)
+				throw new Error();
 			String conjugation = splitEntry[0].trim().toLowerCase();
 			Collection<String> lemmas = Arrays.asList(splitEntry[1].split(splittingToken));
 			var entrySet = new TreeSet<String>();

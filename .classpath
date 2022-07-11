@@ -6,16 +6,19 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="Tests"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="Extra libraries/fst-3.0.1.jar"/>
-	<classpathentry kind="lib" path="Extra libraries/jackson-core-2.11.1.jar"/>
-	<classpathentry kind="lib" path="Extra libraries/objenesis-3.1.jar"/>
-	<classpathentry kind="lib" path="Extra libraries/json-20210307.jar"/>
-	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
+	<classpathentry kind="lib" path="lib/fst-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.11.1.jar"/>
+	<classpathentry kind="lib" path="lib/json-20220320.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.13.2.jar"/>
+	<classpathentry kind="lib" path="lib/junit-jupiter-5.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/miglayout-4.0.jar"/>
+	<classpathentry kind="lib" path="lib/objenesis-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.12.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

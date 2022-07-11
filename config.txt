@@ -1,4 +1,4 @@
-Language = Spanish
+Language = English
 
 MaxNumberOfSentencesToLearn = 12000
 

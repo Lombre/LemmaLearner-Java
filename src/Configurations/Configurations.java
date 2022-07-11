@@ -16,20 +16,20 @@ public class Configurations implements ParsingConfigurations,
 	
 	private final Map<String, String> configurationKeyToValue;
 
-	private final String CONFIG_LOCATION = "config.txt";
+	private final String config_path;
 	
 	private final String KEY_VALUE_DELIMITER_IN_CONFIG_FILE = "=";
 	
-	
 	public Configurations() {
-		configurationKeyToValue = loadConfigs(CONFIG_LOCATION);
-		save(CONFIG_LOCATION);
-	}
-	
-	protected Configurations(String rawConfig) {
-		configurationKeyToValue = null;
+		this("config.txt");
 	}
 
+	public Configurations(String configPath) {
+		this.config_path = configPath;
+		configurationKeyToValue = loadConfigs(config_path);
+		save(config_path);
+	}
+	
 	private Map<String, String> loadConfigs(String fileLocation) {
 		String rawConfiguration = loadRawConfigurations(fileLocation);	
 		
@@ -93,7 +93,7 @@ public class Configurations implements ParsingConfigurations,
 			rawConfigurationToWrite += configurationKey + " " + KEY_VALUE_DELIMITER_IN_CONFIG_FILE + " " + configurationValue + "\n\n";
 		}
 		try {
-			Files.writeString(Path.of(CONFIG_LOCATION), rawConfigurationToWrite);
+			Files.writeString(Path.of(config_path), rawConfigurationToWrite);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

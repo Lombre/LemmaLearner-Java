@@ -10,7 +10,6 @@ public class TranslatedSentence extends Sentence {
 	public TranslatedSentence(String rawSentence, String translatedSentence, List<String> rawWords) {
 		super(rawSentence, rawWords);
 		this.rawTranslatedSentence = translatedSentence;
-		// TODO Auto-generated constructor stub
 	}
 		
 	

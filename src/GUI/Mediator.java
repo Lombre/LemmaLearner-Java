@@ -1,7 +1,6 @@
 package GUI;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,9 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +39,7 @@ public class Mediator {
 	
 	
 	public void loadFilesInGivenFolder(String folderLocation) {
-		System.out.println("Loading");
+		System.out.println("Loading texts");
 		database.addAllTextsInFolderToDatabase(folderLocation, gui);
 		
 	}

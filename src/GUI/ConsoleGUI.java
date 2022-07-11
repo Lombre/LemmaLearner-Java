@@ -71,18 +71,16 @@ public class ConsoleGUI implements ProgressPrinter {
 	@Override
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
-		runProgram();
 	}
 
 	public void runProgram() {
 		
-		mediator.loadFilesInGivenFolder("Texts/spanish");
+		mediator.loadFilesInGivenFolder("Texts/English");
 		
 		//mediator.loadSubtitesFilesInGivenFolder("subtitles/naruto-combined");
 		
 		mediator.startLearning();
-		
-		
+			
 		/*
 		mediator.loadProgress();
 		mediator.saveProgress();
