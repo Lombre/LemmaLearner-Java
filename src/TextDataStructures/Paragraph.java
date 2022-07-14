@@ -1,7 +1,7 @@
 package TextDataStructures;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import LemmaLearner.*;
 
@@ -112,21 +112,19 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 		sentences.addAll(newParagraphSentences);
 	}
 
-	public Paragraph getParagraphWithSentencesFilteredOnLength(int minSentenceLength, int maxSentenceLength) {
+	public Paragraph getParagraphWithSentencesFilteredOnCriteria(Function<Sentence, Boolean> filterCriteria) {
 		var filteredSentences = new ArrayList<Sentence>();
 		for (Sentence sentence : sentences) {
-			if (sentence.getWordCount() < minSentenceLength) {
-				//The sentence is removed
-			} else if ( sentence.getWordCount() <= maxSentenceLength) {
+			if (filterCriteria.apply(sentence)) {
 				filteredSentences.add(sentence);
 			} else {
-				Collection<Sentence> subSentences = sentence.getSubSentencesOfCorrectLength(this, minSentenceLength, maxSentenceLength);
+				Collection<Sentence> subSentences = sentence.getSubSentencesMatchingCriteria(this, filterCriteria);
 				if (0 < subSentences.size())
-					filteredSentences.addAll(subSentences);
+					filteredSentences.addAll(subSentences);				
 			}
 		}
 		var returnParagraph =  new Paragraph(rawParagraph, filteredSentences, paragraphID);
-		returnParagraph.setOriginText(getOriginText());
+		returnParagraph.setOriginText(this.getOriginText());
 		return returnParagraph;
 	}
 

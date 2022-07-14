@@ -20,7 +20,7 @@ public class SortablePair<A, B> implements Comparable<SortablePair<A, B>> {
 
     public boolean equals(Object other) {
         if (other instanceof SortablePair) {
-            SortablePair<A, B> otherPair = (SortablePair<A, B>) other;
+            SortablePair<?, ?> otherPair = (SortablePair<?, ?>) other;
             //Only discerned based on the first element.
             return 
             ((  this.first == otherPair.first ||

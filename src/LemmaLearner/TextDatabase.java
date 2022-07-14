@@ -1,26 +1,31 @@
 package LemmaLearner;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-import java.util.function.BiFunction;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-
 
 import Configurations.Configurations;
 import Configurations.DatabaseConfigurations;
 import GUI.ProgressPrinter;
 import Lemmatization.Lemmatizer;
-import TextDataStructures.*;
+import TextDataStructures.Conjugation;
+import TextDataStructures.Lemma;
+import TextDataStructures.Paragraph;
+import TextDataStructures.Sentence;
+import TextDataStructures.Text;
+import TextDataStructures.TranslatedText;
 
 
 public class TextDatabase{
@@ -68,17 +73,87 @@ public class TextDatabase{
 		if (config.shouldPrintText()) 
 			progressPrinter.beginAddTextsToDatabase(textFilesInFolder.size());
 		
-		parsedTexts.forEach(text -> {text.filterUnlearnableSentences(); 
+		
+		parsedTexts.forEach(text -> {filterText(text);
 									 addTextToDatabase(text, progressPrinter);});
 			
 		
 		initializeLemmas();
+		
 		
 		if (config.shouldPrintText()) {
 			printAllTextsAddedToDatabaseInformation(progressStruct.absoluteStartTime);
 			progressPrinter.printFinishedAddingTexts();
 		}
 		
+	}
+
+	public void filterText(Text text) {
+		filterSentencesOnNumberOfWords(text);
+		filterSentencesOnNumberOfLetters(text);
+	}
+
+	private void filterSentencesOnNumberOfLetters(Text text) {
+		if (config.shouldPrintText())
+			System.out.println("Filter length");
+		text.filterSentencesBasedOnCriteria((Sentence s) -> s.hasCorrectNumberOfLetters(config.getMinSentenceLengthInLetters(), config.getMaxSentenceLengthInLetters()));
+	}
+
+	private void filterSentencesOnNumberOfWords(Text text) {
+		if (config.shouldPrintText())
+			System.out.println("Filter words");
+		text.filterSentencesBasedOnCriteria((Sentence s) -> s.hasCorrectNumberOfWords(config.getMinSentenceLengthInWords(), config.getMaxSentenceLengthInWords()));
+	}
+
+	private void printTestRemovalSummary() {
+		var lemmasSorted = new ArrayList<Lemma>(allLemmas.values());
+		Collections.sort(lemmasSorted, (Lemma lemma1, Lemma lemma2) -> {return lemma2.getFrequency() - lemma1.getFrequency();});
+		
+		for (int i = 0; i < lemmasSorted.size(); i++) {
+			var lemma = lemmasSorted.get(i);
+			if (i % 500 == 0) {
+				System.out.println(i + ") "+ lemma + ": " + lemma.getFrequency());	
+			}
+		}
+		
+		var wordPairsCount = new HashMap<Pair<String, String>, Integer>();
+		var wordCount = new HashMap<String, Integer>();
+		for (var lemma: allLemmas.values()) {
+			wordCount.put(lemma.getRawLemma(), 0);
+		}
+		
+		int goodSentences = 0;
+		for (Sentence sentence: allSentences.values()) {
+			var lemmas = new ArrayList<Lemma>(sentence.getLemmaSet(this));
+			boolean hasGoodPair = false;
+			for (int i = 0; i < lemmas.size() - 1; i++) {
+				for (int j = i + 1; j < lemmas.size(); j++) {
+					var lemma1 = lemmas.get(i);
+					var lemma2 = lemmas.get(j);
+					var wordPair = new Pair<String, String>(lemma1.getRawLemma(), lemma2.getRawLemma());
+					if (wordPairsCount.containsKey(wordPair)) {
+						wordPairsCount.put(wordPair, wordPairsCount.get(wordPair) + 1);
+					} else {
+						wordPairsCount.put(wordPair, 1);						
+					}
+					
+					if ((wordCount.get(lemma1.getRawLemma()) < 10 || wordCount.get(lemma2.getRawLemma()) < 5) || 
+							(wordPairsCount.get(wordPair) <= 3 && lemma1.getFrequency() < 500 && lemma2.getFrequency() < 500)) {
+						hasGoodPair = true;
+					}
+				}
+			}
+			if (hasGoodPair) {
+				for (var lemma: sentence.getLemmaSet(this)) {
+					wordCount.put(lemma.getRawLemma(), wordCount.get(lemma.getRawLemma()) + 1);
+				}
+				goodSentences++;
+			}
+		}
+		
+		System.out.println(wordPairsCount.size());
+		System.out.println(goodSentences);
+		System.out.println(allSentences.size());
 	}
 	
 
@@ -185,7 +260,7 @@ public class TextDatabase{
 		if (config.shouldSaveTexts())
 			parsedText.save(getSavedTextFileName(subfile));
 		//parsedText.combineAllParagraphs();
-		parsedText.filterUnlearnableSentences();
+		filterText(parsedText);
 		addTextToDatabase(parsedText, progressPrinter);		
 	}
 
@@ -265,7 +340,7 @@ public class TextDatabase{
 
 	public Text loadAndInitializeProgressFile(String rawProgressFile, ProgressPrinter progressPrinter) {
 		Text progressText = parseRawText("progress_file", rawProgressFile);
-		progressText.filterUnlearnableSentences();
+		filterText(progressText);
 		addTextToDatabase(progressText, progressPrinter);
 		initializeLemmas();
 		return progressText;

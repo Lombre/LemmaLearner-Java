@@ -77,6 +77,11 @@ public class Configurations implements ParsingConfigurations,
 	}
 
 
+	@Override
+	public String toString() {
+		return "Configurations [configurationKeyToValue=" + configurationKeyToValue + "]";
+	}
+
 	private String getConfigurationValue(final String configurationKey) throws Error {
 		if (!configurationKeyToValue.containsKey(configurationKey)) {
 			throw new Error("The configuration for \"" + configurationKey + "\" is not found in the configuration file.");
@@ -155,6 +160,26 @@ public class Configurations implements ParsingConfigurations,
 	
 	public boolean shouldNegativelyScoreNonWords() {
 		return getConfigurationBoolean("ShouldNegativelyScoreNonWords");
+	}
+
+	@Override
+	public int getMaxSentenceLengthInWords() {
+		return getConfigurationInt("MaxSentenceLengthInWords");
+	}
+
+	@Override
+	public int getMinSentenceLengthInWords() {
+		return getConfigurationInt("MinSentenceLengthInWords");
+	}
+
+	@Override
+	public int getMaxSentenceLengthInLetters() {
+		return getConfigurationInt("MaxSentenceLengthInLetters");
+	}
+
+	@Override
+	public int getMinSentenceLengthInLetters() {
+		return getConfigurationInt("MinSentenceLengthInLetters");
 	}
 	
 }

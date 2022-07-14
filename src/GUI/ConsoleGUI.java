@@ -58,7 +58,6 @@ public class ConsoleGUI implements ProgressPrinter {
 	int textCounter = 0;
 	@Override
 	public void printAddedTextToDatabase() {
-		// TODO Auto-generated method stub
 		textCounter++;
 		System.out.println("Added text " + textCounter + " to the database.");
 	}
@@ -75,10 +74,8 @@ public class ConsoleGUI implements ProgressPrinter {
 
 	public void runProgram() {
 		
-		mediator.loadFilesInGivenFolder("Texts/English");
-		
-		//mediator.loadSubtitesFilesInGivenFolder("subtitles/naruto-combined");
-		
+		mediator.loadFilesInLanguageSpecificFolder();
+				
 		mediator.startLearning();
 			
 		/*

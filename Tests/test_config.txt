@@ -2,7 +2,15 @@ Language = English
 
 MaxNumberOfSentencesToLearn = 12000
 
+MaxSentenceLengthInLetters = 800
+
+MaxSentenceLengthInWords = 300
+
 MaxTimesLemmaShouldBeLearned = 10
+
+MinSentenceLengthInLetters = 0
+
+MinSentenceLengthInWords = 0
 
 ScoreExponent = 2
 

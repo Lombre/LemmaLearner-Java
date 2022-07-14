@@ -1,19 +1,15 @@
 package Tests;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Configurations.Configurations;
-
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.List;
-
-import org.junit.*;
-
-import LemmaLearner.*;
+import LemmaLearner.TextDatabase;
 import TextDataStructures.Paragraph;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;

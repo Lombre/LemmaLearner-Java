@@ -1,6 +1,7 @@
 package TextDataStructures;
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import Configurations.LearningConfigations;
@@ -10,7 +11,6 @@ import LemmaLearner.*;
 public class Sentence implements Serializable, Comparable<Sentence>, ParagraphParent {
 	
 	private Set<Paragraph> originParagraphs;
-	private Set<Lemma> lemmaSet = null;
 	private List<Paragraph> subParagraphs;
 	private final String rawSentence;
 	private final short[] wordBeginningIndex;
@@ -23,6 +23,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		wordBeginningIndex = new short[rawWords.size()];
 		wordLengthIndex = new short[rawWords.size()];
 		setWordIndexes(rawSentence, rawWords);
+		this.subParagraphs = new ArrayList<Paragraph>();
 	}
 
 
@@ -119,7 +120,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 
 	public boolean isDirectlyLearnable(Set<Lemma> learnedLemmas, TextDatabase database) {
 		int numberOfUnlearnedLemmas = getNumberOfUnlearnedLemmas(learnedLemmas, database);
-		return numberOfUnlearnedLemmas == 1;
+		return getNumberOfUnlearnedLemmas(learnedLemmas, database) == 1;
 	}
 	
 	public int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
@@ -185,7 +186,6 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	}
 
 	public double getScore(TextDatabase database, LearningConfigations config) {
-		var lemmaSet = getLemmaSet(database);
 		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
 		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
 		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent()): 0;
@@ -198,7 +198,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		double modifier = 1;
 		var lemmaList = getLemmaList(database);		
 		for (var lemma : lemmaList) {
-			if (lemma.getRawLemma().equals(database.NOT_A_WORD_STRING)) {
+			if (lemma.getRawLemma().equals(TextDatabase.NOT_A_WORD_STRING)) {
 				modifier *= 0.85;
 			}
 		}
@@ -268,27 +268,36 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 
 
 	public Collection<Paragraph> getSubParagraphs() {
-		// TODO Auto-generated method stub
 		return subParagraphs;
 	}
 
 
-	public Collection<Sentence> getSubSentencesOfCorrectLength(Paragraph originParagraph, int minSentenceLength, int maxSentenceLength){
+	public Collection<Sentence> getSubSentencesMatchingCriteria(Paragraph originParagraph, Function<Sentence, Boolean> filterCriteria){
 		Collection<Sentence> filteredSentences = new ArrayList<Sentence>();
-		//The sentence is to large, but maybe it contains subparagraphs that are good?
+		//The sentence does not fit the criteria, but maybe it contains subparagraphs that do?
 		for (Paragraph subParagraph : subParagraphs) {
 			Sentence subParagraphSentence = subParagraph.asSentence(originParagraph);
-			if (minSentenceLength <= subParagraphSentence.getWordCount() && subParagraphSentence.getWordCount() <= maxSentenceLength) {
+			if (filterCriteria.apply(subParagraphSentence)) {
 				filteredSentences.add(subParagraphSentence);
 			} else {
 				//Reduce the paragraph:
-				Paragraph filteredSubParagraph = subParagraph.getParagraphWithSentencesFilteredOnLength(minSentenceLength, maxSentenceLength);
-				filteredSubParagraph.setOriginText(getAParagraph().getOriginText());
+				Paragraph filteredSubParagraph = subParagraph.getParagraphWithSentencesFilteredOnCriteria(filterCriteria);
+				filteredSubParagraph.setOriginText(originParagraph.getOriginText());
 				if (0 < filteredSubParagraph.getSentences().size())
 					filteredSubParagraph.getSentences().forEach(subSentence -> filteredSentences.add(subSentence));
 			}
 		}
 		return filteredSentences;
+	}
+	
+	
+	public boolean hasCorrectNumberOfWords(int minNumberOfWords, int maxNumberOfWords) {
+		return minNumberOfWords <= this.getWordCount() && this.getWordCount() <= maxNumberOfWords;
+	}
+
+	
+	public boolean hasCorrectNumberOfLetters(int minNumberOfLetters, int maxNumberOfLetters) {
+		return minNumberOfLetters <= this.getRawSentence().length() && this.getRawSentence().length() <= maxNumberOfLetters;
 	}
 
 

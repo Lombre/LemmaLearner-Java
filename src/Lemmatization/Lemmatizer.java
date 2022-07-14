@@ -1,19 +1,14 @@
 package Lemmatization;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.*;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 import Configurations.LemmatizationConfigurations;
 import LemmaLearner.TextDatabase;
-import TextDataStructures.*;
+import TextDataStructures.Conjugation;
 
 public class Lemmatizer {
 	
-	private final Path lemmaFilePath;
 	private HashMap<String, List<String>> conjugationToLemmas = new HashMap<String, List<String>>();
 	//private OnlineDictionary onlineDictionary;
 	private WiktionaryDictionary dictionary;
@@ -22,9 +17,8 @@ public class Lemmatizer {
 	
 	public Lemmatizer(LemmatizationConfigurations config) {	
 		this.config = config;
-		lemmaFilePath = Paths.get(config.getLanguage().toLowerCase() + "_lemma.txt");
 		//initializeStandardLemmatizer(lemmaFilePath);
-		dictionary = new WiktionaryDictionary(config.getLanguage());
+		dictionary = new WiktionaryDictionary(this.config.getLanguage());
 		dictionary.load();
 	}
 	
@@ -32,30 +26,6 @@ public class Lemmatizer {
 		dictionary.save();
 	}
 
-	private void initializeStandardLemmatizer(Path path) {
-		if (Files.exists(path)) {
-			try (Stream<String> lines = Files.lines(path, Charset.defaultCharset())) {
-				for (String line : (Iterable<String>) lines::iterator)
-				{
-					String[] splitLine = line.split("->");
-					String lemma = splitLine[0].split("/")[0].strip();
-					String[] conjugations = splitLine[1].strip().split(",");
-					for (String conjugation : conjugations) {
-						if (conjugationToLemmas.containsKey(conjugation)) {
-							List<String> lemmaList = conjugationToLemmas.get(conjugation);
-							lemmaList.add(lemma);
-						}
-						else {
-							List<String> lemmaList = new ArrayList() {{add(lemma);}};
-							conjugationToLemmas.put(conjugation.strip(), lemmaList);
-						}
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}			
-		}
-	}
 
 
 	public String getRawLemma(Conjugation conjugation) {

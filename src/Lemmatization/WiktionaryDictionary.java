@@ -1,21 +1,28 @@
 package Lemmatization;
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.json.JSONObject;
-import org.nustaq.serialization.FSTConfiguration;
-import org.nustaq.serialization.FSTObjectInput;
-import org.nustaq.serialization.FSTObjectOutput;
 
-import LemmaLearner.*;
-import TextDataStructures.*;
+import LemmaLearner.SerilizationHelper;
+import LemmaLearner.TextDatabase;
 
 
 //https://kaikki.org/dictionary/
@@ -98,11 +105,8 @@ public class WiktionaryDictionary implements Serializable {
 		
 		BufferedReader in = new BufferedReader(new FileReader(dictionaryFileLocation));
 		
-		int numberOfEntries = 0;
-		
 		while (in.ready()) {
 			//The JSON file has one entry per line.
-			numberOfEntries++;
 			String jsonString = in.readLine();
 			if (shouldOnlyReadStemForms)
 				addJSONStemFormSegmentToDictionary(jsonString);		
@@ -179,7 +183,6 @@ public class WiktionaryDictionary implements Serializable {
 		if (conjugationToLemma.containsKey(word)) {
 			//This can happen if there are two entries for a word.
 			//Like if one is the word as a verb, and another as a noun.
-			var lemmas = conjugationToLemma.get(word);
 			return;
 		}
 		else 
@@ -218,7 +221,6 @@ public class WiktionaryDictionary implements Serializable {
 			}
 			myWriter.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

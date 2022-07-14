@@ -1,20 +1,16 @@
 package Tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 
 import Configurations.Configurations;
-
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.*;
-
-import LemmaLearner.*;
+import GUI.ConsoleGUI;
+import LemmaLearner.TextDatabase;
 import TextDataStructures.Conjugation;
 import TextDataStructures.Paragraph;
 import TextDataStructures.Sentence;
@@ -31,7 +27,7 @@ class TestDatabaseInsertion {
 	
 	@BeforeEach
 	public void setUp() {
-		config = new Configurations();
+		config = new Configurations("Tests/test_config.txt");
 		database = new TextDatabase(config);
 	}
 	
@@ -190,7 +186,8 @@ class TestDatabaseInsertion {
 		assertSame(returnedText, parsedText);
 		
 		assertEquals(1, database.allParagraphs.size());
-		assertEquals(2, database.allSentences.size());
+		System.out.println(config.getMinSentenceLengthInLetters());
+		assertEquals(database.allSentences.toString(), 2, database.allSentences.size());
 		assertEquals(4, database.allWords.size());
 		
 		assertEquals(1, database.allWords.get(word1).getFrequency());
@@ -199,6 +196,138 @@ class TestDatabaseInsertion {
 		assertEquals(1, database.allWords.get(word4).getFrequency());
 	}
 	
+	@Test
+	public void testAddFilesInFolderToDatabase_texts_are_added() {
+		database.addAllTextsInFolderToDatabase("Test texts/MultiFileFolder/", new ConsoleGUI());
+		assertEquals(2, database.allTexts.size());
+		assertTrue(database.allTexts.keySet().contains("test1.txt"));
+		assertTrue(database.allTexts.keySet().contains("test2.txt"));
+	}
+	
+	@Test
+	public void testAddFilesInFolderToDatabase_sentences_are_added() {
+		database.addAllTextsInFolderToDatabase("Test texts/MultiFileFolder/", new ConsoleGUI());
+		
+		assertEquals(2, database.allSentences.size());
+		assertTrue(database.allSentences.keySet().contains("This is a test - 1."));
+		assertTrue(database.allSentences.keySet().contains("This is also a test - 2."));
+	}
+
+	@Test
+	public void testAddFilesInFolderToDatabase_words_are_added() {
+		database.addAllTextsInFolderToDatabase("Test texts/MultiFileFolder/", new ConsoleGUI());
+		
+		assertEquals(5, database.allWords.size());
+		System.out.println(database.allWords.keySet());
+		assertTrue(database.allWords.keySet().contains("this"));
+		assertTrue(database.allWords.keySet().contains("is"));
+		assertTrue(database.allWords.keySet().contains("also"));
+		assertTrue(database.allWords.keySet().contains("a"));
+		assertTrue(database.allWords.keySet().contains("test"));
+	}
+
+
+	@Test
+	public void testAddFilesInFolderToDatabase_lemmas_are_added() {
+		database.addAllTextsInFolderToDatabase("Test texts/MultiFileFolder/", new ConsoleGUI());
+		
+		assertEquals(5, database.allLemmas.size());
+		System.out.println(database.allLemmas.keySet());
+		assertTrue(database.allLemmas.keySet().contains("this"));
+		assertTrue(database.allLemmas.keySet().contains("be"));
+		assertTrue(database.allLemmas.keySet().contains("also"));
+		assertTrue(database.allLemmas.keySet().contains("a"));
+		assertTrue(database.allLemmas.keySet().contains("test"));
+	}
+	
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfWords_toFewWords() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "10");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "20");
+		TestTool.parseStringAndAddToDatabase("Yes. Yes no. No yes yes cake. Not enough words in this sentence.", database);
+		assertEquals(0, database.allSentences.size());
+	}
+	
+
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfWords_enoughWordsInSentence() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "10");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "20");
+		TestTool.parseStringAndAddToDatabase("There are enough words in this sentence to be included in the database. There are also enough words in this sentence to be included in the database.", database);
+		assertEquals(2, database.allSentences.size());
+	}
+	
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfWords_toManyWords() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "10");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "20");
+		TestTool.parseStringAndAddToDatabase("There are far far to many words in this sentence for it to reasonably be included in the text database seen here.", database);
+		assertEquals(0, database.allSentences.size());
+	}
+	
+	
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfWords_toManyWords_butWithSubsentence() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "5");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "20");
+		String subSentence = "but not in terms of this subsentence";
+		TestTool.parseStringAndAddToDatabase("There are far far to many words in this sentence (" + subSentence + ") for it to reasonably be included in the text database seen here.", database);
+		assertEquals(1, database.allSentences.size());
+		assertTrue(database.allSentences.containsKey(subSentence));
+	}
+	
+
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfLetters_toFewLetters() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "20");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "100");
+		TestTool.parseStringAndAddToDatabase("Blah. Cake is good. Not enogh letters.", database);
+		assertEquals(0, database.allSentences.size());
+	}
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfLetters_enoughLetters() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "20");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "100");
+		TestTool.parseStringAndAddToDatabase("There are enogugh letters in this sentence. It is also the case in this sentence.", database);
+		assertEquals(2, database.allSentences.size());
+	}
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfLetters_toManyLetters() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "20");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "50");
+		TestTool.parseStringAndAddToDatabase("There are definetely to many letters in this sentnence for it to actually be included in the database, hahahahahahahahahahahahahahahaha.", database);
+		assertEquals(0, database.allSentences.size());
+	}
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfLetters_toManyLetters_withSubsentence() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "20");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "50");
+		String subSentence = "but not in terms of this subsentence";
+		TestTool.parseStringAndAddToDatabase("There are definetely to many letters in this sentnence for it to actually be included in the database (" + subSentence + "), hahahahahahahahahahahahahahahaha.", database);
+		assertEquals(1, database.allSentences.size());
+		assertTrue(database.allSentences.containsKey(subSentence));
+	}
+	
+
+	@Test
+	public void testFilteringOfSentencesOnNumberOfWordsAndLetters() {
+		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "4");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "30");
+		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "10");
+		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "80");
+		var testString = "“Then, good night, your Majesty, and I trust that we shall soon have some good news for you. And good night, Watson,” he added, as the wheels of the royal brougham rolled down the street. “If you will be good enough to call tomorrow afternoon at three o’clock I should like to chat this little matter over with you.”";
+		TestTool.parseStringAndAddToDatabase(testString, database);
+		assertEquals(0, database.allSentences.size());
+			
+	}
 	
 	
 	

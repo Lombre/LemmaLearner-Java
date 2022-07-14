@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +7,15 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
-import net.miginfocom.swing.MigLayout;
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import Configurations.Configurations;
 import LemmaLearner.ParsingProgressStruct;
@@ -17,6 +23,7 @@ import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
+import net.miginfocom.swing.MigLayout;
 
 public class SwingGUI implements ProgressPrinter {
 	

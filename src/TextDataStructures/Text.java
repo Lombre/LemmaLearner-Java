@@ -1,6 +1,7 @@
 package TextDataStructures;
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 
 import LemmaLearner.*;
 
@@ -77,68 +78,16 @@ public class Text implements Serializable, ParagraphParent{
 
 	
 
-	public void filterUnlearnableSentences() {
-		filterSentencesBasedOnLength(4, 16);
-	}
-
-
-	private void filterSentencesBasedOnLength(int minSentenceLength, int maxSentenceLength) {
+	public void filterSentencesBasedOnCriteria(Function<Sentence, Boolean> filterCriteria) {
 		
+		Set<Paragraph> filteredParagraphs = new ListSet<Paragraph>();
 		
-		int initalNumberOfSentences = paragraphs.stream()
-												.map(paragraph -> paragraph.getSentences().size())
-												.reduce((a, b) -> a + b).get();
-		
-		
-
-		List<Paragraph> originalParagraphs = new ArrayList<Paragraph>(paragraphs);
-		paragraphs.clear();
-		
-		for (Paragraph paragraph : originalParagraphs) {
-			Paragraph revisedParagraph = paragraph.getParagraphWithSentencesFilteredOnLength(minSentenceLength, maxSentenceLength);
+		for (Paragraph paragraph : paragraphs) {
+			Paragraph revisedParagraph = paragraph.getParagraphWithSentencesFilteredOnCriteria(filterCriteria);
 			if (0 < revisedParagraph.getSentences().size()) 
-				paragraphs.add(revisedParagraph);
+				filteredParagraphs.add(revisedParagraph);
 		}		
-
-		int laterNumberOfSentences = paragraphs.stream()
-												.map(paragraph -> paragraph.getSentences().size())
-												.reduce((a, b) -> a + b).get();
-		
-		
-		//System.out.println("Initial number of sentences: " + initalNumberOfSentences);
-		//System.out.println("Later number of sentences: " + laterNumberOfSentences);
-		
-	}
-
-
-	public void combineAllParagraphs() {
-		
-		throw new Error("Removed function");
-		/*
-		var combinedParagraphs = new ArrayList<Paragraph>(paragraphs);
-		
-		paragraphs.clear();
-		
-		for (int i = 0; i < combinedParagraphs.size() - 1; i++) {
-			var currentParagraph = combinedParagraphs.get(i);
-			var nextParagraph = combinedParagraphs.get(i+1);
-
-			throw new Error();
-			var currentParagraphLastSentence = currentParagraph.getNthSentence(currentParagraph.getSentences().size()-1);
-			var nextParapgrahFirstSentence = nextParagraph.getNthSentence(0);
-			if (currentParagraphLastSentence.isUnended() && 
-				nextParapgrahFirstSentence.startsWithLowerCase()) {
-				
-				Paragraph combinedParapgrah = combineParagraphs(currentParagraph, nextParagraph);
-				paragraphs.add(combinedParapgrah);
-				i++;
-			} else {
-				paragraphs.add(currentParagraph);
-			}
-		}
-		*/
-		// TODO Auto-generated method stub
-		
+		paragraphs = filteredParagraphs;
 	}
 
 

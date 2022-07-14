@@ -1,30 +1,28 @@
 package Tests;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
-
-import Configurations.Configurations;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import LemmaLearner.*;
+import Configurations.Configurations;
+import GUI.ConsoleGUI;
+import LemmaLearner.GreedyLearner;
+import LemmaLearner.SortablePair;
+import LemmaLearner.TextDatabase;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
-
-import GUI.ConsoleGUI;
 
 
 class TestGreedyLearning {
@@ -113,7 +111,7 @@ class TestGreedyLearning {
 		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
 		TestTool.changeConfigField(config, "ShouldNegativelyScoreNonWords", "false");
 		
-		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedSentence, database);
+		TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
 		//Initially the lemmas should give a score of 1 each, as that are their frequencies.
 		assertEquals((1+1+1)*(1+1+1), learnedSentence.getScore(database, config), 0.001);
@@ -171,9 +169,9 @@ class TestGreedyLearning {
 	public void testLemmasAreLearnedGreedily() throws Exception {
 		
 		//This assumes no extra scoring for conjugations or learning lemmas again
-		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
+		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "False");
 		TestTool.changeConfigField(config, "MaxTimesLemmaShouldBeLearned", "1");
-		TestTool.changeConfigField(config, "ShouldNegativelyScoreNonWords", "false");
+		TestTool.changeConfigField(config, "ShouldNegativelyScoreNonWords", "False");
 		
 		//If it is done greedily, the invariant that there is no Lemma w2 learned after another Lemma w1,
 		//Such that w1.frequency < w2.frequency, unless w1 participates in the sentence used to learn w2,
@@ -181,6 +179,7 @@ class TestGreedyLearning {
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
 		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());
 		database.initializeLemmas();
+		System.out.println(config);
 		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
 			var currentLemma = learningOrder.get(i).getFirst();
@@ -190,12 +189,15 @@ class TestGreedyLearning {
 
 			//An initial sentence is learned, with all the Lemmas in it. 
 			//The Lemmas learned from this sentence should thus be skipped.
-			if (currentSentence.equals(learningOrder.get(0).getSecond())) {
+			if (currentSentence.equals(learningOrder.get(1).getSecond())) {
 				continue;
 			}
 			
-			if (!nextSentence.getRawSentence().equals(learner.NOT_A_SENTENCE_STRING) && !nextSentence.getLemmaSet(database).contains(currentLemma)) {
-				assertTrue("Greedy invariant broken: Lemma " + nextLemma + " has a higher frequency (" + nextLemma.getFrequency() +  ") than " + currentLemma + " (" + currentLemma.getFrequency() +  ") but is learnt after the Lemma, for no reason.", nextLemma.getFrequency() <= currentLemma.getFrequency());
+			if (!nextSentence.getRawSentence().equals(GreedyLearner.NOT_A_SENTENCE_STRING) && !nextSentence.getLemmaSet(database).contains(currentLemma)) {
+				if (i == 91) {
+					int k = 1;
+				}
+				assertTrue("Greedy invariant broken: Lemma number " + i + " \"" + nextLemma + "\" has a higher frequency (" + nextLemma.getFrequency() +  ") than \"" + currentLemma + "\" (" + currentLemma.getFrequency() +  ") but is learnt after the Lemma, for no reason.", nextLemma.getFrequency() <= currentLemma.getFrequency());
 			}
 		}
 	}
@@ -211,6 +213,7 @@ class TestGreedyLearning {
 		TestTool.parseText(fileToParse, database);
 		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
+		System.out.println(config);
 		//Is notaword lemma.
 		learnedLemmas.add(learningOrder.get(0).getFirst());
 		//Skip the first lemma, as this is notaword.

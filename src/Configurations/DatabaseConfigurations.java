@@ -8,4 +8,12 @@ public interface DatabaseConfigurations extends BaseTestable{
 	
 	String getLanguage();
 
+	int getMaxSentenceLengthInWords();
+	
+	int getMinSentenceLengthInWords();
+
+	int getMaxSentenceLengthInLetters();
+	
+	int getMinSentenceLengthInLetters();
+
 }

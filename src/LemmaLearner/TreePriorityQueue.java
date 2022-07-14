@@ -1,11 +1,10 @@
 package LemmaLearner;
-import java.awt.Component;
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
-
-
-import LemmaLearner.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 
 public class TreePriorityQueue<E> {
 	TreeSet<SortablePair<List<E>, Double>> treeSet;
@@ -78,7 +77,6 @@ public class TreePriorityQueue<E> {
 	
 	
 	public void clear() {
-		// TODO Auto-generated method stub
 		treeSet.clear();
 		elementToPair.clear();
 		scoreToPair.clear();
@@ -88,7 +86,6 @@ public class TreePriorityQueue<E> {
 		  if (!elementToPair.containsKey(e)) 
 			  throw new Error("Element " + e + " cannot be replaced, as it is not contained in the queue to start with.");
 		  remove(e); 
-		  SortablePair<E, Double> newPair = new SortablePair<E, Double>(e, score); 		
 		  add(e, score);
 		  return true; 
 		 

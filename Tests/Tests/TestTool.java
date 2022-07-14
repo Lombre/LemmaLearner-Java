@@ -1,31 +1,19 @@
 package Tests;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import Configurations.Configurations;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.*;
 
+import Configurations.Configurations;
 import GUI.ConsoleGUI;
-import LemmaLearner.*;
+import LemmaLearner.TextDatabase;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
 
@@ -45,10 +33,12 @@ public class TestTool {
 	
 	public static Text parseStringAndAddToDatabase(String stringToParse, TextDatabase database) {
 		Text parsedText = database.parseRawText(testTextName, stringToParse);
+		database.filterText(parsedText);
 		database.addTextToDatabase(parsedText, new ConsoleGUI());
 		database.initializeLemmas();
 		return parsedText;
 	}
+
 	
 	public static void assertSameObjectInList(List<Object> listOfObjects) {
 		if (listOfObjects.size() < 2) return;
@@ -74,7 +64,8 @@ public class TestTool {
 		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());		
 		database.initializeLemmas();
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public static void changeConfigField(Configurations config, String field, String value) {
 		try {
 			var map = (Map<String, String>) FieldUtils.readField(config, "configurationKeyToValue", true);

@@ -44,6 +44,10 @@ public class Mediator {
 		
 	}
 
+	public void loadFilesInLanguageSpecificFolder() {
+		this.loadFilesInGivenFolder("Texts/" + config.getLanguage() + "/");
+	}
+
 
 	public void loadSubtitesFilesInGivenFolder(String folderLocation) {
 		System.out.println("Loading subtitles");
@@ -52,7 +56,7 @@ public class Mediator {
 	}
 
 	public void startLearning() {
-		var learningList = learner.learnAllLemmas();
+		learner.learnAllLemmas();
 		System.out.println("Done!");
 	}
 	
@@ -106,12 +110,13 @@ public class Mediator {
 			for (Sentence sentence : sentences) {
 				learner.learnLemmasInSentence(sentence);
 			}
-			int j = 1;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 	}
+
+
 	
 	
 }

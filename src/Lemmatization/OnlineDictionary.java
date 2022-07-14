@@ -12,7 +12,6 @@ import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
 import LemmaLearner.*;
-import TextDataStructures.*;
 
 
 
@@ -85,7 +84,8 @@ public class OnlineDictionary {
 			throw new Error("Saving file \"" + SAVED_DICTIONARY_PATH + "\" failed.");
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	private HashMap<String, String> loadSavedDictionary() throws Exception {
 		FileInputStream fileInputStream = new FileInputStream(SAVED_DICTIONARY_PATH);
 	    FSTObjectInput in = new FSTObjectInput(fileInputStream);

@@ -1,10 +1,9 @@
 package TextDataStructures;
-import java.awt.Component;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import LemmaLearner.*;
+import LemmaLearner.ListSet;
 
 public class Lemma implements Serializable, Comparable<Lemma> {
 
