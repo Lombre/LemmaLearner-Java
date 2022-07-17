@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -79,6 +81,31 @@ public class TextDatabase{
 			
 		
 		initializeLemmas();
+
+		
+		var lemmaToBookCount = new HashMap<Lemma, Integer>();
+		for (Text text : parsedTexts) {
+			Set<Lemma> lemmasInText = text.getAllLemmasInText(this);
+			for (Lemma lemma : lemmasInText) {
+				lemmaToBookCount.computeIfPresent(lemma, (key, val) -> val + 1);
+				lemmaToBookCount.computeIfAbsent(lemma, (key) -> 1);
+			}
+		}
+		
+		System.out.println("Initial lemma count: " + lemmaToBookCount.size());
+		
+		double requiredFraction = 0.10;
+		
+		var filteredLemmas = new TreeSet<Lemma>();
+		
+		for (Lemma lemma : lemmaToBookCount.keySet()) {
+			int lemmaCount = lemmaToBookCount.get(lemma);
+			if (requiredFraction*parsedTexts.size() <= lemmaCount) {
+				filteredLemmas.add(lemma);
+			}
+		}
+		
+		System.out.println("After filtering with lemmas required to bein in at least " + requiredFraction + " fractions of the texts: " + filteredLemmas.size());
 		
 		
 		if (config.shouldPrintText()) {
@@ -94,14 +121,10 @@ public class TextDatabase{
 	}
 
 	private void filterSentencesOnNumberOfLetters(Text text) {
-		if (config.shouldPrintText())
-			System.out.println("Filter length");
 		text.filterSentencesBasedOnCriteria((Sentence s) -> s.hasCorrectNumberOfLetters(config.getMinSentenceLengthInLetters(), config.getMaxSentenceLengthInLetters()));
 	}
 
 	private void filterSentencesOnNumberOfWords(Text text) {
-		if (config.shouldPrintText())
-			System.out.println("Filter words");
 		text.filterSentencesBasedOnCriteria((Sentence s) -> s.hasCorrectNumberOfWords(config.getMinSentenceLengthInWords(), config.getMaxSentenceLengthInWords()));
 	}
 

@@ -9,11 +9,10 @@ public class Starter {
 	
 	public static void main(String[] args) throws Exception {
 		
-		ConsoleGUI gui;
+		SwingGUI gui;
 
-		gui = new ConsoleGUI();
+		gui = new SwingGUI();
 		new Mediator(gui);
-		gui.runProgram();		
 	}
 	
 	

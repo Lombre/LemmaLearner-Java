@@ -1,6 +1,8 @@
+ConjugationScoreFactor = 4
+
 Language = English
 
-MaxNumberOfSentencesToLearn = 3000
+MaxNumberOfSentencesToLearn = 8000
 
 MaxSentenceLengthInLetters = 80
 
@@ -18,11 +20,11 @@ ShouldConjugationsBeScored = True
 
 ShouldLoadDictionary = True
 
-ShouldLoadSavedTexts = False
+ShouldLoadSavedTexts = True
 
 ShouldNegativelyScoreNonWords = True
 
 ShouldPrintText = True
 
-ShouldSaveTexts = False
+ShouldSaveTexts = True
 

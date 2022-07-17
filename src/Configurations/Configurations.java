@@ -181,5 +181,11 @@ public class Configurations implements ParsingConfigurations,
 	public int getMinSentenceLengthInLetters() {
 		return getConfigurationInt("MinSentenceLengthInLetters");
 	}
+
+	@Override
+	public double getConjugationScoreFactor() {
+		// TODO Auto-generated method stub
+		return getConfigurationDouble("ConjugationScoreFactor");
+	}
 	
 }

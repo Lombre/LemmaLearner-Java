@@ -133,4 +133,12 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 		sentenceForm.setInitialOriginParagraph(originParagraph);
 		return sentenceForm;
 	}
+
+	public Set<Lemma> getAllLemmas(TextDatabase textDatabase) {
+		var allLemmas = new HashSet<Lemma>();
+		for (Sentence sentence : getSentences()) {
+			allLemmas.addAll(sentence.getLemmaSet(textDatabase));
+		}
+		return allLemmas;
+	}
 }

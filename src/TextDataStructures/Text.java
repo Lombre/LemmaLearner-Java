@@ -98,5 +98,13 @@ public class Text implements Serializable, ParagraphParent{
 		// TODO Auto-generated method stub
 		return combinedParagraph;
 	}
+
+	public Set<Lemma> getAllLemmasInText(TextDatabase textDatabase) {
+		var allLemmas = new HashSet<Lemma>();
+		for (Paragraph paragraph : paragraphs) {
+			allLemmas.addAll(paragraph.getAllLemmas(textDatabase));
+		}
+		return allLemmas;
+	}
 	
 }

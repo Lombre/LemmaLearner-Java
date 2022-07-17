@@ -188,7 +188,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	public double getScore(TextDatabase database, LearningConfigations config) {
 		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
 		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
-		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent()): 0;
+		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent(), config.getConjugationScoreFactor()): 0;
 		double notawordModifier = (config.shouldNegativelyScoreNonWords())? getNotAWordModifier(database): 1;
 		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore)*notawordModifier;//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
 		return score;
@@ -230,13 +230,13 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		return score;
 	}
 	
-
-	private double getConjugationScore(TextDatabase database, int numberOfTimesCounted, double scoreExponent) {
+	// Score factor is how relatively less conjugations should be score relative to lemmas
+	private double getConjugationScore(TextDatabase database, int numberOfTimesCounted, double scoreExponent, double scoreFactor) {
 		double score = 0;
 		var conjugations = getWordSet(database);
 		for (Conjugation conjugation : conjugations) {
 			if (conjugation.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(scoreExponent, conjugation.getTimesLearned()+2));
+				double extraScore = 1.0/( Math.pow(scoreExponent, conjugation.getTimesLearned())* scoreFactor);
 				score += extraScore;
 			} 
 		}

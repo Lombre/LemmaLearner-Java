@@ -4,6 +4,8 @@ public interface LearningConfigations extends BaseTestable {
 	
 	public double getScoreExponent();
 	
+	public double getConjugationScoreFactor();
+	
 	public int getMaxTimesLemmaShouldBeLearned();
 
 	public int getMaxNumberOfSentencesToLearn();	
