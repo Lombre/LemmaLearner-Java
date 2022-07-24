@@ -37,43 +37,43 @@ public class Pair<K, V>{
     /**
      * Key of this Pair.
      */
-    private K key;
+    private K firstValue;
 
     /**
      * Gets the key for this pair.
      * @return key for this pair
      */
-    public K getKey() { return key; }
+    public K getFirstValue() { return firstValue; }
 
     /**
      * Value of this this Pair.
      */
-    private V value;
+    private V secondValue;
 
     /**
      * Gets the value for this pair.
      * @return value for this pair
      */
-    public V getValue() { return value; }
+    public V getSecondValue() { return secondValue; }
 
     /**
      * Creates a new pair
-     * @param key The key for this pair
-     * @param value The value to use for this pair
+     * @param firstValue The key for this pair
+     * @param secondValue The value to use for this pair
      */
-    public Pair(K key, V value) {
-        this.key = key;
-        this.value = value;
+    public Pair(K firstValue, V secondValue) {
+        this.firstValue = firstValue;
+        this.secondValue = secondValue;
     }
 
     /**
-     * 
+     *
 
 String representation of this
      * Pair.
 
      *
-     * 
+     *
 
 The default name/value delimiter '=' is always used.
 
@@ -82,16 +82,16 @@ The default name/value delimiter '=' is always used.
      */
     @Override
     public String toString() {
-        return key + "=" + value;
+        return firstValue + "=" + secondValue;
     }
 
     /**
-     * 
+     *
 
 Generate a hash code for this Pair.
 
      *
-     * 
+     *
 
 The hash code is calculated using both the name and
      * the value of the Pair.
@@ -102,26 +102,26 @@ The hash code is calculated using both the name and
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + (key != null ? key.hashCode() : 0);
-        hash = 31 * hash + (value != null ? value.hashCode() : 0);
+        hash = 31 * hash + (firstValue != null ? firstValue.hashCode() : 0);
+        hash = 31 * hash + (secondValue != null ? secondValue.hashCode() : 0);
         return hash;
     }
 
      /**
-      * 
+      *
 
 Test this Pair for equality with another
       * Object.
 
       *
-      * 
+      *
 
 If the Object to be tested is not a
       * Pair or is null, then this method
       * returns false.
 
       *
-      * 
+      *
 
 Two Pairs are considered equal if and only if
       * both the names and values are equal.
@@ -137,8 +137,8 @@ Two Pairs are considered equal if and only if
          if (this == o) return true;
          if (o instanceof Pair<?, ?>) {
              Pair<?, ?> pair = (Pair<?, ?>) o;
-             if (key != null ? !key.equals(pair.key) : pair.key != null) return false;
-             if (value != null ? !value.equals(pair.value) : pair.value != null) return false;
+             if (firstValue != null ? !firstValue.equals(pair.firstValue) : pair.firstValue != null) return false;
+             if (secondValue != null ? !secondValue.equals(pair.secondValue) : pair.secondValue != null) return false;
              return true;
          }
          return false;

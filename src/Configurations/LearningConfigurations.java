@@ -1,6 +1,6 @@
 package Configurations;
 
-public interface LearningConfigations extends BaseTestable {
+public interface LearningConfigurations extends BaseTestable {
 	
 	public double getScoreExponent();
 	
@@ -13,5 +13,6 @@ public interface LearningConfigations extends BaseTestable {
 	public boolean shouldConjugationsBeScored();
 
 	public boolean shouldNegativelyScoreNonWords();
-	
+
+	public boolean enableSpaceSavingMode();
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import Configurations.Configurations;
+import Configurations.GuiConfigurations;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -19,8 +20,6 @@ public interface ProgressPrinter {
 		
 	public void printLearnedLemma(List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database);
 
-	public void displayAlternatives(ArrayList<Sentence> alternatives, Set<Lemma> learnedLemmas, Configurations config, TextDatabase database);
-
 	public void beginAddTextsToDatabase(int size);
 
 	public void printAddedTextToDatabase();
@@ -28,5 +27,7 @@ public interface ProgressPrinter {
 	public void printFinishedAddingTexts();
 
 	public void setMediator(Mediator mediator);
+
+	public void initialize(GuiConfigurations config);
 	
 }

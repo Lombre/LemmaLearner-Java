@@ -9,9 +9,10 @@ import java.util.stream.Collectors;
 
 
 public class Configurations implements ParsingConfigurations,
-									   LearningConfigations, 
+									   LearningConfigurations, 
 									   DatabaseConfigurations, 
-									   LemmatizationConfigurations {
+									   LemmatizationConfigurations,
+									   GuiConfigurations {
 	
 	
 	private final Map<String, String> configurationKeyToValue;
@@ -137,9 +138,12 @@ public class Configurations implements ParsingConfigurations,
 	public double getScoreExponent() {
 		return getConfigurationDouble("ScoreExponent");
 	}
-	
+
+	private Integer maxTimesLemmaShouldBeLearned;
 	public int getMaxTimesLemmaShouldBeLearned() {
-		return getConfigurationInt("MaxTimesLemmaShouldBeLearned");
+		if (maxTimesLemmaShouldBeLearned == null)
+			maxTimesLemmaShouldBeLearned = getConfigurationInt("MaxTimesLemmaShouldBeLearned");
+		return maxTimesLemmaShouldBeLearned;
 	}
 
 	public int getMaxNumberOfSentencesToLearn() {
@@ -151,7 +155,7 @@ public class Configurations implements ParsingConfigurations,
 	}
 	
 	public String getLanguage() {
-		return getConfigurationString("Language");
+		return getConfigurationString("Language").toLowerCase();
 	}
 
 	public boolean shouldSaveTexts() {
@@ -186,6 +190,11 @@ public class Configurations implements ParsingConfigurations,
 	public double getConjugationScoreFactor() {
 		// TODO Auto-generated method stub
 		return getConfigurationDouble("ConjugationScoreFactor");
+	}
+
+	@Override
+	public boolean enableSpaceSavingMode() {
+		return getConfigurationBoolean("EnableSpaceSavingMode");
 	}
 	
 }

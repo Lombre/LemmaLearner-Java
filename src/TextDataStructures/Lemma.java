@@ -45,8 +45,11 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 		return getRawLemma();
 	}
 
+	private Set<Sentence> sentences;
 	public Set<Sentence> getSentences() {
-		return conjugations.stream().flatMap(conjugation -> conjugation.getSentences().stream()).collect(Collectors.toSet());
+		if (sentences == null)
+			sentences = conjugations.stream().flatMap(conjugation -> conjugation.getSentences().stream()).collect(Collectors.toSet());
+		return sentences;
 	}
 
 	@Override

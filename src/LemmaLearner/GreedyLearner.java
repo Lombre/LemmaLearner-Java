@@ -2,7 +2,7 @@ package LemmaLearner;
 
 import java.util.*;
 
-import Configurations.LearningConfigations;
+import Configurations.LearningConfigurations;
 import GUI.ProgressPrinter;
 import TextDataStructures.Conjugation;
 import TextDataStructures.Lemma;
@@ -17,13 +17,13 @@ public class GreedyLearner {
 	private PriorityQueue<Lemma> lemmasByFrequency;
 	private TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency;
 	public static final String NOT_A_SENTENCE_STRING = "No sentence found.";
-	private final LearningConfigations config;
+	private final LearningConfigurations config;
 	public ProgressPrinter progressPrinter;
 	
 	public HashMap<List<Lemma>, TreePriorityQueue<Sentence>> sentencesWithRequiredLemmas;
 	public HashMap<Lemma, ListSet<List<Lemma>>> lemmaToListSet = new  HashMap<Lemma, ListSet<List<Lemma>>>();
 
-	public GreedyLearner(TextDatabase database, LearningConfigations config) {
+	public GreedyLearner(TextDatabase database, LearningConfigurations config) {
 		this.database = database;
 		this.config = config;
 	}

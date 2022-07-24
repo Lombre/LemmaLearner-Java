@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import Configurations.LearningConfigations;
+import Configurations.LearningConfigurations;
 import LemmaLearner.TextDatabase;
 import LemmaLearner.*;
 
@@ -15,7 +15,10 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	private final String rawSentence;
 	private final short[] wordBeginningIndex;
 	private final short[] wordLengthIndex;
-	
+
+	private Set<Lemma> lemmaSet;
+	private Set<Conjugation> wordSet;
+
 	public Sentence(String rawSentence, List<String> rawWords) {
 		if (Short.MAX_VALUE <= rawSentence.length()) 
 			throw new Error("A sentence that is to long has been parsed. Maximum allowed length is " + Short.MAX_VALUE + ". The sentence is: " + rawSentence);
@@ -148,13 +151,22 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	}
 
 	public Set<Lemma> getLemmaSet(TextDatabase database) {
-		var wordSet = getWordSet(database);
-		var lemmaSet = new HashSet<Lemma>();
-		for (var word : wordSet) {
-			lemmaSet.add(word.getLemma());
+		if (this.lemmaSet == null){
+			var wordSet = getWordSet(database);
+			var lemmaSet = new HashSet<Lemma>();
+			for (var word : wordSet) {
+				lemmaSet.add(word.getLemma());
+			}
+			// Saving a lemma set for each sentence takes a lot of space
+			// so we only save it if we have enabled this in the config.
+			if (false) { //TODO Add config for this
+				return Collections.unmodifiableSet(lemmaSet);
+			} else
+				this.lemmaSet = lemmaSet; // Collections.unmodifiableSet(lemmaSet);
 		}
-		return Collections.unmodifiableSet(lemmaSet);		
+		return this.lemmaSet;
 	}
+
 
 	public List<Conjugation> getWordList(TextDatabase database) {
 		List<String> rawWordsInSentence = getRawWordList();
@@ -185,7 +197,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		return wordBeginningIndex.length;
 	}
 
-	public double getScore(TextDatabase database, LearningConfigations config) {
+	public double getScore(TextDatabase database, LearningConfigurations config) {
 		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
 		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
 		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent(), config.getConjugationScoreFactor()): 0;

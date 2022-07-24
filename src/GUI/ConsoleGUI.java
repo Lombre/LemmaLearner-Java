@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import Configurations.Configurations;
+import Configurations.GuiConfigurations;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -42,12 +43,7 @@ public class ConsoleGUI implements ProgressPrinter {
 			System.out.println("\t\t ->" + associatedSentence.getLemmatizedRawSentence(database));
 		}
 	}
-
-	@Override
-	public void displayAlternatives(ArrayList<Sentence> alternatives, Set<Lemma> learnedLemmas, Configurations config, TextDatabase database) {
-		System.out.println(alternatives);		
-	}
-
+	
 	
 	@Override
 	public void beginAddTextsToDatabase(int size) {
@@ -82,6 +78,11 @@ public class ConsoleGUI implements ProgressPrinter {
 		mediator.loadProgress();
 		mediator.saveProgress();
 		*/
+	}
+
+	@Override
+	public void initialize(GuiConfigurations config) {
+		this.runProgram();
 	}
 
 

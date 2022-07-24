@@ -14,7 +14,7 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 	
 	public Conjugation(Sentence originSentence, String rawConjugation) {
 		this(rawConjugation);
-		sentences = new ListSet<Sentence>();
+		sentences = new HashSet<Sentence>(); //TODO maybe hashset for speed?
 		sentences.add(originSentence);
 	}
 	

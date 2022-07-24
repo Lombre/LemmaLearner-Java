@@ -22,7 +22,7 @@ public class ManualParser {
 	
 	private ParsingConfigurations config;
 	
-	private final Map<Character, Character> openCharToCloseChar = new TreeMap<Character, Character>(){{
+	private final Map<Character, Character> openCharToCloseChar = new HashMap<Character, Character>(){{
 		put('\"', '\"'); 
 		put('(',')');
 		put('[', ']');
@@ -32,7 +32,7 @@ public class ManualParser {
 		put('¡', '!');
 	}};
 	
-	private final Set<Character> punctuationSet = new TreeSet<Character>(){{
+	private final Set<Character> punctuationSet = new HashSet<Character>(){{
 		add('.'); add('?'); add('!');		
 	}};
 
@@ -54,10 +54,10 @@ public class ManualParser {
 			rawAbbreviations = Files.readAllLines(Path.of(filePath));
 		} catch (IOException e) {
 			System.out.println("No relevant abbreviations file found at: " + filePath);
-			return new TreeSet<String>();
+			return new HashSet<String>();
 		}
 		
-		Set<String> abbreviations = new TreeSet<String>();
+		Set<String> abbreviations = new HashSet<String>();
 		for (String abbreviation : rawAbbreviations) {
 			if (abbreviation.charAt(abbreviation.length() - 1) != '.') {
 				System.out.println("Abbreviations must end with a '.', see: " + abbreviation);

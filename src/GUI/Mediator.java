@@ -10,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,7 @@ public class Mediator {
 		this.gui = progressPrinter;
 		learner.progressPrinter = progressPrinter;
 		this.gui.setMediator(this);
+		this.gui.initialize(config);
 	}
 	
 	
@@ -62,22 +65,15 @@ public class Mediator {
 	
 	public void initializeLearning() {
 		learner.initializeForLearning();
-		var alternatives = learner.getNBestScoringSentencesWithPutBack(numberOfAlternatives);
-		gui.displayAlternatives(alternatives, learner.getLearnedLemmas(), config, database);
 	}
 
 
 	public void learnNextLemma() {
 		learner.learnNextLemma();
-		var alternatives = learner.getNBestScoringSentencesWithPutBack(numberOfAlternatives);
-		gui.displayAlternatives(alternatives, learner.getLearnedLemmas(), config, database);
-		//After learning the sentence we need to display the new learnable sentences.
 	}
 	
 	public void learnLemmaInSentence(Sentence sentence) {
 		learner.learnLemmaFromDirectlyLearnableSentence(sentence);
-		var alternatives = learner.getNBestScoringSentencesWithPutBack(numberOfAlternatives);
-		gui.displayAlternatives(alternatives, learner.getLearnedLemmas(), config, database);
 	}
 	
 	public void saveProgress() {
@@ -114,6 +110,17 @@ public class Mediator {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public Pair<ArrayList<Sentence>, ArrayList<String>> getAlternativeSentencesWithDescription() {
+		
+		var alternativeSentences = learner.getNBestScoringSentencesWithPutBack(10);
+		var alternativeSentencesDescription = new ArrayList<String>();
+		var learnedLemmas = learner.getLearnedLemmas();
+		for (Sentence sentence : alternativeSentences) {
+			alternativeSentencesDescription.add(sentence.getUnlearnedLemmas(learnedLemmas, database) + ", " + String.format("%.2f", sentence.getScore(database, config)) + " -> " + sentence.getLemmatizedRawSentence(database));
+		}
+		return new Pair<ArrayList<Sentence>, ArrayList<String>>(alternativeSentences, alternativeSentencesDescription);
 	}
 
 
