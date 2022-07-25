@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.AbstractButton;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -32,12 +33,14 @@ import TextDataStructures.Sentence;
 import net.miginfocom.swing.MigLayout;
 
 public class SwingGUI implements ProgressPrinter {
-	
+
 	private Mediator mediator;
 	private JFrame frame;
 	private JPanel panel;
 	private JTextField folderField;
 	private JLabel progressLabel;
+	private JTextField conjugationField;
+	private JTextField lemmaField;
 	private JProgressBar progressBar;
 	private JList<String> learnedJList;
 	private JList<String> sentenceChoisesJList;
@@ -48,10 +51,12 @@ public class SwingGUI implements ProgressPrinter {
 	private MyCellRenderer renderer2;
 	private MigLayout layout;
 	ReentrantLock actionLock = new ReentrantLock(true);
-	
+
 	private JButton startLearningButton;
-	
+
 	private GuiConfigurations config;
+    private AbstractButton learnNextLemmaButton;
+    private JButton loadFolderButton;
 
 	/**
 	 * Launch the application.
@@ -78,60 +83,104 @@ public class SwingGUI implements ProgressPrinter {
 		layout = new MigLayout("", "");
         panel = new JPanel(layout);
         
-        panel.add(new JLabel("Text folder:"), "split3");
-        folderField = new JTextField("Texts/" + config.getLanguage()); // + "english/");
-        panel.add(folderField, "pushx, growx");
-        var loadFolderButton = new JButton("Load files");
-        
-        loadFolderButton.addActionListener(event -> loadFilesInFolder());
-        panel.add(loadFolderButton, "span, wrap");
-        
-        startLearningButton = new JButton("Start learning");
-        startLearningButton.addActionListener(event -> startLearning());
-        panel.add(startLearningButton, "center, span, wrap");
-        
-        var learnNextLemmaButton = new JButton("Learn next lemma");
-        learnNextLemmaButton.addActionListener(event -> learnSelectedSentence());
-        panel.add(learnNextLemmaButton, "center, span, wrap");
-        
+        setupLoadText(config);
 
-        learnUntilStopButton = new JButton("Learn until stop");
-        learnUntilStopButton.addActionListener(event -> learnUntilStop());
-        panel.add(learnUntilStopButton, "center, span, wrap");
-        
-        panel.add(new JLabel("Learned sentences"), "split2, growx");
-        panel.add(new JLabel("Sentence choises"), "growx, wrap");
-        
-        learnedJList = new JList<String>(new DefaultListModel<String>());
-        renderer1 = new MyCellRenderer(160);
-        learnedJList.setCellRenderer(renderer1);
-        //learnedJList.setCellRenderer(new MyCellRenderer());
-        //learnedJList.setBounds(100,100, 750,750);
-        
-        scrollLearnedJList = new JScrollPane(learnedJList);
-        panel.add(scrollLearnedJList, "split2, pushy, grow");
-        
-        sentenceChoisesJList = new JList<String>(new DefaultListModel<String>());
-        renderer2 = new MyCellRenderer(160);
-        sentenceChoisesJList.setCellRenderer(renderer2);
-        //sentenceChoisesJList.setCellRenderer(new MyCellRenderer());
-        //sentenceChoisesJList.setBounds(100,100, 750,750);
-        
-        scrollSentenceChoisesJList = new JScrollPane(sentenceChoisesJList);
-        panel.add(scrollSentenceChoisesJList,  "grow, wrap");
-        
-        
-        progressLabel = new JLabel("");
-        panel.add(progressLabel, "center, wrap");
-        
-        progressBar = new JProgressBar();
-        panel.add(progressBar, "growx");        
-        
+        setupLearningButtons();
+
+        setupLearnedListAndSentenceChoises();
+
+        setupLemmatizationOptions();
+
+        String conjugationText = "Conjugation:";
+        JLabel jLabel = new JLabel(conjugationText);
+        panel.add(jLabel, "split 3, sg conjugation");
+        panel.add(new JLabel("Lemmatization:"),"pushx, growx, sg lemmatization");
+        panel.add(new JLabel(""), "wrap, sg changelemma");
+
+        conjugationField = new JTextField("");
+        conjugationField.setColumns(20);
+        panel.add(conjugationField, "split 3, sg conjugation");
+
+        lemmaField = new JTextField("");
+        panel.add(lemmaField, "pushx, growx, sg lemmatization");
+
+        var changeLemmatizations = new JButton("Change lemmatizations");
+        //changeLemmatizations.addActionListener(event -> loadFilesInFolder());
+        panel.add(changeLemmatizations, "span, wrap, sg changelemma");
+
+
+
+
+
+        setupProgressBar();
+
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 	}
+
+    private void setupLemmatizationOptions() {
+
+    }
+
+    private void setupProgressBar() {
+        progressLabel = new JLabel("Not started yet.");
+        panel.add(progressLabel, "center, wrap");
+
+        progressBar = new JProgressBar();
+        panel.add(progressBar, "growx");
+    }
+
+    private void setupLearnedListAndSentenceChoises() {
+        panel.add(new JLabel("Learned sentences"), "split2, growx");
+        panel.add(new JLabel("Sentence choises"), "growx, wrap");
+
+        learnedJList = new JList<String>(new DefaultListModel<String>());
+        renderer1 = new MyCellRenderer(160);
+        learnedJList.setCellRenderer(renderer1);
+        //learnedJList.setCellRenderer(new MyCellRenderer());
+        //learnedJList.setBounds(100,100, 750,750);
+
+        scrollLearnedJList = new JScrollPane(learnedJList);
+        panel.add(scrollLearnedJList, "split2, pushy, grow");
+
+        sentenceChoisesJList = new JList<String>(new DefaultListModel<String>());
+        renderer2 = new MyCellRenderer(160);
+        sentenceChoisesJList.setCellRenderer(renderer2);
+        //sentenceChoisesJList.setCellRenderer(new MyCellRenderer());
+        //sentenceChoisesJList.setBounds(100,100, 750,750);
+
+        scrollSentenceChoisesJList = new JScrollPane(sentenceChoisesJList);
+        panel.add(scrollSentenceChoisesJList,  "grow, wrap");
+    }
+
+    private void setupLearningButtons() {
+        startLearningButton = new JButton("Start learning");
+        startLearningButton.addActionListener(event -> startLearning());
+        panel.add(startLearningButton, "center, span, wrap");
+        startLearningButton.setEnabled(false);
+
+        learnNextLemmaButton = new JButton("Learn next lemma");
+        learnNextLemmaButton.addActionListener(event -> learnSelectedSentence());
+        panel.add(learnNextLemmaButton, "center, span, wrap");
+        learnNextLemmaButton.setEnabled(false);
+
+        learnUntilStopButton = new JButton("Learn until stop");
+        learnUntilStopButton.addActionListener(event -> learnUntilStop());
+        panel.add(learnUntilStopButton, "center, span, wrap");
+        learnUntilStopButton.setEnabled(false);
+    }
+
+    private void setupLoadText(GuiConfigurations config) {
+        panel.add(new JLabel("Text folder:"), "split3");
+        folderField = new JTextField("Texts/" + config.getLanguage()); // + "english/");
+        panel.add(folderField, "pushx, growx");
+        loadFolderButton = new JButton("Load files");
+
+        loadFolderButton.addActionListener(event -> loadFilesInFolder());
+        panel.add(loadFolderButton, "span, wrap");
+    }
 
 	private AtomicBoolean isCurrentlyLearning = new AtomicBoolean(false);
 	private void learnUntilStop() {
@@ -140,9 +189,11 @@ public class SwingGUI implements ProgressPrinter {
 			learnUntilStopButton.setText("Stop learning sentences");
 			new Thread(() -> {
 				actionLock.lock();
+                learnNextLemmaButton.setEnabled(false);
 				while (isCurrentlyLearning.get()) {
 					learnActualSentence();
 				}
+                learnNextLemmaButton.setEnabled(true);
 				actionLock.unlock();
 			}).start();
 		} else {
@@ -160,6 +211,8 @@ public class SwingGUI implements ProgressPrinter {
 			mediator.initializeLearning();
 			displayAlternatives();
 			frame.repaint();
+            learnNextLemmaButton.setEnabled(true);
+            learnUntilStopButton.setEnabled(true);
 			actionLock.unlock();
 		}).start();
 	}
@@ -167,11 +220,13 @@ public class SwingGUI implements ProgressPrinter {
 	private void loadFilesInFolder() {
 		new Thread(() -> {
 			actionLock.lock();
+            loadFolderButton.setEnabled(false);
 			progressLabel.setText("Learning new sentence." );
 			panel.repaint();
-			mediator.loadFilesInGivenFolder(folderField.getText()); 
+			mediator.loadFilesInGivenFolder(folderField.getText());
+            startLearningButton.setEnabled(true);
 			progressLabel.setText("Finished learning new sentence." );
-			
+			startLearningButton.setEnabled(true);
 			frame.repaint();
 			actionLock.unlock();
 		}).start();		
@@ -180,26 +235,29 @@ public class SwingGUI implements ProgressPrinter {
 	public void learnSelectedSentence() {
 		new Thread(() -> {
 			actionLock.lock();
-			learnActualSentence();
+            learnUntilStopButton.setEnabled(false);
+            learnActualSentence();
 			displayAlternatives();
-			
-			int newWidths = (int) ((scrollLearnedJList.getWidth() + scrollLearnedJList.getWidth())/2.3);
-			System.out.println(newWidths);
-			renderer1.setWidth(newWidths);
-			renderer2.setWidth(newWidths);
-			
-			scrollLearnedJList.getViewport().revalidate();
-			scrollSentenceChoisesJList.getViewport().revalidate();
-			panel.revalidate();
-			scrollLearnedJList.getViewport().revalidate();
-			scrollSentenceChoisesJList.getViewport().revalidate();
-			panel.revalidate();
-			panel.repaint();
-			
+
+            learnUntilStopButton.setEnabled(true);
 			actionLock.unlock();
-			System.out.println(frame.getWidth());
 		}).start();
 	}
+
+    private void updatePanelView() {
+        int newWidths = (int) ((scrollLearnedJList.getWidth() + scrollLearnedJList.getWidth())/3);
+		System.out.println(frame.getWidth() + ", " + newWidths);
+        renderer1.setWidth(newWidths);
+        renderer2.setWidth(newWidths);
+
+        scrollLearnedJList.getViewport().revalidate();
+        scrollSentenceChoisesJList.getViewport().revalidate();
+        panel.revalidate();
+        scrollLearnedJList.getViewport().revalidate();
+        scrollSentenceChoisesJList.getViewport().revalidate();
+        panel.revalidate();
+        panel.repaint();
+    }
 
 	private void learnActualSentence() {
 		int selectedItemIndex = sentenceChoisesJList.getSelectedIndex();
@@ -229,14 +287,15 @@ public class SwingGUI implements ProgressPrinter {
 		Sentence learnedSentence = learnedPair.getSecond();
 		var list = ((DefaultListModel<String>) learnedJList.getModel());
 		list.addElement((list.size() + 1) + ", " + learnedLemma.getRawLemma() + " -> " + learnedSentence.getRawSentence());
+        updatePanelView();
 	}
 
 	// Must be temporarily stored so that they can be accessed in the list.
 	ArrayList<Sentence> sentenceAlternatives;
 	public void displayAlternatives() {
 		var sentencePair = mediator.getAlternativeSentencesWithDescription();
-		sentenceAlternatives = sentencePair.getKey();
-		var descriptions = sentencePair.getValue();
+		sentenceAlternatives = sentencePair.getFirstValue();
+		var descriptions = sentencePair.getSecondValue();
 		var displayList = ((DefaultListModel<String>) sentenceChoisesJList.getModel());
 		displayList.clear();
 		for (int i = 0; i < descriptions.size(); i++) {
@@ -245,7 +304,7 @@ public class SwingGUI implements ProgressPrinter {
 			displayList.addElement(sentenceDescription + "<br> ------ " + sentence.getRawSentence());
 			
 		}
-
+        updatePanelView();
 	}
 
 	@Override
