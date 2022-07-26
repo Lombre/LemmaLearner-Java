@@ -341,6 +341,33 @@ public class GreedyLearner {
 	public List<SortablePair<Lemma, Sentence>> getLearningList() {
 		return orderOfLearnedLemmas;
 	}
+
+
+
+	public void reloadSentencesAssociatedWithLemma(Lemma lemma) {
+		var sentences = lemma.getSentences();
+		for (Sentence sentence : sentences) {
+			if (directlyLearnableSentencesByFrequency.contains(sentence))
+				directlyLearnableSentencesByFrequency.remove(sentence);
+			if (sentence.isDirectlyLearnable(learnedLemmas, database)){
+				addSentenceToDirectlyLearnableSentencesQueue(sentence, directlyLearnableSentencesByFrequency);
+			}
+		}
+	}
+
+
+	public void updateLearningWithNewLemmatization(Lemma oldLemma, Lemma newLemma) {
+		reloadSentencesAssociatedWithLemma(oldLemma);
+		reloadSentencesAssociatedWithLemma(newLemma);
+		if (lemmasByFrequency.contains(oldLemma)){
+			lemmasByFrequency.remove(oldLemma);
+			lemmasByFrequency.add(oldLemma);
+		}
+		if (lemmasByFrequency.contains(newLemma)){
+			lemmasByFrequency.remove(newLemma);
+			lemmasByFrequency.add(newLemma);
+		}
+	}
 	
 	
 	

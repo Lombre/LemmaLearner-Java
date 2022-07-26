@@ -313,5 +313,11 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	}
 
 
+	public void updateLemmaSet(TextDatabase database) {
+		lemmaSet = null;
+		getLemmaSet(database); // this will update the lemmaset if lemmaSet=null
+	}
+
+
 	
 }

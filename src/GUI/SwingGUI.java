@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListCellRenderer;
@@ -22,12 +24,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
+import TextDataStructures.Conjugation;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 import net.miginfocom.swing.MigLayout;
@@ -91,10 +96,19 @@ public class SwingGUI implements ProgressPrinter {
 
         setupLemmatizationOptions();
 
+        setupProgressBar();
+
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+	}
+
+    private void setupLemmatizationOptions() {
         String conjugationText = "Conjugation:";
         JLabel jLabel = new JLabel(conjugationText);
         panel.add(jLabel, "split 3, sg conjugation");
-        panel.add(new JLabel("Lemmatization:"),"pushx, growx, sg lemmatization");
+        panel.add(new JLabel("Lemmatizations:"),"pushx, growx, sg lemmatization");
         panel.add(new JLabel(""), "wrap, sg changelemma");
 
         conjugationField = new JTextField("");
@@ -105,26 +119,21 @@ public class SwingGUI implements ProgressPrinter {
         panel.add(lemmaField, "pushx, growx, sg lemmatization");
 
         var changeLemmatizations = new JButton("Change lemmatizations");
+        changeLemmatizations.addActionListener(event -> changeLemmatization());
         //changeLemmatizations.addActionListener(event -> loadFilesInFolder());
         panel.add(changeLemmatizations, "span, wrap, sg changelemma");
-
-
-
-
-
-        setupProgressBar();
-
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-	}
-
-    private void setupLemmatizationOptions() {
-
     }
 
-    private void setupProgressBar() {
+    private void changeLemmatization() {
+        String rawConjugation = conjugationField.getText();
+        String lemmaTextToParse = lemmaField.getText();
+        String rawLemma = lemmaTextToParse.split(" ")[0];
+        mediator.changeLemmatization(rawConjugation, rawLemma);
+        displayAlternatives();
+        updatePanelView();
+	}
+
+	private void setupProgressBar() {
         progressLabel = new JLabel("Not started yet.");
         panel.add(progressLabel, "center, wrap");
 
@@ -143,16 +152,33 @@ public class SwingGUI implements ProgressPrinter {
         //learnedJList.setBounds(100,100, 750,750);
 
         scrollLearnedJList = new JScrollPane(learnedJList);
-        panel.add(scrollLearnedJList, "split2, pushy, grow");
+        panel.add(scrollLearnedJList, "split2, pushy, grow, sg learningpanes");
 
         sentenceChoisesJList = new JList<String>(new DefaultListModel<String>());
+        sentenceChoisesJList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e){
+                    int indexOfSelectedItem = sentenceChoisesJList.getSelectedIndex();
+                    if (indexOfSelectedItem == -1) //Nothing is selected, for example seen if items are removed from the list
+                        return;
+                    Sentence sentenceSelected = sentenceAlternatives.get(indexOfSelectedItem); //e.getFirstIndex());
+                    displayLemmatizationChoiseForSentence(sentenceSelected);
+                }
+
+				private void displayLemmatizationChoiseForSentence(Sentence sentenceSelected) {
+					Conjugation conjugation = mediator.getUnlearnedConjugation(sentenceSelected);
+                    Set<String> potentialLemmatizations = mediator.getPotentialLemmatizations(conjugation.getRawConjugation());
+                    String potentialLemmatizationsString = "(" +  potentialLemmatizations.stream().reduce((x,y) -> x + ", " + y).get() + ")";
+                    conjugationField.setText(conjugation.getRawConjugation());
+                    lemmaField.setText(conjugation.getLemma() + " " + potentialLemmatizationsString);
+				}
+            });
         renderer2 = new MyCellRenderer(160);
         sentenceChoisesJList.setCellRenderer(renderer2);
         //sentenceChoisesJList.setCellRenderer(new MyCellRenderer());
         //sentenceChoisesJList.setBounds(100,100, 750,750);
 
         scrollSentenceChoisesJList = new JScrollPane(sentenceChoisesJList);
-        panel.add(scrollSentenceChoisesJList,  "grow, wrap");
+        panel.add(scrollSentenceChoisesJList,  "pushy, grow, sg learningpanes, wrap");
     }
 
     private void setupLearningButtons() {
@@ -245,16 +271,6 @@ public class SwingGUI implements ProgressPrinter {
 	}
 
     private void updatePanelView() {
-        int newWidths = (int) ((scrollLearnedJList.getWidth() + scrollLearnedJList.getWidth())/3);
-		System.out.println(frame.getWidth() + ", " + newWidths);
-        renderer1.setWidth(newWidths);
-        renderer2.setWidth(newWidths);
-
-        scrollLearnedJList.getViewport().revalidate();
-        scrollSentenceChoisesJList.getViewport().revalidate();
-        panel.revalidate();
-        scrollLearnedJList.getViewport().revalidate();
-        scrollSentenceChoisesJList.getViewport().revalidate();
         panel.revalidate();
         panel.repaint();
     }
@@ -291,19 +307,17 @@ public class SwingGUI implements ProgressPrinter {
 	}
 
 	// Must be temporarily stored so that they can be accessed in the list.
-	ArrayList<Sentence> sentenceAlternatives;
+	List<Sentence> sentenceAlternatives;
 	public void displayAlternatives() {
-		var sentencePair = mediator.getAlternativeSentencesWithDescription();
-		sentenceAlternatives = sentencePair.getFirstValue();
-		var descriptions = sentencePair.getSecondValue();
+		var sentenceDescriptions = mediator.getAlternernativeSentencesDescription();
+        sentenceAlternatives = sentenceDescriptions.stream().map(x -> x.sentence).collect(Collectors.toList());
+
 		var displayList = ((DefaultListModel<String>) sentenceChoisesJList.getModel());
-		displayList.clear();
-		for (int i = 0; i < descriptions.size(); i++) {
-			var sentenceDescription = descriptions.get(i);
-			var sentence = sentenceAlternatives.get(i);
-			displayList.addElement(sentenceDescription + "<br> ------ " + sentence.getRawSentence());
-			
-		}
+        displayList.clear();
+        for (SentenceDescription description : sentenceDescriptions) {
+            String element = description.getGUIDescription();
+            displayList.addElement(element);
+        }
         updatePanelView();
 	}
 
@@ -342,8 +356,8 @@ public class SwingGUI implements ProgressPrinter {
 }
 
 class MyCellRenderer extends DefaultListCellRenderer {
-	   public static final String HTML_1 = "<html><body style='width: ";
-	   public static final String HTML_2 = "px'>";
+	   public static final String HTML_1 = "<html>";
+	   public static final String HTML_2 = "";
 	   public static final String HTML_3 = "</html>";
 	   private int width;
 
@@ -354,7 +368,7 @@ class MyCellRenderer extends DefaultListCellRenderer {
 	   @Override
 	   public Component getListCellRendererComponent(JList list, Object value,
 	         int index, boolean isSelected, boolean cellHasFocus) {
-	      String text = HTML_1 + String.valueOf(width) + HTML_2 + value.toString()
+	      String text = HTML_1 + HTML_2 + value.toString()
 	            + HTML_3;
 	      return super.getListCellRendererComponent(list, text, index, isSelected,
 	            cellHasFocus);

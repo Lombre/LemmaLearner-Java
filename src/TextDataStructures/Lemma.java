@@ -21,20 +21,24 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 	}
 
 	public int getFrequency() {
-		if (frequency == -1) 
-			frequency = conjugations.stream()
-								    .map(word -> word.getFrequency())
-								    .reduce(0, (freq1, freq2) -> freq1 + freq2);
+		if (frequency == -1)
+			updateFrequency();
 		return frequency;
 	}
-	
+
+	public void updateFrequency() {
+		frequency = conjugations.stream()
+							    .map(word -> word.getFrequency())
+							    .reduce(0, (freq1, freq2) -> freq1 + freq2);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Lemma))
 			return false;
 		else return ((Lemma) obj).getRawLemma().equals(this.getRawLemma());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return rawLemma.hashCode();
@@ -48,8 +52,12 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 	private Set<Sentence> sentences;
 	public Set<Sentence> getSentences() {
 		if (sentences == null)
-			sentences = conjugations.stream().flatMap(conjugation -> conjugation.getSentences().stream()).collect(Collectors.toSet());
+			updateSentences();
 		return sentences;
+	}
+
+	private void updateSentences(){
+		sentences = conjugations.stream().flatMap(conjugation -> conjugation.getSentences().stream()).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -59,13 +67,13 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 
 	public void addConjugation(Conjugation conjugation) {
 		this.conjugations.add(conjugation);
-		conjugation.setRawLemma(this);		
+		conjugation.setRawLemma(this);
 	}
 
 	public int getTimesLearned() {
 		return timesLearned;
 	}
-	
+
 	public void incrementTimesLearned() {
 		timesLearned++;
 	}
@@ -76,5 +84,19 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 
 	public void resetLearning() {
 		timesLearned = 0;
+	}
+
+	public void removeConjugation(Conjugation conjugation) {
+		conjugations.remove(conjugation);
+		updateSentences();
+		updateFrequency();
+	}
+
+	public void addNewConjugation(Conjugation conjugation) {
+		if (conjugations.contains(conjugation))
+			throw new Error("The conjugation " + conjugation + " is already contained in the conjugation set " + conjugations + " for lemma " + rawLemma + ".");
+		conjugations.add(conjugation);
+		updateSentences();
+		updateFrequency();
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -285,6 +286,11 @@ public class WiktionaryDictionary implements Serializable {
 	@SuppressWarnings("unchecked")
 	private Map<String, Set<String>> loadSavedDictionary() throws Exception {
 	    return (HashMap<String, Set<String>>) SerilizationHelper.load(SAVED_DICTIONARY_PATH);
+	}
+
+	public Set<String> getAllLemmasFromConjugation(String rawConjugation) {
+		Set<String> potentialLemmas = conjugationToLemma.getOrDefault(rawConjugation, new TreeSet<String>(){{add(TextDatabase.NOT_A_WORD_STRING);}});
+		return potentialLemmas;
 	}
 
 	

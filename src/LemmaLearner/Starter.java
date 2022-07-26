@@ -8,9 +8,7 @@ import GUI.*;
 public class Starter {
 	
 	public static void main(String[] args) throws Exception {
-		
-		var gui = new ConsoleGUI();
+		var gui = new SwingGUI();
 		new Mediator(gui);
 	}
-
 }

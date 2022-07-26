@@ -28,12 +28,11 @@ public class Configurations implements ParsingConfigurations,
 	public Configurations(String configPath) {
 		this.config_path = configPath;
 		configurationKeyToValue = loadConfigs(config_path);
-		save(config_path);
+		//save(config_path);
 	}
 	
 	private Map<String, String> loadConfigs(String fileLocation) {
 		String rawConfiguration = loadRawConfigurations(fileLocation);	
-		
 		List<String> configurationLines = getConfigurationsLines(rawConfiguration);
 		
 		final var configurations = new TreeMap<String, String>();

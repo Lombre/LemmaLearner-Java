@@ -13,10 +13,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import Configurations.Configurations;
 import LemmaLearner.*;
+import TextDataStructures.Conjugation;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
@@ -112,18 +114,58 @@ public class Mediator {
 		
 	}
 
-	public Pair<ArrayList<Sentence>, ArrayList<String>> getAlternativeSentencesWithDescription() {
+	public List<SentenceDescription> getAlternernativeSentencesDescription() {
 		
 		var alternativeSentences = learner.getNBestScoringSentencesWithPutBack(10);
-		var alternativeSentencesDescription = new ArrayList<String>();
+		var alternativeSentencesDescription = new ArrayList<SentenceDescription>();
 		var learnedLemmas = learner.getLearnedLemmas();
 		for (Sentence sentence : alternativeSentences) {
-			alternativeSentencesDescription.add(sentence.getUnlearnedLemmas(learnedLemmas, database) + ", " + String.format("%.2f", sentence.getScore(database, config)) + " -> " + sentence.getLemmatizedRawSentence(database));
+			alternativeSentencesDescription.add(new SentenceDescription(sentence, database, config, learnedLemmas));
 		}
-		return new Pair<ArrayList<Sentence>, ArrayList<String>>(alternativeSentences, alternativeSentencesDescription);
+		return alternativeSentencesDescription;
 	}
 
 
-	
-	
+	public Conjugation getUnlearnedConjugation(Sentence sentence) {
+		var words = sentence.getWordSet(database);
+		Lemma unlearnedLemma = sentence.getUnlearnedLemmas(learner.getLearnedLemmas(), database).get(0);
+		var unlearnedConjugation = words.stream().filter(word -> word.getLemma().equals(unlearnedLemma)).findFirst().get();
+		return unlearnedConjugation;
+	}
+
+
+	public Set<String> getPotentialLemmatizations(String rawConjugation) {
+		return database.getPotentialLemmatiations(rawConjugation);
+	}
+
+
+	public void changeLemmatization(String rawConjugation, String rawLemma) {
+		Conjugation conjugation = database.allWords.get(rawConjugation);
+		Lemma oldLemma = conjugation.getLemma();
+		database.changeLemmatization(rawConjugation, rawLemma);
+		Lemma newLemma = conjugation.getLemma();
+		learner.updateLearningWithNewLemmatization(oldLemma, newLemma);
+	}
+
+}
+
+
+class SentenceDescription{
+	Configurations config;
+	TextDatabase database;
+	Sentence sentence;
+	Set<Lemma> learnedLemmas;
+
+	public SentenceDescription(Sentence sentence, TextDatabase database, Configurations config, Set<Lemma> learnedLemmas){
+		this.sentence = sentence;
+		this.database = database;
+		this.config = config;
+		this.learnedLemmas = learnedLemmas;
+	}
+
+	public String getGUIDescription() {
+		var learnedLemma = sentence.getUnlearnedLemmas(learnedLemmas, database).get(0);
+		return learnedLemma.getRawLemma() + ", " + sentence.getScore(database, config) + ": " + sentence.getRawSentence() + "<br> ---- " +
+			   sentence.getLemmatizedRawSentence(database);
+	}
 }

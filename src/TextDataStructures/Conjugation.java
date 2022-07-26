@@ -98,4 +98,8 @@ public class Conjugation implements Serializable, Comparable<Conjugation> {
 	public void resetLearning() {
 		timesLearned = 0;
 	}
+
+	public void setNewLemma(Lemma newLemma) {
+		this.lemma = newLemma;
+	}
 }

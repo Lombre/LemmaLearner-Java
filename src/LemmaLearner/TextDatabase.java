@@ -11,11 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import Configurations.Configurations;
@@ -50,6 +48,8 @@ public class TextDatabase{
 	public HashMap<String, Lemma> allLemmas = new HashMap<String, Lemma>();
 	
 	private final DatabaseConfigurations config;
+
+	private Lemmatizer lemmatizer;
 			
 	public TextDatabase(DatabaseConfigurations config) {
 		this.config = config;
@@ -229,7 +229,7 @@ public class TextDatabase{
 	}
 
 	public void initializeLemmas() {
-		Lemmatizer lemmatizer = new Lemmatizer((Configurations) config);
+		lemmatizer = new Lemmatizer((Configurations) config);
 				
 		//List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
 				
@@ -456,6 +456,29 @@ public class TextDatabase{
 		
 		return parsedText;
 		
+	}
+
+	public Set<String> getPotentialLemmatiations(String rawConjugation) {
+		return lemmatizer.getAllRawLemmas(rawConjugation);
+	}
+
+	public void changeLemmatization(String rawConjugation, String rawLemma) {
+		lemmatizer.changeLemmatization(rawConjugation, rawLemma);
+
+		Conjugation conjugation = allWords.get(rawConjugation);
+		Lemma oldLemma = conjugation.getLemma();
+		Lemma newLemma = allLemmas.getOrDefault(rawLemma, new Lemma(rawLemma));
+		allLemmas.put(rawLemma, newLemma);
+
+		oldLemma.getFrequency();
+
+		conjugation.setNewLemma(newLemma);
+		newLemma.addNewConjugation(conjugation);
+		oldLemma.removeConjugation(conjugation);
+
+		for (Sentence sentence : conjugation.getSentences()) {
+			sentence.updateLemmaSet(this);
+		}
 	}
 
 	
