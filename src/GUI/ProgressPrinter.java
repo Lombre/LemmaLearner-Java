@@ -7,6 +7,7 @@ import java.util.Set;
 
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
+import Configurations.LearningConfigurations;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -18,7 +19,7 @@ public interface ProgressPrinter {
 	
 	public void printProgressInParsingTexts(File textFile, ParsingProgressStruct progressReporter);
 		
-	public void printLearnedLemma(List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database);
+	public void printLearnedLemma(LearningConfigurations config, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database);
 
 	public void beginAddTextsToDatabase(int size);
 

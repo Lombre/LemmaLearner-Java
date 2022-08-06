@@ -9,14 +9,14 @@ import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 
 public class GreedyLearner {
-	
+
 	private TextDatabase database;
 	private List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas;
 	private Set<Lemma> learnedLemmas;
-	private Set<Sentence> seenSentences = new HashSet<Sentence>();
+	private Set<Sentence> seenSentences;
 	private PriorityQueue<Lemma> lemmasByFrequency;
 	private TreePriorityQueue<Sentence> directlyLearnableSentencesByFrequency;
-	public static final String NOT_A_SENTENCE_STRING = "No sentence found.";
+	public static final String NOT_A_SENTENCE_STRING = "notaword.";
 	private final LearningConfigurations config;
 	public ProgressPrinter progressPrinter;
 	
@@ -39,29 +39,14 @@ public class GreedyLearner {
 		//Learns lemmas one by one.
 		while (!hasFinishedLearningLemmas()) {			
 			learnNextLemma();		
-			
+			LearningProgressPrinter.printFractionOfLemmasLearned(config, database, orderOfLearnedLemmas);
+		}
 
-			if (config.shouldPrintText()) {
-				if (orderOfLearnedLemmas.size() % 100 == 0) {
-					var learnedLemmas = orderOfLearnedLemmas.stream().map(pair -> pair.getFirst());
-					int totalNumberOfOccurencesOfLearnedLemmas = learnedLemmas.map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
-					int totalNumberOfLemmaOccurences = database.allLemmas.values().stream().map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
-					System.out.println("Learned lemmas " + totalNumberOfOccurencesOfLearnedLemmas + 
-							" of " + totalNumberOfLemmaOccurences + 
-							" fraction " + 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences +
-							" or 1 out of " + 1/(1 - 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences));
-				}				
-			}
-			
-		}	
-		
 		if (config.shouldPrintText())
 			LearningProgressPrinter.printFinishedLearningLemmasInformation(absoluteStartTime, orderOfLearnedLemmas, learnedLemmas, database);
-				
+
 		return orderOfLearnedLemmas;
 	}
-
-
 
 	public void learnNextLemma() {
 		if (directlyLearnableSentencesByFrequency.isEmpty())
@@ -69,8 +54,6 @@ public class GreedyLearner {
 		else 						
 			learnLemmaFromDirectlyLearnableSentence(getBestScoringDirectlyLearnableSentenceWithNChoises(0));
 	}
-
-
 
 	public void initializeForLearning() {
 		//All the fundamental data structures containing things like sentences needs to be set up.
@@ -88,7 +71,7 @@ public class GreedyLearner {
 	
 
 	public void initializeDataStructures() {
-		
+		seenSentences = new HashSet<Sentence>();
 		orderOfLearnedLemmas = new ArrayList<SortablePair<Lemma, Sentence>>();
 		learnedLemmas = new HashSet<Lemma>();	
 		lemmasByFrequency = getLemmasByFrequency();
@@ -200,19 +183,13 @@ public class GreedyLearner {
 
 		var lemmasToLearn = sentence.getUnlearnedLemmas(learnedLemmas, database);
 		for (Lemma lemmaToLearn : lemmasToLearn) {
-			//learnLemma(bestScoringSentence, lemma);
-			//Should not be necessary:
-			//updateDirectlyLearnableSentences(lemma);	
-			
-
-			learnedLemmas.add(lemmaToLearn);			
+			learnedLemmas.add(lemmaToLearn);
 			lemmasByFrequency.remove(lemmaToLearn); //It is not possible to learn the lemma again.
 			updateDirectlyLearnableSentences(lemmaToLearn);						
 			orderOfLearnedLemmas.add(new SortablePair<Lemma, Sentence>(lemmaToLearn, sentence));			
-			if (config.shouldPrintText())
-				progressPrinter.printLearnedLemma(orderOfLearnedLemmas, database);
+			progressPrinter.printLearnedLemma(config, orderOfLearnedLemmas, database);
 		}
-		
+
 		updateSentencesAssociatedWithLemmasInSentence(sentence);
 		
 	}
@@ -286,8 +263,7 @@ public class GreedyLearner {
 		lemmasByFrequency.remove(lemmaToLearn); //It is not possible to learn the lemma again.
 		
 		orderOfLearnedLemmas.add(new SortablePair<Lemma, Sentence>(lemmaToLearn, directlyLearnableSentence));
-		if (config.shouldPrintText())
-			progressPrinter.printLearnedLemma(orderOfLearnedLemmas, database);
+		progressPrinter.printLearnedLemma(config, orderOfLearnedLemmas, database);
 		
 		updateDirectlyLearnableSentences(lemmaToLearn);			
 	}
@@ -327,7 +303,7 @@ public class GreedyLearner {
 
 
 	public void resetLearning() {
-		database.resetLearning();		
+		database.resetLearning();
 	}
 
 

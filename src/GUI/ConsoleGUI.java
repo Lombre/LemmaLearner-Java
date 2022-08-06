@@ -7,6 +7,7 @@ import java.util.Set;
 
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
+import Configurations.LearningConfigurations;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -34,7 +35,9 @@ public class ConsoleGUI implements ProgressPrinter {
 	}
 
 	@Override
-	public void printLearnedLemma(List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
+	public void printLearnedLemma(LearningConfigurations config, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
+		if (!config.shouldPrintText())
+			return;
 		var newlyLearnedLemma = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1).getFirst();
 		var associatedSentence = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1).getSecond();
 		int lemmaNumber = orderOfLearnedLemmas.size();

@@ -13,7 +13,8 @@ TextsToParse/
 *.saved
 subtitles/
 lib/
-
+dictionary-files/
+saved_progress.txt
 ### Java ###
 # Compiled class file
 *.class

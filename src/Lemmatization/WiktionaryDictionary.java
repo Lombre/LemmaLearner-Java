@@ -47,14 +47,16 @@ public class WiktionaryDictionary implements Serializable {
 	private final String SAVED_DICTIONARY_PATH;
 
 	private final String DICTIONARY_FILE_LOCATION;
-	
+
+    private final String DICTIONARY_FOLDER = "dictionary-files/";
+
 	private final String alternativeConjLemmaSeperator = ">";
 	
 	public WiktionaryDictionary(String language) {
 		this.LANGUAGE = language;
-		this.SAVED_DICTIONARY_PATH = "wiktionary files/wiktionary_dictionary_" + this.LANGUAGE + ".saved";
-		this.DICTIONARY_FILE_LOCATION = "wiktionary files/noninflected-words-" + this.LANGUAGE + ".json";
-		this.ALTERNATIVE_SAVE_FILE = "testConjugationToLemmas_" + this.LANGUAGE + ".txt";
+		this.SAVED_DICTIONARY_PATH = DICTIONARY_FOLDER + "/wiktionary_dictionary_" + this.LANGUAGE + ".saved";
+		this.DICTIONARY_FILE_LOCATION = DICTIONARY_FOLDER + "/noninflected-words-" + this.LANGUAGE + ".json";
+		this.ALTERNATIVE_SAVE_FILE = DICTIONARY_FOLDER + "parsed_wiktionary_dictionary_" + this.LANGUAGE + ".txt";
 	}
 	
 	public String getLemmaFromConjugation(String conjugation) {

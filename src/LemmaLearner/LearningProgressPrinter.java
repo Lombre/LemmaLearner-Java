@@ -3,6 +3,7 @@ package LemmaLearner;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import Configurations.LearningConfigurations;
 import TextDataStructures.Conjugation;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
@@ -99,6 +100,20 @@ public class LearningProgressPrinter {
 		printNumberOfTimesConjugationsHaveBeenLearned(learnedLemmas);				
 		printerNumberOfIgnorableSentences(database);		
 		//printerNumberOfTimesLemmasHaveBeenLearned(learningOrder);
+	}
+
+	public static void printFractionOfLemmasLearned(LearningConfigurations config, TextDatabase database, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas ) {
+		if (config.shouldPrintText()) {
+			if (orderOfLearnedLemmas.size() % 100 == 0) {
+				var learnedLemmas = orderOfLearnedLemmas.stream().map(pair -> pair.getFirst());
+				int totalNumberOfOccurencesOfLearnedLemmas = learnedLemmas.map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
+				int totalNumberOfLemmaOccurences = database.allLemmas.values().stream().map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
+				System.out.println("Learned lemmas " + totalNumberOfOccurencesOfLearnedLemmas +
+						" of " + totalNumberOfLemmaOccurences +
+						" fraction " + 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences +
+						" or 1 out of " + 1/(1 - 1.0*totalNumberOfOccurencesOfLearnedLemmas/totalNumberOfLemmaOccurences));
+			}
+		}
 	}
 
 	private static void printerNumberOfTimesLemmasHaveBeenLearned(List<SortablePair<Lemma, Sentence>> learningOrder) {

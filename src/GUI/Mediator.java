@@ -88,7 +88,7 @@ public class Mediator {
 			for (SortablePair<Lemma, Sentence> lemmaSentencePair : learnedLemmasAndSentences) {
 				var lemma = lemmaSentencePair.getFirst();
 				var sentence = lemmaSentencePair.getSecond();
-				writer.println(lemma.getRawLemma() + "|" + sentence.getRawSentence());
+				writer.println(lemma.getRawLemma() + ": " + sentence.getRawSentence());
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -104,6 +104,7 @@ public class Mediator {
 			Text progresText = database.loadAndInitializeProgressFile(rawProgressFile, gui);
 			List<Sentence> sentences = progresText.getParagraphs().stream().flatMap(paragraph -> paragraph.getSentences().stream())
 																		   .collect(Collectors.toList());
+			learner.resetLearning();
 			learner.initializeDataStructures();
 			for (Sentence sentence : sentences) {
 				learner.learnLemmasInSentence(sentence);

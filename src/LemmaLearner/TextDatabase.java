@@ -1,5 +1,6 @@
 package LemmaLearner;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -82,8 +83,18 @@ public class TextDatabase{
 		
 		initializeLemmas();
 
-		
-		var lemmaToBookCount = new HashMap<Lemma, Integer>();
+		filterOnRequiredCount(parsedTexts);
+
+
+		if (config.shouldPrintText()) {
+			printAllTextsAddedToDatabaseInformation(progressStruct.absoluteStartTime);
+			progressPrinter.printFinishedAddingTexts();
+		}
+
+	}
+
+    private void filterOnRequiredCount(List<Text> parsedTexts) {
+        var lemmaToBookCount = new HashMap<Lemma, Integer>();
 		for (Text text : parsedTexts) {
 			Set<Lemma> lemmasInText = text.getAllLemmasInText(this);
 			for (Lemma lemma : lemmasInText) {
@@ -91,29 +102,22 @@ public class TextDatabase{
 				lemmaToBookCount.computeIfAbsent(lemma, (key) -> 1);
 			}
 		}
-		
+
 		System.out.println("Initial lemma count: " + lemmaToBookCount.size());
-		
+
 		double requiredFraction = 0.10;
-		
+
 		var filteredLemmas = new TreeSet<Lemma>();
-		
+
 		for (Lemma lemma : lemmaToBookCount.keySet()) {
 			int lemmaCount = lemmaToBookCount.get(lemma);
 			if (requiredFraction*parsedTexts.size() <= lemmaCount) {
 				filteredLemmas.add(lemma);
 			}
 		}
-		
+
 		System.out.println("After filtering with lemmas required to bein in at least " + requiredFraction + " fractions of the texts: " + filteredLemmas.size());
-		
-		
-		if (config.shouldPrintText()) {
-			printAllTextsAddedToDatabaseInformation(progressStruct.absoluteStartTime);
-			progressPrinter.printFinishedAddingTexts();
-		}
-		
-	}
+    }
 
 	public void filterText(Text text) {
 		filterSentencesOnNumberOfWords(text);
@@ -362,11 +366,32 @@ public class TextDatabase{
 	}
 
 	public Text loadAndInitializeProgressFile(String rawProgressFile, ProgressPrinter progressPrinter) {
-		Text progressText = parseRawText("progress_file", rawProgressFile);
-		filterText(progressText);
+
+		var lines = Arrays.asList(rawProgressFile.split("\n"));
+		var isolatedLines = lines.stream().map(sentence -> sentence.split("\\|")[1]).collect(Collectors.toList());
+		String isolatedSentences = isolatedLines.stream().reduce((x, y) -> x + "\n" + y).get();
+		final String progess_file_name = "progress_file";
+		if (allTexts.containsKey(progess_file_name)){
+			removeTextFromDatabase(progess_file_name);
+		}
+ 		Text progressText = parseRawText(progess_file_name, isolatedSentences);
+		// No filtering is done
+
 		addTextToDatabase(progressText, progressPrinter);
 		initializeLemmas();
 		return progressText;
+	}
+
+	private void removeTextFromDatabase(String textName) {
+		Text text = allTexts.get(textName);
+		allTexts.remove(textName);
+
+		var textParagraphs = text.getParagraphs();
+		textParagraphs.stream().forEach(parapgrah -> allParagraphs.remove(parapgrah.getParagraphID()));
+
+		var textSentences = textParagraphs.stream().flatMap(parapgraph -> parapgraph.getSentences().stream());
+		textSentences.forEach(sentence -> allSentences.remove(sentence.getRawSentence()));
+
 	}
 
 	public List<Triple<LocalTime, LocalTime, String>> parseSubtitles(String fileLocation) {

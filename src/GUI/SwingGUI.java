@@ -24,11 +24,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
+import Configurations.LearningConfigurations;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -62,6 +64,8 @@ public class SwingGUI implements ProgressPrinter {
 	private GuiConfigurations config;
     private AbstractButton learnNextLemmaButton;
     private JButton loadFolderButton;
+    private JButton loadProgressButton;
+    private JButton saveProgressButton;
 
 	/**
 	 * Launch the application.
@@ -83,11 +87,11 @@ public class SwingGUI implements ProgressPrinter {
 		this.config = config;
 		if (config == null)
 			throw new Error("Config must be given to the GUI before it is initialized.");
-		
+
 		frame = new JFrame("LemmaLearner");
 		layout = new MigLayout("", "");
         panel = new JPanel(layout);
-        
+
         setupLoadText(config);
 
         setupLearningButtons();
@@ -130,7 +134,7 @@ public class SwingGUI implements ProgressPrinter {
         String rawLemma = lemmaTextToParse.split(" ")[0];
         mediator.changeLemmatization(rawConjugation, rawLemma);
         displayAlternatives();
-        updatePanelView();
+        //updatePanelView();
 	}
 
 	private void setupProgressBar() {
@@ -182,20 +186,51 @@ public class SwingGUI implements ProgressPrinter {
     }
 
     private void setupLearningButtons() {
+
+        loadProgressButton = new JButton("Load progress");
+        loadProgressButton.addActionListener(event -> loadProgress());
+        panel.add(loadProgressButton, "split2, center, sg learningbuttons");
+        loadProgressButton.setEnabled(false);
+
+        saveProgressButton = new JButton("Save progress");
+        saveProgressButton.addActionListener(event -> saveProgress());
+        panel.add(saveProgressButton, "center, sg learningbuttons, wrap");
+        saveProgressButton.setEnabled(false);
+
         startLearningButton = new JButton("Start learning");
         startLearningButton.addActionListener(event -> startLearning());
-        panel.add(startLearningButton, "center, span, wrap");
+        panel.add(startLearningButton, "split3, center, sg learningbuttons");
         startLearningButton.setEnabled(false);
 
         learnNextLemmaButton = new JButton("Learn next lemma");
         learnNextLemmaButton.addActionListener(event -> learnSelectedSentence());
-        panel.add(learnNextLemmaButton, "center, span, wrap");
+        panel.add(learnNextLemmaButton, "sg learningbuttons");
         learnNextLemmaButton.setEnabled(false);
 
         learnUntilStopButton = new JButton("Learn until stop");
         learnUntilStopButton.addActionListener(event -> learnUntilStop());
-        panel.add(learnUntilStopButton, "center, span, wrap");
+        panel.add(learnUntilStopButton, "sg learningbuttons, wrap");
         learnUntilStopButton.setEnabled(false);
+    }
+
+    private void saveProgress() {
+        mediator.saveProgress();
+    }
+
+    private void loadProgress() {
+        progressLabel.setText("Loading progress from file.");
+        ((DefaultListModel<String>) learnedJList.getModel()).clear();
+        mediator.loadProgress();
+
+        displayAlternatives();
+        SwingUtilities.updateComponentTreeUI(frame);
+        progressLabel.setText("Finished loading progress from file.");
+        //loadProgressButton.setEnabled(false);
+        startLearningButton.setEnabled(false);
+        learnNextLemmaButton.setEnabled(true);
+        learnUntilStopButton.setEnabled(true);
+        saveProgressButton.setEnabled(true);
+
     }
 
     private void setupLoadText(GuiConfigurations config) {
@@ -224,50 +259,63 @@ public class SwingGUI implements ProgressPrinter {
 			}).start();
 		} else {
 			isCurrentlyLearning.getAndSet(false);
+            displayAlternatives();
+            SwingUtilities.updateComponentTreeUI(frame);
 			learnUntilStopButton.setText("Learn until stop");
 		}
 	}
 
 	private void startLearning() {
-		new Thread(() -> {
+		var thread = new Thread(() -> {
 			actionLock.lock();
 			startLearningButton.setEnabled(false);
+            loadProgressButton.setEnabled(false);
 			progressLabel.setText("Learning initial sentence." );
-			panel.repaint();
+			//panel.repaint();
 			mediator.initializeLearning();
 			displayAlternatives();
-			frame.repaint();
+			//frame.repaint();
+            saveProgressButton.setEnabled(true);
             learnNextLemmaButton.setEnabled(true);
             learnUntilStopButton.setEnabled(true);
-			actionLock.unlock();
-		}).start();
+            actionLock.unlock();
+		});
+
+        try {
+
+            System.out.println("Started");
+            thread.start();
+            thread.join();
+            System.out.println("Returned");
+            SwingUtilities.updateComponentTreeUI(frame);
+        } catch (Throwable e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+
 	}
 
 	private void loadFilesInFolder() {
 		new Thread(() -> {
 			actionLock.lock();
             loadFolderButton.setEnabled(false);
-			progressLabel.setText("Learning new sentence." );
-			panel.repaint();
+			progressLabel.setText("Load files in folder." );
+			//panel.repaint();
 			mediator.loadFilesInGivenFolder(folderField.getText());
-            startLearningButton.setEnabled(true);
-			progressLabel.setText("Finished learning new sentence." );
+			progressLabel.setText("Finished loading files in folder." );
 			startLearningButton.setEnabled(true);
-			frame.repaint();
-			actionLock.unlock();
-		}).start();		
-	}
-	
-	public void learnSelectedSentence() {
-		new Thread(() -> {
-			actionLock.lock();
-            learnUntilStopButton.setEnabled(false);
-            learnActualSentence();
-			displayAlternatives();
-
-            learnUntilStopButton.setEnabled(true);
+            loadProgressButton.setEnabled(true);
+			//frame.repaint();
 			actionLock.unlock();
 		}).start();
+	}
+
+	public void learnSelectedSentence() {
+        learnUntilStopButton.setEnabled(false);
+        learnActualSentence();
+        displayAlternatives();
+        learnUntilStopButton.setEnabled(true);
+        //SwingUtilities.updateComponentTreeUI(frame);
 	}
 
     private void updatePanelView() {
@@ -280,7 +328,7 @@ public class SwingGUI implements ProgressPrinter {
 		if (selectedItemIndex != -1) {
 			mediator.learnLemmaInSentence(sentenceAlternatives.get(selectedItemIndex));
 		} else {
-			mediator.learnNextLemma();			
+			mediator.learnNextLemma();
 		}
 	}
 
@@ -288,7 +336,7 @@ public class SwingGUI implements ProgressPrinter {
 	public void beginParsingTexts(int numberOfTexts, String folderLocation) {
 		new Thread(() -> progressLabel.setText("Begin loading " + numberOfTexts + " texts in folder")).start();
 		progressBar.setMaximum(numberOfTexts);
-		panel.repaint();
+		//panel.repaint();
 	}
 
 	@Override
@@ -297,13 +345,12 @@ public class SwingGUI implements ProgressPrinter {
 	}
 
 	@Override
-	public void printLearnedLemma(List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
+	public void printLearnedLemma(LearningConfigurations config, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
 		var learnedPair = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1);
 		Lemma learnedLemma = learnedPair.getFirst();
 		Sentence learnedSentence = learnedPair.getSecond();
 		var list = ((DefaultListModel<String>) learnedJList.getModel());
 		list.addElement((list.size() + 1) + ", " + learnedLemma.getRawLemma() + " -> " + learnedSentence.getRawSentence());
-        updatePanelView();
 	}
 
 	// Must be temporarily stored so that they can be accessed in the list.
@@ -318,7 +365,10 @@ public class SwingGUI implements ProgressPrinter {
             String element = description.getGUIDescription();
             displayList.addElement(element);
         }
-        updatePanelView();
+
+        System.out.println("Display alternatives");
+        //sentenceChoisesJList.updateUI();
+        //updatePanelView();
 	}
 
 	@Override
@@ -332,11 +382,11 @@ public class SwingGUI implements ProgressPrinter {
 	@Override
 	public void printAddedTextToDatabase() {
 		incrementProgressBar();
-		
+
 	}
-	
+
 	private void incrementProgressBar() {
-		new Thread(() -> {progressBar.setValue(progressBar.getValue() + 1); 
+		new Thread(() -> {progressBar.setValue(progressBar.getValue() + 1);
 						  panel.repaint();}).start();
 	}
 
@@ -351,6 +401,7 @@ public class SwingGUI implements ProgressPrinter {
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
 	}
+
 
 
 }

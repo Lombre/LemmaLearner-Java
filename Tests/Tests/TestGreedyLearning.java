@@ -194,9 +194,6 @@ class TestGreedyLearning {
 			}
 			
 			if (!nextSentence.getRawSentence().equals(GreedyLearner.NOT_A_SENTENCE_STRING) && !nextSentence.getLemmaSet(database).contains(currentLemma)) {
-				if (i == 91) {
-					int k = 1;
-				}
 				assertTrue("Greedy invariant broken: Lemma number " + i + " \"" + nextLemma + "\" has a higher frequency (" + nextLemma.getFrequency() +  ") than \"" + currentLemma + "\" (" + currentLemma.getFrequency() +  ") but is learnt after the Lemma, for no reason.", nextLemma.getFrequency() <= currentLemma.getFrequency());
 			}
 		}

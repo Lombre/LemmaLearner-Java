@@ -14,13 +14,14 @@ import java.util.stream.Collectors;
 public class SimpleDictionaryLemmatizer {
 
     private String language;
+    private final String DICTIONARY_FOLDER = "dictionary-files/";
     private final String KEY_VALUE_DELIMITER = "->";
     private final Map<String, String> conjugationToLemmaMap;
     final String dict_path;
 
 	public SimpleDictionaryLemmatizer(String language){
         this.language = language;
-        dict_path = "private_lemma_dict_" + language + ".txt";
+        dict_path = DICTIONARY_FOLDER + "private_lemma_dict_" + language + ".txt";
         this.conjugationToLemmaMap = loadConfigs(dict_path);
     }
 
@@ -86,7 +87,6 @@ public class SimpleDictionaryLemmatizer {
 	}
 
 
-
 	private List<String> getTextLines(String rawText) {
 		List<String> textLines = new ArrayList<String>(Arrays.asList(rawText.split("\n")));
 
@@ -97,13 +97,9 @@ public class SimpleDictionaryLemmatizer {
 		return textLines;
 	}
 
-
-
 	public void changeLemmatization(String rawConjugation, String rawLemma) {
         conjugationToLemmaMap.put(rawConjugation, rawLemma);
 	}
-
-
 
     public boolean hasLemmaForConjugation(String rawConjugation) {
         return conjugationToLemmaMap.containsKey(rawConjugation);
