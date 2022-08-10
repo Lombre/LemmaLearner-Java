@@ -167,6 +167,6 @@ class SentenceDescription{
 	public String getGUIDescription() {
 		var learnedLemma = sentence.getUnlearnedLemmas(learnedLemmas, database).get(0);
 		return learnedLemma.getRawLemma() + ", " + sentence.getScore(database, config) + ": " + sentence.getRawSentence() + "<br> ---- " +
-			   sentence.getLemmatizedRawSentence(database);
+			   sentence.getLemmatizedRawSentence(database) + "<br>";
 	}
 }

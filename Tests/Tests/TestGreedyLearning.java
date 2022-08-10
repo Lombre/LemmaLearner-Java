@@ -38,6 +38,8 @@ class TestGreedyLearning {
 		config = new Configurations("Tests/test_config.txt");
 		database = new TextDatabase(config);
 		learner = new GreedyLearner(database, config);
+		ConsoleGUI gui = new ConsoleGUI();
+		learner.progressPrinter = gui;
 	}
 	
 
@@ -90,6 +92,7 @@ class TestGreedyLearning {
 		assertSame(parsedText, returnedText);
 		
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
+		learner.initializeDataStructures();
 		var sentencesByUnlearnedLemmaFrequency = learner.getDirectlyLearnableSentencesByFrequency(learnedLemmas);
 		
 		assertEquals(expectedSentence2, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());

@@ -1,5 +1,7 @@
 Language = English
 
+ConjugationScoreFactor = 4
+
 MaxNumberOfSentencesToLearn = 12000
 
 MaxSentenceLengthInLetters = 800

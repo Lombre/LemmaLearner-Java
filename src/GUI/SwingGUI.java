@@ -66,13 +66,8 @@ public class SwingGUI implements ProgressPrinter {
     private JButton loadFolderButton;
     private JButton loadProgressButton;
     private JButton saveProgressButton;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		//new Mediator();
-	}
+    private JLabel sentenceContextLabel;
+    private JTextArea sentenceContextArea;
 
 	/**
 	 * Create the application.
@@ -98,6 +93,8 @@ public class SwingGUI implements ProgressPrinter {
 
         setupLearnedListAndSentenceChoises();
 
+        setupContextTextField();
+
         setupLemmatizationOptions();
 
         setupProgressBar();
@@ -107,6 +104,14 @@ public class SwingGUI implements ProgressPrinter {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 	}
+
+    private void setupContextTextField() {
+        sentenceContextLabel = new JLabel("Sentence context:");
+        panel.add(sentenceContextLabel, "wrap");
+        sentenceContextArea = new JTextArea("Some demo text.\nWith a new line.");
+        panel.add(sentenceContextArea, "growx 50, wrap"); // A lower priority for the growth is needed.
+        sentenceContextArea.setLineWrap(true);
+    }
 
     private void setupLemmatizationOptions() {
         String conjugationText = "Conjugation:";
@@ -164,17 +169,20 @@ public class SwingGUI implements ProgressPrinter {
                     int indexOfSelectedItem = sentenceChoisesJList.getSelectedIndex();
                     if (indexOfSelectedItem == -1) //Nothing is selected, for example seen if items are removed from the list
                         return;
-                    Sentence sentenceSelected = sentenceAlternatives.get(indexOfSelectedItem); //e.getFirstIndex());
-                    displayLemmatizationChoiseForSentence(sentenceSelected);
+                    Sentence selectedSentence = sentenceAlternatives.get(indexOfSelectedItem); //e.getFirstIndex());
+                    displayLemmatizationChoiseForSentence(selectedSentence);
+                    displaySentenceContext(selectedSentence);
                 }
 
-				private void displayLemmatizationChoiseForSentence(Sentence sentenceSelected) {
+
+                private void displayLemmatizationChoiseForSentence(Sentence sentenceSelected) {
 					Conjugation conjugation = mediator.getUnlearnedConjugation(sentenceSelected);
                     Set<String> potentialLemmatizations = mediator.getPotentialLemmatizations(conjugation.getRawConjugation());
                     String potentialLemmatizationsString = "(" +  potentialLemmatizations.stream().reduce((x,y) -> x + ", " + y).get() + ")";
                     conjugationField.setText(conjugation.getRawConjugation());
                     lemmaField.setText(conjugation.getLemma() + " " + potentialLemmatizationsString);
 				}
+
             });
         renderer2 = new MyCellRenderer(160);
         sentenceChoisesJList.setCellRenderer(renderer2);
@@ -183,6 +191,22 @@ public class SwingGUI implements ProgressPrinter {
 
         scrollSentenceChoisesJList = new JScrollPane(sentenceChoisesJList);
         panel.add(scrollSentenceChoisesJList,  "pushy, grow, sg learningpanes, wrap");
+    }
+
+    private void displaySentenceContext(Sentence selectedSentence) {
+        var originatingParagraph = selectedSentence.getAParagraph();
+        var paragraphText = originatingParagraph.getRawParagraph();
+        int indexOfSentence = paragraphText.toLowerCase().indexOf(selectedSentence.getRawSentence().toLowerCase());
+        String textToSet = originatingParagraph.getRawParagraph();
+        if (indexOfSentence != -1){
+            String startParagraph = "<html><p>" + paragraphText.substring(0, indexOfSentence);
+            int endOfSentence = indexOfSentence + selectedSentence.getRawSentence().length();
+            String highlightedSentence = "<span style=\"color: #ff0000\">" + paragraphText.substring(indexOfSentence, endOfSentence) + "</span>";
+            String endParagraph = paragraphText.substring(endOfSentence) + "</p></html>";
+            textToSet = startParagraph + highlightedSentence + endParagraph;
+        }
+        sentenceContextArea.setText(textToSet);
+        sentenceContextLabel.setText("From text \"" + originatingParagraph.getOriginText().getName() + "\"");
     }
 
     private void setupLearningButtons() {
@@ -317,11 +341,6 @@ public class SwingGUI implements ProgressPrinter {
         learnUntilStopButton.setEnabled(true);
         //SwingUtilities.updateComponentTreeUI(frame);
 	}
-
-    private void updatePanelView() {
-        panel.revalidate();
-        panel.repaint();
-    }
 
 	private void learnActualSentence() {
 		int selectedItemIndex = sentenceChoisesJList.getSelectedIndex();
