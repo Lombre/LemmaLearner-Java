@@ -15,6 +15,7 @@ import javax.swing.AbstractButton;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -23,10 +24,12 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.DefaultStyledDocument;
 
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
@@ -67,7 +70,7 @@ public class SwingGUI implements ProgressPrinter {
     private JButton loadProgressButton;
     private JButton saveProgressButton;
     private JLabel sentenceContextLabel;
-    private JTextArea sentenceContextArea;
+    private JEditorPane sentenceContextArea;
 
 	/**
 	 * Create the application.
@@ -108,9 +111,12 @@ public class SwingGUI implements ProgressPrinter {
     private void setupContextTextField() {
         sentenceContextLabel = new JLabel("Sentence context:");
         panel.add(sentenceContextLabel, "wrap");
-        sentenceContextArea = new JTextArea("Some demo text.\nWith a new line.");
+        sentenceContextArea = new JTextPane();
+        sentenceContextArea.setEditable(false);
+        sentenceContextArea.setContentType("text/html");
+        sentenceContextArea.setText("<html>No sentence selected.</html>");
+        sentenceContextArea.updateUI();
         panel.add(sentenceContextArea, "growx 50, wrap"); // A lower priority for the growth is needed.
-        sentenceContextArea.setLineWrap(true);
     }
 
     private void setupLemmatizationOptions() {
@@ -173,36 +179,33 @@ public class SwingGUI implements ProgressPrinter {
                     displayLemmatizationChoiseForSentence(selectedSentence);
                     displaySentenceContext(selectedSentence);
                 }
-
-
-                private void displayLemmatizationChoiseForSentence(Sentence sentenceSelected) {
-					Conjugation conjugation = mediator.getUnlearnedConjugation(sentenceSelected);
-                    Set<String> potentialLemmatizations = mediator.getPotentialLemmatizations(conjugation.getRawConjugation());
-                    String potentialLemmatizationsString = "(" +  potentialLemmatizations.stream().reduce((x,y) -> x + ", " + y).get() + ")";
-                    conjugationField.setText(conjugation.getRawConjugation());
-                    lemmaField.setText(conjugation.getLemma() + " " + potentialLemmatizationsString);
-				}
-
             });
         renderer2 = new MyCellRenderer(160);
         sentenceChoisesJList.setCellRenderer(renderer2);
-        //sentenceChoisesJList.setCellRenderer(new MyCellRenderer());
-        //sentenceChoisesJList.setBounds(100,100, 750,750);
-
         scrollSentenceChoisesJList = new JScrollPane(sentenceChoisesJList);
         panel.add(scrollSentenceChoisesJList,  "pushy, grow, sg learningpanes, wrap");
     }
 
+    private void displayLemmatizationChoiseForSentence(Sentence sentenceSelected) {
+		Conjugation conjugation = mediator.getUnlearnedConjugation(sentenceSelected);
+        Set<String> potentialLemmatizations = mediator.getPotentialLemmatizations(conjugation.getRawConjugation());
+        String potentialLemmatizationsString = "(" +  potentialLemmatizations.stream().reduce((x,y) -> x + ", " + y).get() + ")";
+        conjugationField.setText(conjugation.getRawConjugation());
+        lemmaField.setText(conjugation.getLemma() + " " + potentialLemmatizationsString);
+	}
+
     private void displaySentenceContext(Sentence selectedSentence) {
         var originatingParagraph = selectedSentence.getAParagraph();
         var paragraphText = originatingParagraph.getRawParagraph();
-        int indexOfSentence = paragraphText.toLowerCase().indexOf(selectedSentence.getRawSentence().toLowerCase());
         String textToSet = originatingParagraph.getRawParagraph();
-        if (indexOfSentence != -1){
-            String startParagraph = "<html><p>" + paragraphText.substring(0, indexOfSentence);
+        int indexOfSentence = paragraphText.toLowerCase().indexOf(selectedSentence.getRawSentence().toLowerCase());
+        if (1500 < textToSet.length()){
+            textToSet = "Paragraph to long (" + textToSet.length() + " charachters).";
+        } else if (indexOfSentence != -1){
+            String startParagraph = "<html>" + paragraphText.substring(0, indexOfSentence);
             int endOfSentence = indexOfSentence + selectedSentence.getRawSentence().length();
-            String highlightedSentence = "<span style=\"color: #ff0000\">" + paragraphText.substring(indexOfSentence, endOfSentence) + "</span>";
-            String endParagraph = paragraphText.substring(endOfSentence) + "</p></html>";
+            String highlightedSentence = "<span style=\"color: red\">" + paragraphText.substring(indexOfSentence, endOfSentence) + "</span>";
+            String endParagraph = paragraphText.substring(endOfSentence) + "</html>";
             textToSet = startParagraph + highlightedSentence + endParagraph;
         }
         sentenceContextArea.setText(textToSet);
