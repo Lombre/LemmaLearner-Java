@@ -243,14 +243,26 @@ public class ManualParser {
 		var rawSubParagraph = rawParagraph.substring(i + 1, curEndSentenceIndex);
 		
 		//Now the actual subsentence.
-		var subParagraph= getParagraphFromRawParagraph(rawSubParagraph, textName + "_" + sentences.size() + "_" + subParagraphs.size());
+		var subParagraph = getParagraphFromRawParagraph(rawSubParagraph, textName + "_" + sentences.size() + "_" + subParagraphs.size());
 		if (subParagraph == null) //Something is unparsable in the subsentence.
 			return -1;
+		if (subParagraph.getSentences().size() == 1){
+			subParagraph = wrapSingleSentenceParagraph(subParagraph, rawParagraph.charAt(i), rawParagraph.charAt(curEndSentenceIndex));
+		}
 		subParagraphs.add(subParagraph);
 		for (var sentence: subParagraph.getSentences())
 			rawWords.addAll(sentence.getRawWordList());
 		return curEndSentenceIndex;
 	}
+
+	private Paragraph wrapSingleSentenceParagraph(Paragraph subParagraph, char leftWrapChart, char rightWrapChar) {
+		//assumes that there is only a single sentence in the paragrap
+		Sentence singleSentence = (Sentence) subParagraph.getSentences().toArray()[0];
+		Sentence wrappedSentence = new Sentence(leftWrapChart + singleSentence.getRawSentence() + rightWrapChar, singleSentence.getRawWordList(), (List) singleSentence.getSubParagraphs());
+		return new Paragraph(leftWrapChart + subParagraph.getRawParagraph() + rightWrapChar, new ArrayList<Sentence>(){{add(wrappedSentence);}}, subParagraph.getParagraphID());
+	}
+
+
 
 	private int getCorrespondingClosingCharPosition(String rawParagraph, int indexOfOpeningChar) {
 		

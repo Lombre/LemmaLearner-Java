@@ -102,10 +102,6 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 		return this.getRawParagraph().compareTo(o.getRawParagraph());
 	}
 
-	public Sentence getNthSentence(int n) {
-		throw new Error("Removed function."); 
-		//return sentences.get(n);
-	}
 
 	public void setSentences(List<Sentence> newParagraphSentences) {
 		sentences.clear();

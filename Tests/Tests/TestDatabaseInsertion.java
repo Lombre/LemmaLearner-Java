@@ -274,8 +274,8 @@ class TestDatabaseInsertion {
 	public void testFilteringOfSentencesOnNumberOfWords_toManyWords_butWithSubsentence() {
 		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "5");
 		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "20");
-		String subSentence = "but not in terms of this subsentence";
-		TestTool.parseStringAndAddToDatabase("There are far far to many words in this sentence (" + subSentence + ") for it to reasonably be included in the text database seen here.", database);
+		String subSentence = "(but not in terms of this subsentence)";
+		TestTool.parseStringAndAddToDatabase("There are far far to many words in this sentence " + subSentence + " for it to reasonably be included in the text database seen here.", database);
 		assertEquals(1, database.allSentences.size());
 		assertTrue(database.allSentences.containsKey(subSentence));
 	}
@@ -310,8 +310,8 @@ class TestDatabaseInsertion {
 	public void testFilteringOfSentencesOnNumberOfLetters_toManyLetters_withSubsentence() {
 		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "20");
 		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "50");
-		String subSentence = "but not in terms of this subsentence";
-		TestTool.parseStringAndAddToDatabase("There are definetely to many letters in this sentnence for it to actually be included in the database (" + subSentence + "), hahahahahahahahahahahahahahahaha.", database);
+		String subSentence = "(but not in terms of this subsentence)";
+		TestTool.parseStringAndAddToDatabase("There are definetely to many letters in this sentences for it to actually be included in the database " + subSentence + ", hahahahahahahahahahahahahahahahahaha.", database);
 		assertEquals(1, database.allSentences.size());
 		assertTrue(database.allSentences.containsKey(subSentence));
 	}
