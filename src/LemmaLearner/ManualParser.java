@@ -247,6 +247,12 @@ public class ManualParser {
 		if (subParagraph == null) //Something is unparsable in the subsentence.
 			return -1;
 		if (subParagraph.getSentences().size() == 1){
+<<<<<<< HEAD
+=======
+			// If the subsentence is just a simple sentence wrapped by e.g. ",
+			// we will include these characters in the sentence.
+			// If there are multiple sentences, this will not be done.
+>>>>>>> ec04870 (Fixed wrapping of single sub sentences.)
 			subParagraph = wrapSingleSentenceParagraph(subParagraph, rawParagraph.charAt(i), rawParagraph.charAt(curEndSentenceIndex));
 		}
 		subParagraphs.add(subParagraph);

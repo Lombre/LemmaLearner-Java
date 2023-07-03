@@ -105,7 +105,7 @@ public class TextDatabase{
 
 		System.out.println("Initial lemma count: " + lemmaToBookCount.size());
 
-		double requiredFraction = 0.10;
+		double requiredFraction = 0.0;
 
 		var filteredLemmas = new TreeSet<Lemma>();
 
@@ -235,12 +235,16 @@ public class TextDatabase{
 	public void initializeLemmas() {
 		lemmatizer = new Lemmatizer((Configurations) config);
 				
-		//List<Conjugation> allConjugations = new ArrayList<Conjugation>(allWords.values());
-				
+
 		for (var conjugation : allWords.values()) {
 			if (!conjugation.hasLemmaSet()) {
-				addConjugationToDatabase(lemmatizer, conjugation);				
+				String rawLemma = lemmatizer.getRawLemma(conjugation);
+				addConjugationToDatabase(rawLemma, conjugation);
 			}
+		}
+
+		for (var lemma : allLemmas.values()) {
+			addDefinitionToLemma(lemma);
 		}
 		
 		lemmatizer.save();	
@@ -255,8 +259,12 @@ public class TextDatabase{
 		
 	}
 	
-	private void addConjugationToDatabase(Lemmatizer lemmatizer, Conjugation currentConjugation) {
-		String rawLemma = lemmatizer.getRawLemma(currentConjugation);
+	private void addDefinitionToLemma(Lemma lemma) {
+		var definitions = lemmatizer.getDefinitions(lemma);
+		lemma.addDefinitions(definitions);
+	}
+
+	private void addConjugationToDatabase(String rawLemma, Conjugation currentConjugation) {
 		Lemma currentLemma;
 		if (allLemmas.containsKey(rawLemma))
 			currentLemma = allLemmas.get(rawLemma);

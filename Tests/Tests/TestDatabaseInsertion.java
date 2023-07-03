@@ -234,7 +234,7 @@ class TestDatabaseInsertion {
 		assertEquals(5, database.allLemmas.size());
 		System.out.println(database.allLemmas.keySet());
 		assertTrue(database.allLemmas.keySet().contains("this"));
-		assertTrue(database.allLemmas.keySet().contains("be"));
+		assertTrue(database.allLemmas.keySet().contains("is"));
 		assertTrue(database.allLemmas.keySet().contains("also"));
 		assertTrue(database.allLemmas.keySet().contains("a"));
 		assertTrue(database.allLemmas.keySet().contains("test"));

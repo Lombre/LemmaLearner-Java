@@ -148,6 +148,26 @@ public class Mediator {
 		learner.updateLearningWithNewLemmatization(oldLemma, newLemma);
 	}
 
+
+	public String getSentenceLemmatization(Sentence selectedSentence) {
+		return selectedSentence.getLemmatizedRawSentence(database);
+	}
+
+
+	public void alreadyKnowLemmaInSentence(Sentence sentence) {
+		var unlearnedLemmas = sentence.getUnlearnedLemmas(learner.getLearnedLemmas(), database);
+		var lemma = unlearnedLemmas.get(0);
+		String rawFakeSentence = "";
+		var rawConjugations = lemma.getConjugations().stream().map(conjugation -> conjugation.getRawConjugation()).collect(Collectors.toList());
+		for (var conjugation : rawConjugations){
+			rawFakeSentence += conjugation + " ";
+		}
+		rawFakeSentence = rawFakeSentence.trim() + ".";
+		Sentence fakeSentence = new Sentence(rawFakeSentence, rawConjugations);
+		learner.learnLemmasInSentence(fakeSentence);
+
+	}
+
 }
 
 
@@ -166,7 +186,7 @@ class SentenceDescription{
 
 	public String getGUIDescription() {
 		var learnedLemma = sentence.getUnlearnedLemmas(learnedLemmas, database).get(0);
-		return learnedLemma.getRawLemma() + ", " + sentence.getScore(database, config) + ": " + sentence.getRawSentence() + "<br> ---- " +
-			   sentence.getLemmatizedRawSentence(database) + "<br>";
+		return learnedLemma.getRawLemma() + ", " + String.format("%.2f", sentence.getScore(database, config)) + ": " + sentence.getRawSentence()
+			;//+ "<br> ---- " + sentence.getLemmatizedRawSentence(database) + "<br>";
 	}
 }

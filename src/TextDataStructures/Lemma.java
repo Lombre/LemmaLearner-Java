@@ -1,5 +1,7 @@
 package TextDataStructures;
 import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -9,6 +11,7 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 
 	private final Set<Conjugation> conjugations = new ListSet<Conjugation>();
 	private final String rawLemma;
+	private final List<String> definitions = new ArrayList<String>();
 	private int frequency = -1;
 	private int timesLearned = 0;
 	
@@ -98,5 +101,13 @@ public class Lemma implements Serializable, Comparable<Lemma> {
 		conjugations.add(conjugation);
 		updateSentences();
 		updateFrequency();
+	}
+
+    public List<String> getDefinitions() {
+        return definitions;
+    }
+
+	public void addDefinitions(List<String> definitions) {
+		this.definitions.addAll(definitions);
 	}
 }

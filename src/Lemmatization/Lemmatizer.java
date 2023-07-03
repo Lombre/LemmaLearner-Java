@@ -8,6 +8,7 @@ import java.util.Set;
 import Configurations.LemmatizationConfigurations;
 import LemmaLearner.TextDatabase;
 import TextDataStructures.Conjugation;
+import TextDataStructures.Lemma;
 
 public class Lemmatizer {
 	
@@ -73,5 +74,9 @@ public class Lemmatizer {
 		simpleDictionaryLematizer.changeLemmatization(rawConjugation, rawLemma);
 		simpleDictionaryLematizer.save();
 	}
+
+    public List<String> getDefinitions(Lemma lemma) {
+        return dictionary.getDefinitions(lemma);
+    }
 
 }

@@ -66,11 +66,15 @@ public class SwingGUI implements ProgressPrinter {
 
 	private GuiConfigurations config;
     private AbstractButton learnNextLemmaButton;
+    private AbstractButton alreadyKnowLemmaButton;
     private JButton loadFolderButton;
     private JButton loadProgressButton;
     private JButton saveProgressButton;
     private JLabel sentenceContextLabel;
+    private JLabel lemmaDefinitionLabel;
+    private JLabel sentenceLemmatization;
     private JEditorPane sentenceContextArea;
+    private JEditorPane lemmaDefinitionArea;
 
 	/**
 	 * Create the application.
@@ -96,6 +100,8 @@ public class SwingGUI implements ProgressPrinter {
 
         setupLearnedListAndSentenceChoises();
 
+        setupDefinitionTextField();
+
         setupContextTextField();
 
         setupLemmatizationOptions();
@@ -107,6 +113,17 @@ public class SwingGUI implements ProgressPrinter {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 	}
+
+    private void setupDefinitionTextField() {
+        lemmaDefinitionLabel = new JLabel("Lemma definition:");
+        panel.add(lemmaDefinitionLabel, "wrap");
+        lemmaDefinitionArea = new JTextPane();
+        lemmaDefinitionArea.setEditable(false);
+        lemmaDefinitionArea.setContentType("text/html");
+        lemmaDefinitionArea.setText("<html>No lemma selected.</html>");
+        lemmaDefinitionArea.updateUI();
+        panel.add(lemmaDefinitionArea, "growx 50, wrap"); // A lower priority for the growth is needed.
+    }
 
     private void setupContextTextField() {
         sentenceContextLabel = new JLabel("Sentence context:");
@@ -161,6 +178,20 @@ public class SwingGUI implements ProgressPrinter {
         panel.add(new JLabel("Sentence choises"), "growx, wrap");
 
         learnedJList = new JList<String>(new DefaultListModel<String>());
+        learnedJList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+                public void valueChanged(ListSelectionEvent e){
+                    int indexOfSelectedItem = learnedJList.getSelectedIndex();
+                    if (indexOfSelectedItem == -1) //Nothing is selected, for example seen if items are removed from the list
+                        return;
+                    var selectedLemma    = orderOfLearnedLemmas.get(indexOfSelectedItem).getFirst();
+                    var selectedSentence = orderOfLearnedLemmas.get(indexOfSelectedItem).getSecond();
+                    //displayLemmatizationChoiseForSentence(selectedSentence);
+                    displaySentenceContext(selectedSentence);
+                    displayLemmaDefinition(selectedLemma);
+                    displaySentenceLemmatization(selectedSentence);
+                }
+            });
         renderer1 = new MyCellRenderer(160);
         learnedJList.setCellRenderer(renderer1);
         //learnedJList.setCellRenderer(new MyCellRenderer());
@@ -178,12 +209,24 @@ public class SwingGUI implements ProgressPrinter {
                     Sentence selectedSentence = sentenceAlternatives.get(indexOfSelectedItem); //e.getFirstIndex());
                     displayLemmatizationChoiseForSentence(selectedSentence);
                     displaySentenceContext(selectedSentence);
+                    displayLemmaDefinition(mediator.getUnlearnedConjugation(selectedSentence).getLemma());
+                    displaySentenceLemmatization(selectedSentence);
                 }
+
+
             });
         renderer2 = new MyCellRenderer(160);
         sentenceChoisesJList.setCellRenderer(renderer2);
         scrollSentenceChoisesJList = new JScrollPane(sentenceChoisesJList);
         panel.add(scrollSentenceChoisesJList,  "pushy, grow, sg learningpanes, wrap");
+
+
+        sentenceLemmatization = new JLabel("No sentence chosen.");
+        panel.add(sentenceLemmatization, "center, wrap");
+    }
+
+    private void displaySentenceLemmatization(Sentence selectedSentence) {
+        sentenceLemmatization.setText(mediator.getSentenceLemmatization(selectedSentence));
     }
 
     private void displayLemmatizationChoiseForSentence(Sentence sentenceSelected) {
@@ -193,6 +236,20 @@ public class SwingGUI implements ProgressPrinter {
         conjugationField.setText(conjugation.getRawConjugation());
         lemmaField.setText(conjugation.getLemma() + " " + potentialLemmatizationsString);
 	}
+
+    private void displayLemmaDefinition(Lemma unlearnedLemma) {
+        String textToSet = "";
+        var definitions = unlearnedLemma.getDefinitions();
+        for (int i = 0; i < definitions.size(); i++) {
+            textToSet += (i+1) + ") " + definitions.get(i) + "\n";
+        }
+        if (1500 < textToSet.length()){
+            textToSet = "Paragraph to long (" + textToSet.length() + " charachters).";
+        }
+        lemmaDefinitionArea.setText(textToSet);
+        lemmaDefinitionLabel.setText(unlearnedLemma.getRawLemma());
+    }
+
 
     private void displaySentenceContext(Sentence selectedSentence) {
         var originatingParagraph = selectedSentence.getAParagraph();
@@ -226,7 +283,7 @@ public class SwingGUI implements ProgressPrinter {
 
         startLearningButton = new JButton("Start learning");
         startLearningButton.addActionListener(event -> startLearning());
-        panel.add(startLearningButton, "split3, center, sg learningbuttons");
+        panel.add(startLearningButton, "split4, center, sg learningbuttons");
         startLearningButton.setEnabled(false);
 
         learnNextLemmaButton = new JButton("Learn next lemma");
@@ -234,10 +291,25 @@ public class SwingGUI implements ProgressPrinter {
         panel.add(learnNextLemmaButton, "sg learningbuttons");
         learnNextLemmaButton.setEnabled(false);
 
+
+        alreadyKnowLemmaButton = new JButton("Already know lemma");
+        alreadyKnowLemmaButton.addActionListener(event -> alreadyKnowLemma());
+        panel.add(alreadyKnowLemmaButton, "sg learningbuttons");
+        alreadyKnowLemmaButton.setEnabled(false);
+
+
         learnUntilStopButton = new JButton("Learn until stop");
         learnUntilStopButton.addActionListener(event -> learnUntilStop());
         panel.add(learnUntilStopButton, "sg learningbuttons, wrap");
         learnUntilStopButton.setEnabled(false);
+    }
+
+    private void alreadyKnowLemma() {
+		int selectedItemIndex = sentenceChoisesJList.getSelectedIndex();
+		if (selectedItemIndex != -1) {
+            mediator.alreadyKnowLemmaInSentence(sentenceAlternatives.get(selectedItemIndex));
+            displayAlternatives();
+		}
     }
 
     private void saveProgress() {
@@ -255,6 +327,7 @@ public class SwingGUI implements ProgressPrinter {
         //loadProgressButton.setEnabled(false);
         startLearningButton.setEnabled(false);
         learnNextLemmaButton.setEnabled(true);
+        alreadyKnowLemmaButton.setEnabled(true);
         learnUntilStopButton.setEnabled(true);
         saveProgressButton.setEnabled(true);
 
@@ -278,10 +351,12 @@ public class SwingGUI implements ProgressPrinter {
 			new Thread(() -> {
 				actionLock.lock();
                 learnNextLemmaButton.setEnabled(false);
+                alreadyKnowLemmaButton.setEnabled(false);
 				while (isCurrentlyLearning.get()) {
 					learnActualSentence();
 				}
                 learnNextLemmaButton.setEnabled(true);
+                alreadyKnowLemmaButton.setEnabled(true);
 				actionLock.unlock();
 			}).start();
 		} else {
@@ -305,6 +380,7 @@ public class SwingGUI implements ProgressPrinter {
             saveProgressButton.setEnabled(true);
             learnNextLemmaButton.setEnabled(true);
             learnUntilStopButton.setEnabled(true);
+            alreadyKnowLemmaButton.setEnabled(true);
             actionLock.unlock();
 		});
 
@@ -366,9 +442,12 @@ public class SwingGUI implements ProgressPrinter {
 		incrementProgressBar();
 	}
 
+    List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas = new ArrayList<SortablePair<Lemma, Sentence>>();
 	@Override
 	public void printLearnedLemma(LearningConfigurations config, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
 		var learnedPair = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1);
+        this.orderOfLearnedLemmas.clear();
+        this.orderOfLearnedLemmas.addAll(orderOfLearnedLemmas);
 		Lemma learnedLemma = learnedPair.getFirst();
 		Sentence learnedSentence = learnedPair.getSecond();
 		var list = ((DefaultListModel<String>) learnedJList.getModel());
