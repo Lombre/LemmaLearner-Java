@@ -1,6 +1,8 @@
 package LemmaLearner;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import Configurations.LearningConfigurations;
 import GUI.ProgressPrinter;
@@ -154,6 +156,9 @@ public class GreedyLearner {
 		//Find the sentence in the database with the max score
 		int bestSentenceScore = -1;
 		Sentence bestScoringSentence = null;
+
+		//getNBestInitialSentences();
+
 		for (Sentence sentence : database.allSentences.values()) {
 			//Sum of word frequencies in sentence
 			int currentSentenceScore = sentence.getUnlearnedLemmas(learnedLemmas, database).stream()
@@ -163,12 +168,31 @@ public class GreedyLearner {
 				bestSentenceScore = currentSentenceScore;
 				bestScoringSentence = sentence;
 			}
-		}		
-		
+		}
+
 		if (config.shouldPrintText())
 			System.out.println("Learn initial sentence with total frequency score " + bestSentenceScore + ": " + bestScoringSentence.getRawSentence());
-		
+
 		learnLemmasInSentence(bestScoringSentence);
+	}
+
+
+
+	private List<Sentence> getNBestInitialSentences() {
+		List<Sentence> sortedSentences = new ArrayList<Sentence>(){{addAll(database.allSentences.values());}};
+
+
+		Function<Sentence, Integer> getSentenceScore = (Sentence sentence) -> sentence.getUnlearnedLemmas(learnedLemmas, database).stream()
+															.map(lemma -> lemma.getFrequency())
+															.reduce(0, (frequency1, frequency2) -> frequency1 + frequency2);
+
+		sortedSentences.sort( (Sentence s1, Sentence s2) -> getSentenceScore.apply(s2) - getSentenceScore.apply(s1) );
+
+		int elementsToShow = 10;
+
+		var bestSentences = sortedSentences.stream().limit(elementsToShow).collect(Collectors.toList());
+		System.out.println(bestSentences);
+		return bestSentences;
 	}
 
 
