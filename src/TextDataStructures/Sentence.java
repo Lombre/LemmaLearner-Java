@@ -39,14 +39,16 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		String lowerCaseRawSentence = rawSentence.toLowerCase();
 		int lastEndingIndex = 0;
 		for (int i = 0; i < rawWords.size(); i++) {
-			String currentRawWord = rawWords.get(i);
+			String currentRawWord = rawWords.get(i).toLowerCase();
 			int indexBeginning = lowerCaseRawSentence.indexOf(currentRawWord.toLowerCase(), lastEndingIndex);
-			if (indexBeginning == -1) 
+			if (indexBeginning == -1)
 				throw new Error("Word \"" + currentRawWord + "\" not found in sentence: " + getRawSentence());
 			wordBeginningIndex[i] = (short) indexBeginning;
-			wordLengthIndex[i] = (short) (currentRawWord.length());
+			var length = (currentRawWord.codePointCount(0, currentRawWord.length()));
+			wordLengthIndex[i] = (short) length;
 			lastEndingIndex = wordBeginningIndex[i] + wordLengthIndex[i];
 		}
+		int k = 1;
 	}
 	
 	public String getRawSentence() {
@@ -56,7 +58,10 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	public List<String> getRawWordList() {
 		ArrayList<String> rawWords = new ArrayList<String>();
 		for (int i = 0; i < wordBeginningIndex.length; i++) {
-			String rawWord = rawSentence.substring(wordBeginningIndex[i], wordBeginningIndex[i] + wordLengthIndex[i]).toLowerCase();
+			int wordEndIndex = wordBeginningIndex[i] + wordLengthIndex[i];
+			if (rawSentence.length() < wordEndIndex)
+				System.out.println(rawSentence);
+			String rawWord = rawSentence.toLowerCase().substring(wordBeginningIndex[i], wordEndIndex);
 			rawWords.add(rawWord);
 		}
 		return rawWords;

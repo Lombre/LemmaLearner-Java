@@ -59,8 +59,19 @@ class TestParsing {
 		assertEquals(wordPart2.toLowerCase(), sentence.getRawWordList().get(1));
 		assertEquals(wordPart3.toLowerCase(), sentence.getRawWordList().get(2));
 	}
-	
 
+	@Test
+	void testCanHandleTextsWhereLowercaseChangesStringSize() throws Exception {
+		String rawSentence =  "İstanbul straddling"; //Lowercase version is longer.
+		System.out.println(rawSentence.length());
+		parsedText = TestTool.parseString(rawSentence, database);
+		assertEquals(parsedText.getParagraphs().size(), 1);
+
+		Paragraph paragraph = (Paragraph) parsedText.getParagraphs().toArray()[0];
+		Sentence sentence = (Sentence) paragraph.getSentences().toArray()[0];
+		sentence.getRawWordList();
+	}
+	
 
 	@Test
 	void testWordSplitCorrectlySingleQuoteCommaCase() throws Exception {

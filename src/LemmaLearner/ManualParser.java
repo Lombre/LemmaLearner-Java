@@ -162,40 +162,42 @@ public class ManualParser {
 		
 		// Parse the paragraph by walking over it from left to right, 
 		// splitting it into sentences when they are found.
-		for (int i = curPositionInSentence; i < rawParagraph.length(); i++) {
-			
-			char curChar = rawParagraph.charAt(i);
-			
-			if (isAtStartOfSubsentence(curChar)) {
-				//Parse the subsentence. Like some in parenthesis.				
-				
-				i = extractSubSentences(rawParagraph, textName, curPositionInSentence, sentences, rawWords, subParagraphs, i);	
+		//
+		// To handle unicode, codepoints needs to be used instead of chars...
+		for (int i = curPositionInSentence; i < rawParagraph.length(); ) {
+			int curCodepoint = rawParagraph.codePointAt(i);
+
+			if (isAtStartOfSubsentence((char) curCodepoint)) {
+				//Parse the subsentence. Like some in parenthesis.
+
+				i = extractSubSentences(rawParagraph, textName, curPositionInSentence, sentences, rawWords, subParagraphs, i);
 				if (i == -1) //It was unparsable
 					return null;
-				
-				//The frame of reference now shifts to after the subsentence, as it has been parsed.		
+
+				//The frame of reference now shifts to after the subsentence, as it has been parsed.
 				curPositionInSentence = i;
 				if (isAtEndOfParagraph(rawParagraph, i)) {
-					extractSentence(rawParagraph, curPositionInSentence, curSentenceStartIndex, sentences, rawWords, subParagraphs, i);					
-				} 
-				continue;
+					extractSentence(rawParagraph, curPositionInSentence, curSentenceStartIndex, sentences, rawWords, subParagraphs, i);
+				}
 			} else if (isAtAbbreviation(i, rawParagraph)) {
 				//Abbreviations should be ignored.
 				numberOfAbbreviations++;
 				//if (numberOfAbbreviations % 100 == 0)
 				//	System.out.println("Nice! " + numberOfAbbreviations);
-				continue;
-			} else if (isAtEndOfParagraph(rawParagraph, i) || isAtPunctuation(rawParagraph, i, curChar)) {
-				
+			} else if (isAtEndOfParagraph(rawParagraph, i) || isAtPunctuation(rawParagraph, i, (char) curCodepoint)) {
+
 				extractSentence(rawParagraph, curPositionInSentence, curSentenceStartIndex, sentences, rawWords, subParagraphs, i);
-				
+
 				//Clearing for new sentence.
 				curPositionInSentence = i+1;
 				curSentenceStartIndex = i+1;
 				rawWords = new ArrayList<String>();
 				subParagraphs = new ArrayList<Paragraph>();
-				continue;
 			}
+
+			var charCount =Character.charCount(curCodepoint);
+
+			i += charCount;
 		}
 		Paragraph paragraph = new Paragraph(rawParagraph, sentences);
 		paragraph.setParagraphID(textName);
@@ -247,12 +249,9 @@ public class ManualParser {
 		if (subParagraph == null) //Something is unparsable in the subsentence.
 			return -1;
 		if (subParagraph.getSentences().size() == 1){
-<<<<<<< HEAD
-=======
 			// If the subsentence is just a simple sentence wrapped by e.g. ",
 			// we will include these characters in the sentence.
 			// If there are multiple sentences, this will not be done.
->>>>>>> ec04870 (Fixed wrapping of single sub sentences.)
 			subParagraph = wrapSingleSentenceParagraph(subParagraph, rawParagraph.charAt(i), rawParagraph.charAt(curEndSentenceIndex));
 		}
 		subParagraphs.add(subParagraph);
@@ -318,7 +317,7 @@ public class ManualParser {
 		var wordArray = pattern.split(sentence);
 		var words = new ArrayList<String>(Arrays.asList(wordArray));
 		words.removeIf(word -> word.equals(""));
-		return words.stream().map(word -> word.toLowerCase()).collect(Collectors.toList());
+		return words;
 	}
 
 	
