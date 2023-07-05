@@ -27,6 +27,7 @@ import TextDataStructures.Paragraph;
 import TextDataStructures.Sentence;
 import TextDataStructures.Text;
 import TextDataStructures.TranslatedText;
+import GUI.Mediator;
 
 
 public class TextDatabase{
@@ -233,7 +234,8 @@ public class TextDatabase{
 	}
 
 	public void initializeLemmas() {
-		lemmatizer = new Lemmatizer((Configurations) config);
+		if (lemmatizer == null)
+			lemmatizer = new Lemmatizer((Configurations) config);
 				
 
 		for (var conjugation : allWords.values()) {
@@ -376,7 +378,7 @@ public class TextDatabase{
 	public Text loadAndInitializeProgressFile(String rawProgressFile, ProgressPrinter progressPrinter) {
 
 		var lines = Arrays.asList(rawProgressFile.split("\n"));
-		var isolatedLines = lines.stream().map(sentence -> sentence.split("\\|")[1]).collect(Collectors.toList());
+		var isolatedLines = lines.stream().map(sentence -> sentence.split(Mediator.PROGRESS_LEMMA_SENTENCE_SEPERATOR)[1]).collect(Collectors.toList());
 		String isolatedSentences = isolatedLines.stream().reduce((x, y) -> x + "\n" + y).get();
 		final String progess_file_name = "progress_file";
 		if (allTexts.containsKey(progess_file_name)){

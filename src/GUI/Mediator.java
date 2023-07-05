@@ -30,12 +30,15 @@ public class Mediator {
 	private TextDatabase database;
 	private GreedyLearner learner;
 	
-	private final int numberOfAlternatives = 15;
+	private static final int numberOfAlternatives = 15;
+	private final String PROGRESS_SAVE_FILE;
+	public static final String PROGRESS_LEMMA_SENTENCE_SEPERATOR = ">-->";
 	
 	public Mediator(ProgressPrinter progressPrinter) {
 		this.config = new Configurations();
 		this.database = new TextDatabase(config);
 		this.learner = new GreedyLearner(database, config);
+		this.PROGRESS_SAVE_FILE = "saved_progress_" + config.getLanguage()  + ".txt";
 		this.gui = progressPrinter;
 		learner.progressPrinter = progressPrinter;
 		this.gui.setMediator(this);
@@ -80,7 +83,7 @@ public class Mediator {
 	
 	public void saveProgress() {
 		var learnedLemmasAndSentences = learner.getLearningList();
-		File savedProgressFile = new File("saved_progress.txt");
+		File savedProgressFile = new File(PROGRESS_SAVE_FILE);
 		try {
 			savedProgressFile.createNewFile();
 			OutputStream os = new FileOutputStream(savedProgressFile);
@@ -88,7 +91,7 @@ public class Mediator {
 			for (SortablePair<Lemma, Sentence> lemmaSentencePair : learnedLemmasAndSentences) {
 				var lemma = lemmaSentencePair.getFirst();
 				var sentence = lemmaSentencePair.getSecond();
-				writer.println(lemma.getRawLemma() + ": " + sentence.getRawSentence());
+				writer.println(lemma.getRawLemma() + PROGRESS_LEMMA_SENTENCE_SEPERATOR + sentence.getRawSentence());
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -98,7 +101,7 @@ public class Mediator {
 	
 	
 	public void loadProgress() {
-		Path savedProgressFile = Paths.get("saved_progress.txt");
+		Path savedProgressFile = Paths.get(PROGRESS_SAVE_FILE);
 		try {
 			String rawProgressFile = Files.readString(savedProgressFile, StandardCharsets.UTF_8);
 			Text progresText = database.loadAndInitializeProgressFile(rawProgressFile, gui);
