@@ -34,6 +34,7 @@ import javax.swing.text.DefaultStyledDocument;
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
 import Configurations.LearningConfigurations;
+import LemmaLearner.LearningElement;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -184,11 +185,11 @@ public class SwingGUI implements ProgressPrinter {
                     int indexOfSelectedItem = learnedJList.getSelectedIndex();
                     if (indexOfSelectedItem == -1) //Nothing is selected, for example seen if items are removed from the list
                         return;
-                    var selectedLemma    = orderOfLearnedLemmas.get(indexOfSelectedItem).getFirst();
-                    var selectedSentence = orderOfLearnedLemmas.get(indexOfSelectedItem).getSecond();
+                    var selectedLemmas   = orderOfLearnedLemmas.get(indexOfSelectedItem).getLemmasLearned();
+                    var selectedSentence = orderOfLearnedLemmas.get(indexOfSelectedItem).getSentenceLearnedFrom();
                     //displayLemmatizationChoiseForSentence(selectedSentence);
                     displaySentenceContext(selectedSentence);
-                    displayLemmaDefinition(selectedLemma);
+                    displayLemmaDefinition(selectedLemmas.get(0));
                     displaySentenceLemmatization(selectedSentence);
                 }
             });
@@ -442,16 +443,17 @@ public class SwingGUI implements ProgressPrinter {
 		incrementProgressBar();
 	}
 
-    List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas = new ArrayList<SortablePair<Lemma, Sentence>>();
+    List<LearningElement> orderOfLearnedLemmas = new ArrayList<LearningElement>();
 	@Override
-	public void printLearnedLemma(LearningConfigurations config, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
+	public void printLearnedLemmas(LearningConfigurations config, List<LearningElement> orderOfLearnedLemmas, TextDatabase database) {
 		var learnedPair = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1);
         this.orderOfLearnedLemmas.clear();
         this.orderOfLearnedLemmas.addAll(orderOfLearnedLemmas);
-		Lemma learnedLemma = learnedPair.getFirst();
-		Sentence learnedSentence = learnedPair.getSecond();
+		List<Lemma> learnedLemmas = learnedPair.getLemmasLearned();
+		Sentence learnedSentence = learnedPair.getSentenceLearnedFrom();
 		var list = ((DefaultListModel<String>) learnedJList.getModel());
-		list.addElement((list.size() + 1) + ", " + learnedLemma.getRawLemma() + " -> " + learnedSentence.getRawSentence());
+        String space = 1 < learnedLemmas.size()? "<br>----": "";
+        list.addElement((list.size() + 1) + ", " + learnedPair.getRawLemmasString() + " -> " + space + learnedSentence.getRawSentence());
 	}
 
 	// Must be temporarily stored so that they can be accessed in the list.

@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import Configurations.Configurations;
 import GUI.ConsoleGUI;
 import LemmaLearner.GreedyLearner;
+import LemmaLearner.LearningElement;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
 import TextDataStructures.Lemma;
@@ -183,16 +184,16 @@ class TestGreedyLearning {
 		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());
 		database.initializeLemmas();
 		System.out.println(config);
-		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
+		List<LearningElement> learningOrder = learner.learnAllLemmas();
 		for (int i = 0; i < learningOrder.size() - 1; i++) {
-			var currentLemma = learningOrder.get(i).getFirst();
-			var currentSentence = learningOrder.get(i).getSecond();
-			var nextLemma = learningOrder.get(i+1).getFirst();
-			var nextSentence = learningOrder.get(i+1).getSecond();
+			var currentLemma = learningOrder.get(i).getLemmasLearned().get(0);
+			var currentSentence = learningOrder.get(i).getSentenceLearnedFrom();
+			var nextLemma = learningOrder.get(i+1).getLemmasLearned().get(0);
+			var nextSentence = learningOrder.get(i+1).getSentenceLearnedFrom();
 
 			//An initial sentence is learned, with all the Lemmas in it. 
 			//The Lemmas learned from this sentence should thus be skipped.
-			if (currentSentence.equals(learningOrder.get(1).getSecond())) {
+			if (currentSentence.equals(learningOrder.get(1).getSentenceLearnedFrom())) {
 				continue;
 			}
 			
@@ -211,30 +212,30 @@ class TestGreedyLearning {
 		//Thus each new sentence must contain exactly one new lemma.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
 		TestTool.parseText(fileToParse, database);
-		List<SortablePair<Lemma, Sentence>> learningOrder = learner.learnAllLemmas();
+		List<LearningElement> learningOrder = learner.learnAllLemmas();
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		System.out.println(config);
 		//Is notaword lemma.
-		learnedLemmas.add(learningOrder.get(0).getFirst());
+		learnedLemmas.addAll(learningOrder.get(0).getLemmasLearned());
 		//Skip the first lemma, as this is notaword.
 		for (int i = 1; i < learningOrder.size() - 1; i++) {
-			Lemma learnedLemma = learningOrder.get(i).getFirst();
-			Sentence currentSentence = learningOrder.get(i).getSecond();
+			List<Lemma> currentLemmas = learningOrder.get(i).getLemmasLearned();
+			Sentence currentSentence = learningOrder.get(i).getSentenceLearnedFrom();
+			assertFalse(learnedLemmas.contains(currentLemmas));
 			//An initial sentence is learned, with all the Lemmas in it. 
 			//The Lemmas learned from this sentence should thus be skipped.
-			if (currentSentence.equals(learningOrder.get(1).getSecond())) {
-				learnedLemmas.add(learnedLemma);
+			if (currentSentence.equals(learningOrder.get(1).getSentenceLearnedFrom())) {
+				learnedLemmas.addAll(currentLemmas);
 				continue;
 			}
-			assertFalse(learnedLemmas.contains(learnedLemma));
-			for (Lemma LemmaInSentence : currentSentence.getLemmaSet(database)) {
-				if (LemmaInSentence == learnedLemma)
-					assertFalse(learnedLemmas.contains(LemmaInSentence));
+			for (Lemma lemmaInSentence : currentSentence.getLemmaSet(database)) {
+				if (currentLemmas.contains(lemmaInSentence))
+					assertFalse(learnedLemmas.contains(lemmaInSentence));
 				else {
-					assertTrue("Sentence \"" + currentSentence + "\" contains lemma " + LemmaInSentence + " which haven't been learned yet.", learnedLemmas.contains(LemmaInSentence));				
+					assertTrue("Sentence \"" + currentSentence + "\" contains lemma " + lemmaInSentence + " which haven't been learned yet.", learnedLemmas.contains(lemmaInSentence));
 				}
 			}
-			learnedLemmas.add(learnedLemma);
+			learnedLemmas.addAll(currentLemmas);
 		}
 	}
 	

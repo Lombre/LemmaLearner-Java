@@ -8,6 +8,7 @@ import java.util.Set;
 import Configurations.Configurations;
 import Configurations.GuiConfigurations;
 import Configurations.LearningConfigurations;
+import LemmaLearner.LearningElement;
 import LemmaLearner.ParsingProgressStruct;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
@@ -35,14 +36,16 @@ public class ConsoleGUI implements ProgressPrinter {
 	}
 
 	@Override
-	public void printLearnedLemma(LearningConfigurations config, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas, TextDatabase database) {
+	public void printLearnedLemmas(LearningConfigurations config, List<LearningElement> orderOfLearnedLemmas, TextDatabase database) {
 		if (!config.shouldPrintText())
 			return;
-		var newlyLearnedLemma = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1).getFirst();
-		var associatedSentence = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1).getSecond();
+		var newlyLearnedLemmas = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1).getLemmasLearned();
+		var associatedSentence = orderOfLearnedLemmas.get(orderOfLearnedLemmas.size() - 1).getSentenceLearnedFrom();
 		int lemmaNumber = orderOfLearnedLemmas.size();
 		if (orderOfLearnedLemmas.size() % 100 == 0 || orderOfLearnedLemmas.size() < 1000) {
-			System.out.println(lemmaNumber + ") " + newlyLearnedLemma + ", " + newlyLearnedLemma.getFrequency() + " -> " + associatedSentence);
+
+			int totalFrequency = newlyLearnedLemmas.stream().map(x -> x.getFrequency()).reduce((x, sum) -> x+sum).get();
+			System.out.println(lemmaNumber + ") " + newlyLearnedLemmas + ", " + totalFrequency + " -> " + associatedSentence);
 			System.out.println("\t\t ->" + associatedSentence.getLemmatizedRawSentence(database));
 		}
 	}

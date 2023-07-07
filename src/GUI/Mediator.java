@@ -88,10 +88,8 @@ public class Mediator {
 			savedProgressFile.createNewFile();
 			OutputStream os = new FileOutputStream(savedProgressFile);
 			PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
-			for (SortablePair<Lemma, Sentence> lemmaSentencePair : learnedLemmasAndSentences) {
-				var lemma = lemmaSentencePair.getFirst();
-				var sentence = lemmaSentencePair.getSecond();
-				writer.println(lemma.getRawLemma() + PROGRESS_LEMMA_SENTENCE_SEPERATOR + sentence.getRawSentence());
+			for (LearningElement element : learnedLemmasAndSentences) {
+				writer.println(element.getRawLemmasString() + PROGRESS_LEMMA_SENTENCE_SEPERATOR + element.getSentenceLearnedFrom().getRawSentence());
 			}
 			writer.close();
 		} catch (IOException e) {

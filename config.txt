@@ -4,7 +4,7 @@ EnableSpaceSavingMode = False
 
 Language = English
 
-MaxNumberOfSentencesToLearn = 8000
+MaxNumberOfSentencesToLearn = 12000
 
 MaxSentenceLengthInLetters = 80
 

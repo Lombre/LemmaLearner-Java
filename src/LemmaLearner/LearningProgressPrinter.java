@@ -82,14 +82,11 @@ public class LearningProgressPrinter {
 		System.out.println();
 	}
 
-	public static void printFinishedLearningLemmasInformation(long absoluteStartTime, List<SortablePair<Lemma, Sentence>> learningOrder, Set<Lemma> learnedLemmas, TextDatabase database) {
+	public static void printFinishedLearningLemmasInformation(long absoluteStartTime, List<LearningElement> learningOrder, Set<Lemma> learnedLemmas, TextDatabase database) {
 		
-		List<Lemma> lemmasLearnedFromSentences = learningOrder.stream()
-															.filter(pair -> !pair.getSecond().getRawSentence().equals(GreedyLearner.NOT_A_SENTENCE_STRING))
-															.map(pair -> pair.getFirst())
+		List<Lemma> lemmasLearnedFromSentences = learningOrder.stream().flatMap(x -> x.getLemmasLearned().stream()).filter(x -> x.getRawLemma().equals(GreedyLearner.NOT_A_SENTENCE_STRING))
 															.collect(Collectors.toList());
-		
-		
+
 		System.out.println("Number of lemmas learned from sentences: " + lemmasLearnedFromSentences.size() + " of " + database.allLemmas.size());
 	
 		long absoluteEndTime = System.currentTimeMillis();	
@@ -102,10 +99,10 @@ public class LearningProgressPrinter {
 		//printerNumberOfTimesLemmasHaveBeenLearned(learningOrder);
 	}
 
-	public static void printFractionOfLemmasLearned(LearningConfigurations config, TextDatabase database, List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas ) {
+	public static void printFractionOfLemmasLearned(LearningConfigurations config, TextDatabase database, List<LearningElement> orderOfLearnedLemmas ) {
 		if (config.shouldPrintText()) {
 			if (orderOfLearnedLemmas.size() % 100 == 0) {
-				var learnedLemmas = orderOfLearnedLemmas.stream().map(pair -> pair.getFirst());
+				var learnedLemmas = orderOfLearnedLemmas.stream().map(element -> element.getLemmasLearned()).flatMap(listLemmas -> listLemmas.stream());
 				int totalNumberOfOccurencesOfLearnedLemmas = learnedLemmas.map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
 				int totalNumberOfLemmaOccurences = database.allLemmas.values().stream().map(lemma -> lemma.getFrequency()).reduce(0, (a,b) -> a+b);
 				System.out.println("Learned lemmas " + totalNumberOfOccurencesOfLearnedLemmas +

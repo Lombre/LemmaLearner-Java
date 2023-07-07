@@ -13,7 +13,7 @@ import TextDataStructures.Sentence;
 public class GreedyLearner {
 
 	private TextDatabase database;
-	private List<SortablePair<Lemma, Sentence>> orderOfLearnedLemmas;
+	private List<LearningElement> orderOfLearnedLemmas;
 	private Set<Lemma> learnedLemmas;
 	private Set<Sentence> seenSentences;
 	private PriorityQueue<Lemma> lemmasByFrequency;
@@ -32,7 +32,7 @@ public class GreedyLearner {
 	
 
 
-	public List<SortablePair<Lemma, Sentence>> learnAllLemmas() {	
+	public List<LearningElement> learnAllLemmas() {
 				
 		long absoluteStartTime = System.currentTimeMillis();
 		
@@ -74,7 +74,7 @@ public class GreedyLearner {
 
 	public void initializeDataStructures() {
 		seenSentences = new HashSet<Sentence>();
-		orderOfLearnedLemmas = new ArrayList<SortablePair<Lemma, Sentence>>();
+		orderOfLearnedLemmas = new ArrayList<LearningElement>();
 		learnedLemmas = new HashSet<Lemma>();	
 		lemmasByFrequency = getLemmasByFrequency();
 		directlyLearnableSentencesByFrequency = getDirectlyLearnableSentencesByFrequency(learnedLemmas);		
@@ -210,10 +210,10 @@ public class GreedyLearner {
 			learnedLemmas.add(lemmaToLearn);
 			lemmasByFrequency.remove(lemmaToLearn); //It is not possible to learn the lemma again.
 			updateDirectlyLearnableSentences(lemmaToLearn);						
-			orderOfLearnedLemmas.add(new SortablePair<Lemma, Sentence>(lemmaToLearn, sentence));			
-			progressPrinter.printLearnedLemma(config, orderOfLearnedLemmas, database);
 		}
 
+		orderOfLearnedLemmas.add(new LearningElement(lemmasToLearn, sentence));
+		progressPrinter.printLearnedLemmas(config, orderOfLearnedLemmas, database);
 		updateSentencesAssociatedWithLemmasInSentence(sentence);
 		
 	}
@@ -286,8 +286,8 @@ public class GreedyLearner {
 		
 		lemmasByFrequency.remove(lemmaToLearn); //It is not possible to learn the lemma again.
 		
-		orderOfLearnedLemmas.add(new SortablePair<Lemma, Sentence>(lemmaToLearn, directlyLearnableSentence));
-		progressPrinter.printLearnedLemma(config, orderOfLearnedLemmas, database);
+		orderOfLearnedLemmas.add(new LearningElement(new ArrayList<Lemma>(){{add(lemmaToLearn);}}, directlyLearnableSentence));
+		progressPrinter.printLearnedLemmas(config, orderOfLearnedLemmas, database);
 		
 		updateDirectlyLearnableSentences(lemmaToLearn);			
 	}
@@ -338,7 +338,7 @@ public class GreedyLearner {
 
 
 
-	public List<SortablePair<Lemma, Sentence>> getLearningList() {
+	public List<LearningElement> getLearningList() {
 		return orderOfLearnedLemmas;
 	}
 
