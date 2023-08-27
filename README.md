@@ -2,7 +2,7 @@
 
 A version of my LemmaLearner project, written in Java instead of python.
 
-The idea is to generate a list of words with associated sentences based on a given set of texts (for example books), in a directly learnable order (one new word per sentence). The sentences can be chosen in a way to optimize the learning experience. The learning list can then be converted into things like anki cards, such that one can easily learn a language. 
+The idea is to generate a list of words with associated sentences based on a given set of texts (for example books), in a directly learnable order (one new word per sentence). The sentences can be chosen in a way to optimize the learning experience. The learning list can then be converted into things like Anki cards, such that one can easily learn a language. 
 
 It works for different languages, but not languages without spaces (chinese, japanese, etc.).
 
@@ -15,9 +15,7 @@ LemmaLearner does not use words as the actual basis for generating the learning 
 In general, the lemmas are learned (mostly) in order of frequency, such that the most frequent lemmas are learned first. The sentences used to learn the different lemmas are chosen in a somewhat intelligent manner, to optimize the learning experience. This includes:
 
  - Trying to include lemmas in a given sentence that has been learned, but which haven't been seen often. 
- 
  - Trying to include conjugations of already-learned lemmas, which have not been seen before.
- 
  - How long the sentence is. The sentence must not be to long or to short, otherwise it will be excluded.
   
 
@@ -29,15 +27,13 @@ I will add a GUI before I give a description of this.
 
 Add description.
 
-For the programmers: The learning is done in a greedy manner, mostly because I'm fairly confident that the problem is NP-hard.
+For the programmers: The learning is done in a greedy manner, mostly because I'm fairly certain that the problem is NP-hard.
 
 ## TODO
 
- - Make a GUI.
-
+ - Ensure proper saving and loading of results.
  - Make Anki output.
 
- - Make it able to use subtitle files as an input.
 
 
 

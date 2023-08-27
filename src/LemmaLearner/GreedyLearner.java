@@ -10,7 +10,7 @@ import TextDataStructures.Conjugation;
 import TextDataStructures.Lemma;
 import TextDataStructures.Sentence;
 
-public class GreedyLearner {
+public class GreedyLearner implements Learner {
 
 	private TextDatabase database;
 	private List<LearningElement> orderOfLearnedLemmas;
@@ -367,6 +367,12 @@ public class GreedyLearner {
 			lemmasByFrequency.remove(newLemma);
 			lemmasByFrequency.add(newLemma);
 		}
+	}
+
+
+	@Override
+	public void setProgressPrinter(ProgressPrinter progressPrinter) {
+		this.progressPrinter = progressPrinter;
 	}
 	
 	

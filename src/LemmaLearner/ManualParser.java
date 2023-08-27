@@ -28,6 +28,7 @@ public class ManualParser {
 		put('[', ']');
 		put('“', '”');
 		put('‘', '’');
+		put('‘', '’');
 		put('¿', '?');
 		put('¡', '!');
 	}};
@@ -143,8 +144,7 @@ public class ManualParser {
 		return input;
 	}
 	
-	private static int numberOfAbbreviations = 0;
-	private Paragraph getParagraphFromRawParagraph(String rawParagraph, String textName) {
+	public Paragraph getParagraphFromRawParagraph(String rawParagraph, String textName) {
 		
 		int curPositionInSentence = 0;
 		int curSentenceStartIndex = 0;
@@ -181,9 +181,6 @@ public class ManualParser {
 				}
 			} else if (isAtAbbreviation(i, rawParagraph)) {
 				//Abbreviations should be ignored.
-				numberOfAbbreviations++;
-				//if (numberOfAbbreviations % 100 == 0)
-				//	System.out.println("Nice! " + numberOfAbbreviations);
 			} else if (isAtEndOfParagraph(rawParagraph, i) || isAtPunctuation(rawParagraph, i, (char) curCodepoint)) {
 
 				extractSentence(rawParagraph, curPositionInSentence, curSentenceStartIndex, sentences, rawWords, subParagraphs, i);

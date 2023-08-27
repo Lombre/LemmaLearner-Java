@@ -28,7 +28,7 @@ public class Mediator {
 	private Configurations config;
 	private ProgressPrinter gui;
 	private TextDatabase database;
-	private GreedyLearner learner;
+	private Learner learner;
 	
 	private static final int numberOfAlternatives = 15;
 	private final String PROGRESS_SAVE_FILE;
@@ -40,7 +40,7 @@ public class Mediator {
 		this.learner = new GreedyLearner(database, config);
 		this.PROGRESS_SAVE_FILE = "saved_progress_" + config.getLanguage()  + ".txt";
 		this.gui = progressPrinter;
-		learner.progressPrinter = progressPrinter;
+		learner.setProgressPrinter(progressPrinter);
 		this.gui.setMediator(this);
 		this.gui.initialize(config);
 	}
