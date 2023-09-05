@@ -20,11 +20,11 @@ public interface Learner {
 
 	public void initializeDataStructures();
 
-	public ArrayList<Sentence> getNBestScoringSentencesWithPutBack(int n);
+	public List<Pair<Sentence, Double>> getNBestScoringSentencesWithPutBack(int n);
 
 	public void learnLemmasInSentence(Sentence sentence);
 
-	public Lemma learnLemmaFromDirectlyLearnableSentence(Sentence directlyLearnableSentence);
+	//public Lemma learnLemmaFromDirectlyLearnableSentence(Sentence directlyLearnableSentence);
 
 	public void resetLearning();
 

@@ -37,7 +37,7 @@ public class Mediator {
 	public Mediator(ProgressPrinter progressPrinter) {
 		this.config = new Configurations();
 		this.database = new TextDatabase(config);
-		this.learner = new GreedyLearner(database, config);
+		this.learner = new GreedyLearner(database, config, 2);
 		this.PROGRESS_SAVE_FILE = "saved_progress_" + config.getLanguage()  + ".txt";
 		this.gui = progressPrinter;
 		learner.setProgressPrinter(progressPrinter);
@@ -78,7 +78,7 @@ public class Mediator {
 	}
 	
 	public void learnLemmaInSentence(Sentence sentence) {
-		learner.learnLemmaFromDirectlyLearnableSentence(sentence);
+		learner.learnLemmasInSentence(sentence);
 	}
 	
 	public void saveProgress() {
@@ -117,12 +117,11 @@ public class Mediator {
 	}
 
 	public List<SentenceDescription> getAlternernativeSentencesDescription() {
-		
-		var alternativeSentences = learner.getNBestScoringSentencesWithPutBack(10);
+		var alternativeSentencesPairsWithScores = learner.getNBestScoringSentencesWithPutBack(10);
 		var alternativeSentencesDescription = new ArrayList<SentenceDescription>();
 		var learnedLemmas = learner.getLearnedLemmas();
-		for (Sentence sentence : alternativeSentences) {
-			alternativeSentencesDescription.add(new SentenceDescription(sentence, database, config, learnedLemmas));
+		for (var sentenceScorePair : alternativeSentencesPairsWithScores) {
+			alternativeSentencesDescription.add(new SentenceDescription(sentenceScorePair.getFirstValue(), database, config, learnedLemmas, sentenceScorePair.getSecondValue()));
 		}
 		return alternativeSentencesDescription;
 	}
@@ -173,21 +172,25 @@ public class Mediator {
 
 
 class SentenceDescription{
-	Configurations config;
-	TextDatabase database;
-	Sentence sentence;
-	Set<Lemma> learnedLemmas;
+	final Configurations config;
+	final TextDatabase database;
+	final Sentence sentence;
+	final Set<Lemma> learnedLemmas;
+	final double score;
 
-	public SentenceDescription(Sentence sentence, TextDatabase database, Configurations config, Set<Lemma> learnedLemmas){
+	public SentenceDescription(Sentence sentence, TextDatabase database, Configurations config, Set<Lemma> learnedLemmas, double score){
 		this.sentence = sentence;
 		this.database = database;
 		this.config = config;
 		this.learnedLemmas = learnedLemmas;
+		this.score = score;
 	}
 
 	public String getGUIDescription() {
-		var learnedLemma = sentence.getUnlearnedLemmas(learnedLemmas, database).get(0);
-		return learnedLemma.getRawLemma() + ", " + String.format("%.2f", sentence.getScore(database, config)) + ": " + sentence.getRawSentence()
+
+		String learnedLemmasString = String.join(", ", sentence.getUnlearnedLemmas(learnedLemmas, database).stream().map(lemma -> lemma.getRawLemma()).collect(Collectors.toList()));
+
+		return learnedLemmasString + ", " + String.format("%.2f", score) + ": " + sentence.getRawSentence()
 			;//+ "<br> ---- " + sentence.getLemmatizedRawSentence(database) + "<br>";
 	}
 }

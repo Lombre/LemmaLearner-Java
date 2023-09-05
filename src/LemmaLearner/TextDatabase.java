@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import Configurations.Configurations;
@@ -121,16 +122,17 @@ public class TextDatabase{
     }
 
 	public void filterText(Text text) {
-		filterSentencesOnNumberOfWords(text);
-		filterSentencesOnNumberOfLetters(text);
+		var criterias = Arrays.asList(filterSentencesOnNumberOfWords(),
+									  filterSentencesOnNumberOfLetters());
+		text.filterSentencesBasedOnCriteria(criterias);
 	}
 
-	private void filterSentencesOnNumberOfLetters(Text text) {
-		text.filterSentencesBasedOnCriteria((Sentence s) -> s.hasCorrectNumberOfLetters(config.getMinSentenceLengthInLetters(), config.getMaxSentenceLengthInLetters()));
+	private Function<Sentence, Boolean> filterSentencesOnNumberOfLetters() {
+		return (Sentence s) -> s.hasCorrectNumberOfLetters(config.getMinSentenceLengthInLetters(), config.getMaxSentenceLengthInLetters());
 	}
 
-	private void filterSentencesOnNumberOfWords(Text text) {
-		text.filterSentencesBasedOnCriteria((Sentence s) -> s.hasCorrectNumberOfWords(config.getMinSentenceLengthInWords(), config.getMaxSentenceLengthInWords()));
+	private Function<Sentence, Boolean> filterSentencesOnNumberOfWords() {
+		return (Sentence s) -> s.hasCorrectNumberOfWords(config.getMinSentenceLengthInWords(), config.getMaxSentenceLengthInWords());
 	}
 
 	private void printTestRemovalSummary() {

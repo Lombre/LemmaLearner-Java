@@ -29,7 +29,7 @@ class TestNewPriorityQueue {
 	public void setUp() {
 		config = new Configurations();
 		database = new TextDatabase(config);
-		learner = new GreedyLearner(database, config);
+		learner = new GreedyLearner(database, config, 1);
 		queue = learner.getSentencePriorityQueue();
 		
 	}

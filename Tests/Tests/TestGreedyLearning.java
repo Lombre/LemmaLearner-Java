@@ -17,8 +17,11 @@ import org.junit.jupiter.api.Test;
 
 import Configurations.Configurations;
 import GUI.ConsoleGUI;
+import LemmaLearner.BasicScorer;
 import LemmaLearner.GreedyLearner;
+import LemmaLearner.Learner;
 import LemmaLearner.LearningElement;
+import LemmaLearner.SentenceScorer;
 import LemmaLearner.SortablePair;
 import LemmaLearner.TextDatabase;
 import TextDataStructures.Lemma;
@@ -27,22 +30,22 @@ import TextDataStructures.Text;
 
 
 class TestGreedyLearning {
-	
+
 
 	TextDatabase database;
 	Text parsedText;
 	GreedyLearner learner;
 	Configurations config;
-	
+
 	@BeforeEach
 	public void setUp() {
 		config = new Configurations("Tests/test_config.txt");
 		database = new TextDatabase(config);
-		learner = new GreedyLearner(database, config);
+		learner = new GreedyLearner(database, config, 1);
 		ConsoleGUI gui = new ConsoleGUI();
 		learner.progressPrinter = gui;
 	}
-	
+
 
 	@Test
 	public void testLemmasByFrequencyOrderedCorrectly() throws Exception {
@@ -53,25 +56,25 @@ class TestGreedyLearning {
 		String expectedSentence2 = Lemma2 + " " + Lemma3 + ".";
 		String expectedSentence3 = Lemma3 + ".";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3;
-		
+
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database);
-		
+
 		assertEquals(database.allTexts.size(), 1);
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
 		assertEquals(parsedText.getRawText(), expectedParagraph);
 		assertSame(parsedText, returnedText);
-		
+
 		PriorityQueue<Lemma> LemmasByFrequency = learner.getLemmasByFrequency();
 		Lemma hopefullyLemma3 = LemmasByFrequency.poll();
 		Lemma hopefullyLemma2 = LemmasByFrequency.poll();
 		Lemma hopefullyLemma1 = LemmasByFrequency.poll();
 		assertNull(LemmasByFrequency.poll());
-		
+
 		assertSame(database.allLemmas.get(Lemma1), hopefullyLemma1);
 		assertSame(database.allLemmas.get(Lemma2), hopefullyLemma2);
 		assertSame(database.allLemmas.get(Lemma3), hopefullyLemma3);
 	}
-	
+
 	@Test
 	public void testInitialDirectlyLearnableLemmasByFrequencyOrderedCorrectly() throws Exception {
 		String Lemma1 = "flour"; //Occurs once.
@@ -83,26 +86,26 @@ class TestGreedyLearning {
 		String expectedSentence4 = Lemma2 + " " + Lemma3 + ".";
 		String expectedSentence5 = Lemma3 + " " + "cake" + ".";
 		String expectedParagraph = expectedSentence1 + " " + expectedSentence2 + " " + expectedSentence3 + " " + expectedSentence4 + " " + expectedSentence5;
-		
+
 
 		Text returnedText = TestTool.parseStringAndAddToDatabase(expectedParagraph, database);
-		
+
 		assertEquals(1, database.allTexts.size());
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
 		assertEquals(expectedParagraph, parsedText.getRawText());
 		assertSame(parsedText, returnedText);
-		
+
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		learner.initializeDataStructures();
 		var sentencesByUnlearnedLemmaFrequency = learner.getDirectlyLearnableSentencesByFrequency(learnedLemmas);
-		
+
 		assertEquals(expectedSentence2, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());
 		assertEquals(expectedSentence3, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());
 		assertEquals(expectedSentence1, sentencesByUnlearnedLemmaFrequency.poll().getRawSentence());
 		assertNull(sentencesByUnlearnedLemmaFrequency.poll());
 	}
 
-	
+
 
 	@Test
 	public void testSentencesAreScoredCorrectlyNoConjugations() throws Exception {
@@ -110,30 +113,30 @@ class TestGreedyLearning {
 		String rawLemma2 = "two";
 		String rawLemma3 = "three";
 		String expectedSentence = rawLemma1 + " " + rawLemma2 + " " + rawLemma3 + ".";
-		
+
 		// We need to say that the config should not take conjugations into account
 		TestTool.changeConfigField(config, "ShouldConjugationsBeScored", "false");
 		TestTool.changeConfigField(config, "ShouldNegativelyScoreNonWords", "false");
-		
+
 		TestTool.parseStringAndAddToDatabase(expectedSentence, database);
 		Sentence learnedSentence = database.allSentences.get(expectedSentence);
 		//Initially the lemmas should give a score of 1 each, as that are their frequencies.
-		assertEquals((1+1+1)*(1+1+1), learnedSentence.getScore(database, config), 0.001);
+		SentenceScorer scorer = new BasicScorer(database, config);
+		assertEquals((1+1+1)*(1+1+1)/Math.pow(4, 2), scorer.getScore(learnedSentence), 0.001);
 		
 		Lemma lemma1 = database.allLemmas.get(rawLemma1);
 		Lemma lemma2 = database.allLemmas.get(rawLemma2);
 		Lemma lemma3 = database.allLemmas.get(rawLemma3);
 		
 		lemma1.incrementTimesLearned();
-		assertEquals((1+1)*(1+1+0.5), learnedSentence.getScore(database, config), 0.001);
+		assertEquals((1+1)*(1+1+0.5)/Math.pow(4,1), scorer.getScore(learnedSentence), 0.001);
 		lemma2.incrementTimesLearned();
-		assertEquals((1)*(1 + 0.5 + 0.5), learnedSentence.getScore(database, config), 0.001);
+		assertEquals((1)*(1 + 0.5 + 0.5)/Math.pow(4, 0), scorer.getScore(learnedSentence), 0.001);
 		lemma2.incrementTimesLearned();
-		assertEquals((1)*(1 + 0.25 + 0.5), learnedSentence.getScore(database, config), 0.001);
-		
+		assertEquals((1)*(1 + 0.25 + 0.5)/Math.pow(4, 0), scorer.getScore(learnedSentence), 0.001);
 
 		lemma3.incrementTimesLearned();
-		assertEquals(0, learnedSentence.getScore(database, config), 0.001);
+		assertEquals(0, scorer.getScore(learnedSentence), 0.001);
 	}
 	
 	
@@ -151,20 +154,22 @@ class TestGreedyLearning {
 		Text parsedText = database.allTexts.get(TestTool.testTextName);
 		assertEquals(parsedText.getRawText(), expectedSentence);
 		assertSame(parsedText, returnedText);
-		
-		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
+
+		var learner = new GreedyLearner(database, config, 2);
+		Set<Lemma> learnedLemmas = learner.getLearnedLemmas();
 		Sentence sentence = database.allSentences.get(expectedSentence);
-		
-		assertFalse(sentence.isDirectlyLearnable(learnedLemmas, database));
-		
+
+
+		assertFalse(learner.isDirectlyLearnable(sentence));
+
 		learnedLemmas.add(database.allLemmas.get(Lemma1));
-		assertFalse(sentence.isDirectlyLearnable(learnedLemmas, database));
+		assertTrue(learner.isDirectlyLearnable(sentence));
 		
 		learnedLemmas.add(database.allLemmas.get(Lemma2));
-		assertTrue(sentence.isDirectlyLearnable(learnedLemmas, database));
+		assertTrue(learner.isDirectlyLearnable(sentence));
 		
 		learnedLemmas.add(database.allLemmas.get(Lemma3));
-		assertFalse(sentence.isDirectlyLearnable(learnedLemmas, database));
+		assertFalse(learner.isDirectlyLearnable(sentence));
 		
 	}
 	
@@ -203,16 +208,16 @@ class TestGreedyLearning {
 		}
 	}
 	
-	
-	
 
 	@Test
 	public void testLemmasAreLearnedOneByOne() throws Exception {
 		//A lemma must be learned one at a time, for it to be a valid learning order.
 		//Thus each new sentence must contain exactly one new lemma.
 		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
-		TestTool.parseText(fileToParse, database);
+		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());
+		database.initializeLemmas();
 		List<LearningElement> learningOrder = learner.learnAllLemmas();
+		assertTrue(100 < learningOrder.size());
 		Set<Lemma> learnedLemmas = new HashSet<Lemma>();
 		System.out.println(config);
 		//Is notaword lemma.
@@ -222,7 +227,7 @@ class TestGreedyLearning {
 			List<Lemma> currentLemmas = learningOrder.get(i).getLemmasLearned();
 			Sentence currentSentence = learningOrder.get(i).getSentenceLearnedFrom();
 			assertFalse(learnedLemmas.contains(currentLemmas));
-			//An initial sentence is learned, with all the Lemmas in it. 
+			//An initial sentence is learned, with all the Lemmas in it.
 			//The Lemmas learned from this sentence should thus be skipped.
 			if (currentSentence.equals(learningOrder.get(1).getSentenceLearnedFrom())) {
 				learnedLemmas.addAll(currentLemmas);
@@ -236,6 +241,28 @@ class TestGreedyLearning {
 				}
 			}
 			learnedLemmas.addAll(currentLemmas);
+		}
+	}
+	
+
+	@Test
+	public void  testSentenceAlternativesAreInCorrectOrder() throws Exception {
+		//A lemma must be learned one at a time, for it to be a valid learning order.
+		//Thus each new sentence must contain exactly one new lemma.
+		GreedyLearner newLearner = new GreedyLearner(database, config, 2);
+		newLearner.progressPrinter = learner.progressPrinter;
+		File fileToParse = new File("Test texts/Adventures of Sherlock Holmes, The - Arthur Conan Doyle.txt");
+		database.parseTextAndAddToDatabase(fileToParse, new ConsoleGUI());
+		database.initializeLemmas();
+		newLearner.initializeForLearning();
+		//newLearner.getNBestScoringSentencesWithPutBack(10000000);
+		for (int i = 0; i < 100; i++) {
+			var alternatives = newLearner.getNBestScoringSentencesWithPutBack(1000);
+			int k = 1;
+			for (int j = 0; j < Math.max(alternatives.size() - 1, 10); j++){
+				assertTrue("At i=" + i + " alternative " + j + ": "  + alternatives.get(j) + " has a smaller score than alterntative " + (j+1) + ": " + alternatives.get(j+1), alternatives.get(j).getSecondValue() >= alternatives.get(j + 1).getSecondValue());
+			}
+			newLearner.learnNextLemma();
 		}
 	}
 	

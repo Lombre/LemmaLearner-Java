@@ -319,12 +319,13 @@ class TestDatabaseInsertion {
 
 	@Test
 	public void testFilteringOfSentencesOnNumberOfWordsAndLetters() {
-		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "4");
+		TestTool.changeConfigField(config, "MinSentenceLengthInWords", "5");
 		TestTool.changeConfigField(config, "MaxSentenceLengthInWords", "30");
 		TestTool.changeConfigField(config, "MinSentenceLengthInLetters", "10");
 		TestTool.changeConfigField(config, "MaxSentenceLengthInLetters", "80");
 		var testString = "“Then, good night, your Majesty, and I trust that we shall soon have some good news for you. And good night, Watson,” he added, as the wheels of the royal brougham rolled down the street. “If you will be good enough to call tomorrow afternoon at three o’clock I should like to chat this little matter over with you.”";
 		TestTool.parseStringAndAddToDatabase(testString, database);
+		System.out.println( database.allSentences.values().toString());
 		assertEquals(0, database.allSentences.size());
 			
 	}

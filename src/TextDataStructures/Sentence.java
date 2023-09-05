@@ -87,9 +87,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	public Set<String> getRawWordSet() {
 		return new HashSet<>(getRawWordList());
 	}
-	
-	
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Sentence)) return false;
@@ -126,11 +124,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		originParagraphs.add(paragraph);
 	}
 
-	public boolean isDirectlyLearnable(Set<Lemma> learnedLemmas, TextDatabase database) {
-		int numberOfUnlearnedLemmas = getNumberOfUnlearnedLemmas(learnedLemmas, database);
-		return getNumberOfUnlearnedLemmas(learnedLemmas, database) == 1;
-	}
-	
+
 	public int getNumberOfUnlearnedLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		Set<Lemma> lemmas = this.getLemmaSet(database);
 		int numberOfLemmasInSentence = lemmas.size();
@@ -148,7 +142,7 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		return new HashSet<Conjugation>(wordList);
 	}
 
-	private List<Lemma> getLemmaList(TextDatabase database) {
+	public List<Lemma> getLemmaList(TextDatabase database) {
 		return getWordList(database).stream()
 									.map(word -> word.getLemma())
 									.collect(Collectors.toList());
@@ -202,64 +196,6 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 		return wordBeginningIndex.length;
 	}
 
-	public double getScore(TextDatabase database, LearningConfigurations config) {
-		double unlearnedLemmaScore = getUnlearnedLemmaFrequencyScore(database, config.getMaxTimesLemmaShouldBeLearned());
-		double lemmaScore = getLemmaScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent());
-		double conjugationScore = (config.shouldConjugationsBeScored())? getConjugationScore(database, config.getMaxTimesLemmaShouldBeLearned(), config.getScoreExponent(), config.getConjugationScoreFactor()): 0;
-		double notawordModifier = (config.shouldNegativelyScoreNonWords())? getNotAWordModifier(database): 1;
-		double score = unlearnedLemmaScore*(lemmaScore + conjugationScore)*notawordModifier;//unlearnedLemmaScore + lemmaScore + conjugationScore;//unlearnedLemmaScore*(lemmaScore + conjugationScore);
-		return score;
-	}
-	
-	private double getNotAWordModifier(TextDatabase database) {
-		double modifier = 1;
-		var lemmaList = getLemmaList(database);		
-		for (var lemma : lemmaList) {
-			if (lemma.getRawLemma().equals(TextDatabase.NOT_A_WORD_STRING)) {
-				modifier *= 0.85;
-			}
-		}
-		return modifier;
-	}
-
-
-	private double getUnlearnedLemmaFrequencyScore(TextDatabase database, int numberOfTimesCounted) {
-		double score = 0;
-		var lemmas = getLemmaSet(database);
-		for (Lemma lemma : lemmas) {
-			if (lemma.getTimesLearned() == 0) {
-				//The primary basis for the score is the frequency of the unlearned lemma.
-				score += lemma.getFrequency();
-			} 
-		}
-		return score;
-	}
-
-	private double getLemmaScore(TextDatabase database, int numberOfTimesCounted, double scoreExponent) {
-		double score = 0;
-		var lemmas = getLemmaSet(database);
-		for (Lemma lemma : lemmas) {
-			if (lemma.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(scoreExponent, lemma.getTimesLearned()));
-				score += extraScore;
-			} 
-		}
-		return score;
-	}
-	
-	// Score factor is how relatively less conjugations should be score relative to lemmas
-	private double getConjugationScore(TextDatabase database, int numberOfTimesCounted, double scoreExponent, double scoreFactor) {
-		double score = 0;
-		var conjugations = getWordSet(database);
-		for (Conjugation conjugation : conjugations) {
-			if (conjugation.getTimesLearned() < numberOfTimesCounted){
-				double extraScore = 1.0/( Math.pow(scoreExponent, conjugation.getTimesLearned())* scoreFactor);
-				score += extraScore;
-			} 
-		}
-		return score;
-	}
-
 	public boolean hasNoNewLemmas(Set<Lemma> learnedLemmas, TextDatabase database) {
 		return getNumberOfUnlearnedLemmas(learnedLemmas, database) == 0;
 	}
@@ -289,16 +225,16 @@ public class Sentence implements Serializable, Comparable<Sentence>, ParagraphPa
 	}
 
 
-	public Collection<Sentence> getSubSentencesMatchingCriteria(Paragraph originParagraph, Function<Sentence, Boolean> filterCriteria){
+	public Collection<Sentence> getSubSentencesMatchingCriteria(Paragraph originParagraph, List<Function<Sentence, Boolean>> filterCriterias){
 		Collection<Sentence> filteredSentences = new ArrayList<Sentence>();
 		//The sentence does not fit the criteria, but maybe it contains subparagraphs that do?
 		for (Paragraph subParagraph : subParagraphs) {
 			Sentence subParagraphSentence = subParagraph.asSentence(originParagraph);
-			if (filterCriteria.apply(subParagraphSentence)) {
+			if (filterCriterias.stream().allMatch(criteria -> criteria.apply(subParagraphSentence))) {
 				filteredSentences.add(subParagraphSentence);
 			} else {
 				//Reduce the paragraph:
-				Paragraph filteredSubParagraph = subParagraph.getParagraphWithSentencesFilteredOnCriteria(filterCriteria);
+				Paragraph filteredSubParagraph = subParagraph.getParagraphWithSentencesFilteredOnCriteria(filterCriterias);
 				filteredSubParagraph.setOriginText(originParagraph.getOriginText());
 				if (0 < filteredSubParagraph.getSentences().size())
 					filteredSubParagraph.getSentences().forEach(subSentence -> filteredSentences.add(subSentence));

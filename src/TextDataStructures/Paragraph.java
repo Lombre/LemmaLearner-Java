@@ -108,13 +108,13 @@ public class Paragraph implements Serializable, Comparable<Paragraph> {
 		sentences.addAll(newParagraphSentences);
 	}
 
-	public Paragraph getParagraphWithSentencesFilteredOnCriteria(Function<Sentence, Boolean> filterCriteria) {
+	public Paragraph getParagraphWithSentencesFilteredOnCriteria(List<Function<Sentence, Boolean>> filterCriterias) {
 		var filteredSentences = new ArrayList<Sentence>();
 		for (Sentence sentence : sentences) {
-			if (filterCriteria.apply(sentence)) {
+			if (filterCriterias.stream().allMatch(criteria -> criteria.apply(sentence))) {
 				filteredSentences.add(sentence);
 			} else {
-				Collection<Sentence> subSentences = sentence.getSubSentencesMatchingCriteria(this, filterCriteria);
+				Collection<Sentence> subSentences = sentence.getSubSentencesMatchingCriteria(this, filterCriterias);
 				if (0 < subSentences.size())
 					filteredSentences.addAll(subSentences);				
 			}

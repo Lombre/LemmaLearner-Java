@@ -78,12 +78,12 @@ public class Text implements Serializable, ParagraphParent{
 
 	
 
-	public void filterSentencesBasedOnCriteria(Function<Sentence, Boolean> filterCriteria) {
+	public void filterSentencesBasedOnCriteria(List<Function<Sentence, Boolean>> filterCriterias) {
 		
 		Set<Paragraph> filteredParagraphs = new ListSet<Paragraph>();
 		
 		for (Paragraph paragraph : paragraphs) {
-			Paragraph revisedParagraph = paragraph.getParagraphWithSentencesFilteredOnCriteria(filterCriteria);
+			Paragraph revisedParagraph = paragraph.getParagraphWithSentencesFilteredOnCriteria(filterCriterias);
 			if (0 < revisedParagraph.getSentences().size()) 
 				filteredParagraphs.add(revisedParagraph);
 		}		
